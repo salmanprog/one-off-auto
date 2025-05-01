@@ -1,0 +1,68 @@
+
+import React from "react";
+import { Search, MessageCircle, Upload } from "lucide-react";
+
+const HowItWorks = () => {
+  const steps = [
+    {
+      icon: <Search className="h-14 w-14 text-oneoffautos-blue" />,
+      title: "Find Your Perfect Ride",
+      description: "Browse our curated selection of modified vehicles with specialized filters to find exactly what you're looking for."
+    },
+    {
+      icon: <MessageCircle className="h-14 w-14 text-oneoffautos-blue" />,
+      title: "Connect With Sellers",
+      description: "Message sellers directly to ask questions, negotiate, and arrange viewings with fellow enthusiasts who share your passion."
+    },
+    {
+      icon: <Upload className="h-14 w-14 text-oneoffautos-blue" />,
+      title: "List Your Build",
+      description: "Ready to sell? Create a detailed listing that showcases your modifications and connects you with buyers who appreciate your work."
+    }
+  ];
+
+  return (
+    <section className="py-20 bg-oneoffautos-lightgray">
+      <div className="container-custom">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            How One Off <span className="text-oneoffautos-red">Autos</span> Works
+          </h2>
+          <div className="h-1 w-24 bg-oneoffautos-red mx-auto rounded-full mb-6"></div>
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+            One Off Autos makes buying and selling modified vehicles simple and straightforward.
+            Our platform is designed specifically for automotive enthusiasts who understand the value of custom builds.
+          </p>
+        </div>
+
+        {/* Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {steps.map((step, index) => (
+            <div key={index} className="flex flex-col h-full">
+              <div className="bg-white rounded-lg shadow-lg h-full flex flex-col transition-transform duration-300 hover:translate-y-[-8px]">
+                <div className="p-8 flex flex-col items-center flex-grow">
+                  <div className="bg-oneoffautos-lightgray p-5 rounded-full mb-6 border-2 border-oneoffautos-red/20">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 text-oneoffautos-blue">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-600 text-center">
+                    {step.description}
+                  </p>
+                </div>
+                <div className="bg-oneoffautos-blue text-white py-3 px-6 rounded-b-lg flex justify-between items-center">
+                  <span className="font-bold">Step {index + 1}</span>
+                  <span className="text-sm">→</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HowItWorks;
