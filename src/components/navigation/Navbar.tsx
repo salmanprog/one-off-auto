@@ -43,6 +43,7 @@ const Navbar = () => {
 
           {/* Social and Mobile Menu Toggle */}
           <div className="flex items-center space-x-4">
+            {/* Social Icons */}
             <div className="hidden md:flex items-center space-x-3">
               <a
                 href="https://facebook.com"
@@ -72,9 +73,25 @@ const Navbar = () => {
                 <Youtube size={20} />
               </a>
             </div>
-            <Link to="/sell-your-ride" className="hidden md:block btn-secondary">
-              Sell Your Ride
-            </Link>
+
+            {/* CTA and Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-3 ml-4">
+              <Link to="/sell-your-ride" className="btn-secondary">
+                Sell Your Ride
+              </Link>
+              <Link
+                to="/login"
+                className="px-4 py-2 border border-oneoffautos-blue text-oneoffautos-blue font-medium rounded-md hover:bg-oneoffautos-blue hover:text-white transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 bg-oneoffautos-blue text-white font-medium rounded-md hover:bg-blue-800 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </div>
             <button
               className="md:hidden text-gray-700 hover:text-oneoffautos-blue"
               onClick={toggleMobileMenu}

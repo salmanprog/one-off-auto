@@ -72,13 +72,31 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           </Link>
         </nav>
 
-        <div className="mt-8 px-4">
+        {/* CTA and Auth Buttons */}
+        <div className="mt-8 px-4 flex flex-col space-y-3">
+          {/* CTA Button */}
           <Link
             to="/sell-your-ride"
             onClick={onClose}
             className="w-full text-center flex justify-center items-center py-3 px-6 bg-oneoffautos-red text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-sm"
           >
             Sell Your Ride
+          </Link>
+
+          {/* Authentication Buttons */}
+          <Link
+            to="/login"
+            onClick={onClose}
+            className="w-full text-center flex justify-center items-center py-3 px-6 border border-oneoffautos-blue text-oneoffautos-blue rounded-md hover:bg-oneoffautos-blue hover:text-white transition-colors font-medium"
+          >
+            Login
+          </Link>
+          <Link
+            to="/signup"
+            onClick={onClose}
+            className="w-full text-center flex justify-center items-center py-3 px-6 bg-oneoffautos-blue text-white rounded-md hover:bg-blue-800 transition-colors font-medium shadow-sm"
+          >
+            Sign Up
           </Link>
         </div>
 
