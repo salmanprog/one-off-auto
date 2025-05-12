@@ -7,7 +7,7 @@ import ListingCard from "../listings/ListingCard";
 const featuredListings = [
   {
     id: "1",
-    title: "2015 Subaru WRX - Built Engine",
+    title: "Mercedes - Modified",
     price: 28500,
     location: "Denver, CO",
     mileage: 45000,
@@ -16,7 +16,7 @@ const featuredListings = [
   },
   {
     id: "2",
-    title: "1995 Mazda Miata - LS V8 Swap",
+    title: "Ford Mustang - Modified",
     price: 24999,
     location: "Austin, TX",
     mileage: 78000,
@@ -25,7 +25,7 @@ const featuredListings = [
   },
   {
     id: "3",
-    title: "2018 Honda Civic Type R - Track Ready",
+    title: "Mercedes - Track Ready",
     price: 36750,
     location: "Portland, OR",
     mileage: 32000,
