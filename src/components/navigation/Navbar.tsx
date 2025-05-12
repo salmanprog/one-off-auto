@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Facebook, Instagram, Youtube } from "lucide-react";
 import MobileMenu from "./MobileMenu";
+import Logo from "../common/Logo";
 
-const Navbar = () => {
+  const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -16,11 +17,8 @@ const Navbar = () => {
       <div className="container-custom py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-oneoffautos-blue">
-              <span className="text-oneoffautos-red">ONE</span>OFF<span className="text-oneoffautos-red">AUTOS</span>
-            </span>
-          </Link>
+          
+          <Logo className="max-w-[150px]" />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

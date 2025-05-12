@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Phone, Mail } from "lucide-react";
+import Logo from "../common/Logo";
 
 const Footer = () => {
   return (
@@ -10,11 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo and About */}
           <div>
-            <Link to="/" className="inline-block">
-              <span className="text-2xl font-bold">
-                <span className="text-oneoffautos-red">ONE</span>OFF<span className="text-oneoffautos-red">AUTOS</span>
-              </span>
-            </Link>
+           <Logo className="max-w-[150px]" />
             <p className="mt-4 text-gray-300">
               The premier marketplace for enthusiasts buying and selling unique modified vehicles.
             </p>
