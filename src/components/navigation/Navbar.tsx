@@ -78,10 +78,10 @@ import Logo from "../common/Logo";
                 Sell Your Ride
               </Link>
               <Link
-                to="/login"
+                to="/signin"
                 className="px-4 py-2 border border-oneoffautos-blue text-oneoffautos-blue font-medium rounded-md hover:bg-oneoffautos-blue hover:text-white transition-colors"
               >
-                Login
+                Sign In
               </Link>
               <Link
                 to="/signup"
