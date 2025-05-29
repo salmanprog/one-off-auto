@@ -16,6 +16,8 @@ import AuthRoute from "./components/authroute/Index";
 import GuestRoute from "./components/authroute/GuestRoute";
 import AdminDashboard from "./components/dashboards/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import ListingDetail from "./pages/ListingDetail";
+
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,7 @@ const App = () => (
           <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
           <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/listings/:listingId" element={<ListingDetail />} />
           <Route path="/admin-dashboard/*" element={<DashboardLayout />} />
           <Route path="/user-dashboard/*" element={<DashboardLayout />} />
           <Route path="*" element={<NotFound />} />
