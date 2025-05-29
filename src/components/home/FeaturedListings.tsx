@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ListingCard from "../listings/ListingCard";
-import { useFetch } from "../../hooks/request";
+
 // Mock data for featured listings
 const featuredListings = [
   {
