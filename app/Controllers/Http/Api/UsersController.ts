@@ -73,9 +73,9 @@ export default class UsersController extends RestController
                 })
             ]),
             password: schema.string({},[
-                rules.minLength(8),
+                rules.minLength(6),
                 rules.maxLength(100),
-                rules.regex(/^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,100}$/)
+                //rules.regex(/^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,100}$/)
             ]),
             confirm_password: schema.string({},[
               rules.confirmed('password')
