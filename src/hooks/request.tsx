@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import HttpRequest from "../repositories";
 import api from "../repositories/api";
 import Helper from "../helpers";
+import _ from 'lodash';
 
 // Custom hook for making GET requests
 export function useFetch(header, type = "mount",slug) {
@@ -10,7 +11,7 @@ export function useFetch(header, type = "mount",slug) {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const fetchApi = () => {
     let { method, url } = api[header];
-    let dynamic_url = window._.isEmpty(slug) ? baseUrl + url : baseUrl + url + '/' + slug
+    let dynamic_url = _.isEmpty(slug) ? baseUrl + url : baseUrl + url + '/' + slug
     HttpRequest.makeRequest(method, dynamic_url).then(
       (response) => {
         if (response.code !== 200) {
