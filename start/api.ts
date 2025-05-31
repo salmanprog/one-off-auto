@@ -22,7 +22,8 @@ Route
     Route.post('user/change-password','Api/UsersController.changePassword').as('user.change-password').middleware('apiAuth')
     Route.post('user/forgot-password','Api/UsersController.forgotPassword').as('user.forgot-password')
     Route.post('user/login','Api/UsersController.login').as('user.login');
-    
+    // Vehicle
+    Route.resource('user/vehicle', 'Api/VehicleController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store
     Route.resource('user', 'Api/UsersController')
       .except(['destroy'])

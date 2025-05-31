@@ -26,6 +26,8 @@ class User
 
   private static async jsonSchema(record: object,request:object)
   {
+    let api_token = typeof request.headers().authorization == 'undefined' ? record.userApiToken.api_token : request.apiToken();
+    api_token = Buffer.from(api_token, "utf8").toString("base64")
       return {
           id: record.id,
           user_group_id: record.user_group_id,
@@ -48,6 +50,7 @@ class User
             status:record.status,
           },
           meta: await UserApiToken.initResponse(record.userApiToken,request),
+          api_token: api_token,
           created_at: record.created_at
       }
   }

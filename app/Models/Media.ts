@@ -90,5 +90,12 @@ export default class Media extends RestModel
         query = await query.where('id',id).first();
         return query.toJSON();
     }
+
+    public static async generateSlug(name:string)
+    {
+        let slug = strSlug(name);
+        let query = await this.query().where('slug',slug).count('id as total');
+        return query[0].$extras.total == 0 ? slug : slug + query[0].$extras.total + rand(111,999);
+    }
 }
 module.exports = Media;
