@@ -25,12 +25,12 @@ const dummyListing: DetailedListing = {
   price: 35000,
   location: 'Los Angeles, CA',
   mileage: 25000,
-  image: '/src/images/product-img-1.avif', // Primary image from the listing data
+  image: '/product-img-1.avif', // Primary image from the listing data
   mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
   description: 'This stunning 2018 Ford Mustang GT features a powerful turbocharger upgrade, a performance suspension kit for improved handling, and a custom exhaust system that provides an aggressive sound. Low mileage and well-maintained.',
   additionalImages: [
-    '/src/images/product-img-2.avif', // Provided image 1
-    '/src/images/product-img-1.avif', // Provided image 2 (using one provided path twice for demonstration)
+    '/product-img-2.avif', // Provided image 1
+    '/product-img-1.avif', // Provided image 2 (using one provided path twice for demonstration)
   ],
 };
 
@@ -42,7 +42,7 @@ const dummyRelatedListings = [
     price: 65000,
     location: 'Miami, FL',
     mileage: 10000,
-    image: '/src/images/product-img-1.avif', // Placeholder image
+    image: '/images/product-img-1.avif', // Placeholder image
     mods: ['Pro-Touring Build', 'LS Engine Swap'],
   },
   {
@@ -51,7 +51,7 @@ const dummyRelatedListings = [
     price: 28000,
     location: 'Seattle, WA',
     mileage: 80000,
-    image: '/src/images/product-img-2.avif', // Placeholder image
+    image: '/images/product-img-2.avif', // Placeholder image
     mods: ['Forged Engine Internals', 'Big Turbo Kit'],
   },
   // Add more dummy listings as needed
