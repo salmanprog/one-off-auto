@@ -34,6 +34,7 @@ class Vehicle
           user_id: record.user_id,
           user: await User.initResponse(record.user,request),
           slug: record.slug,
+          image_url: !_.isEmpty(record.media) ?  await storageUrl(record.media[0].file_url) : baseUrl('/images/dummy_car.jpg'),
           vehicle_make: record.vehicle_make,
           vehicle_model: record.vehicle_model,
           vehicle_year: record.vehicle_year,
