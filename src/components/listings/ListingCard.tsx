@@ -19,7 +19,7 @@ interface ListingCardProps {
 
 const ListingCard = ({ listing }: ListingCardProps) => {
   return (
-    <Link to={`/listings/${listing.id}`} className="block">
+    <Link to={`/listings/${listing.slug}`} className="block">
       <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg h-full transition-shadow">
         <div className="relative pb-[65%] overflow-hidden">
           <img

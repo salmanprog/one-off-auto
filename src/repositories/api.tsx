@@ -27,6 +27,10 @@ const api = {
       url: 'vehicle',
       method: "GET",
     },
+    user_vehicle_list: {
+      url: 'user/vehicle',
+      method: "GET",
+    },
     get_vehicle_details: {
       url: 'vehicle/{id}',
       method: "GET",

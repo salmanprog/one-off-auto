@@ -1,66 +1,8 @@
-
 import { useState, useMemo } from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import ListingCard from "../components/listings/ListingCard";
 import ListingsFilters from "../components/listings/ListingsFilters";
-
-// Mock data for listings
-const mockListings = [
-  {
-    id: "1",
-    title: "Mercedes - Modified",
-    price: 28500,
-    location: "Denver, CO",
-    mileage: 45000,
-    image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80",
-    mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"]
-  },
-  {
-    id: "2",
-    title: "Ford Mustang - Modified",
-    price: 24999,
-    location: "Austin, TX",
-    mileage: 78000,
-    image: "https://images.unsplash.com/photo-1581650107963-3e8c1f48241b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2371&q=80",
-    mods: ["LS1 V8 Swap", "Custom Exhaust", "Roll Bar", "Wide Fenders"]
-  },
-  {
-    id: "3",
-    title: "Mercedes - Track Ready",
-    price: 36750,
-    location: "Portland, OR",
-    mileage: 32000,
-    image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2564&q=80",
-    mods: ["FMIC", "Hondata Tune", "Ohlins Coilovers", "Carbon Fiber"]
-  },
-  {
-    id: "4",
-    title: "2014 Ford Mustang GT - 700+ HP",
-    price: 32500,
-    location: "Miami, FL",
-    mileage: 56000,
-    image: "https://images.unsplash.com/photo-1584345604476-8ec5f452d1e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    mods: ["Supercharger", "Tune", "Exhaust", "Lowering Springs"]
-  },
-  {
-    id: "5",
-    title: "2011 BMW E92 M3 - Competition Package",
-    price: 42900,
-    location: "Los Angeles, CA",
-    mileage: 61000,
-    image: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2564&q=80",
-    mods: ["Competition Package", "KW Suspension", "Akrapovic Exhaust", "BBS Wheels"]
-  },
-  {
-    id: "6",
-    title: "2019 Toyota 86 - Widebody Show Car",
-    price: 35800,
-    location: "Chicago, IL",
-    mileage: 28000,
-    image: "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-    mods: ["Rocket Bunny Kit", "Air Suspension", "Custom Paint", "Forged Wheels"]
-  },
-];
+import { useFetch } from "../hooks/request";
 
 // Define filter types
 interface FilterState {
@@ -79,9 +21,31 @@ interface FilterState {
 }
 
 const Listings = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Adjust as needed
+
+  const { data, loading, error } = useFetch("user_vehicle_list");
+
+  const listings = useMemo(() => {
+    if (!data) return [];
+
+    // If data is an array, map it
+    const vehicles = Array.isArray(data) ? data : [data];
+
+    return vehicles.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      title: item.vehicle_title,
+      price: item.vehicle_price,
+      location: item.vehicle_owner_address,
+      mileage: item.vehicle_mileage,
+      image: item.image_url, // Optional chaining + fallback
+      mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
+    }));
+  }, [data]);
+
   const [sortOption, setSortOption] = useState("newest");
 
-  // Filter state
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
     make: "",
@@ -94,20 +58,17 @@ const Listings = () => {
     engineMods: [],
     suspensionMods: [],
     bodyMods: [],
-    wheelsMods: []
+    wheelsMods: [],
   });
 
-  // Handle sort change
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value);
   };
 
-  // Handle filter changes
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
-  // Reset all filters
   const resetFilters = () => {
     setFilters({
       searchTerm: "",
@@ -121,102 +82,67 @@ const Listings = () => {
       engineMods: [],
       suspensionMods: [],
       bodyMods: [],
-      wheelsMods: []
+      wheelsMods: [],
     });
   };
 
-  // Filter and sort listings
   const filteredAndSortedListings = useMemo(() => {
-    // First filter the listings
-    let filtered = [...mockListings];
+    let filtered = [...listings];
 
-    // Search term filter
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
-      filtered = filtered.filter(listing =>
-        listing.title.toLowerCase().includes(searchLower) ||
-        listing.mods.some(mod => mod.toLowerCase().includes(searchLower))
+      filtered = filtered.filter(
+        (listing) =>
+          listing.title.toLowerCase().includes(searchLower) ||
+          listing.mods.some((mod) => mod.toLowerCase().includes(searchLower))
       );
     }
 
-    // Make filter
     if (filters.make) {
-      filtered = filtered.filter(listing =>
+      filtered = filtered.filter((listing) =>
         listing.title.toLowerCase().includes(filters.make.toLowerCase())
       );
     }
 
-    // Model filter
     if (filters.model) {
-      filtered = filtered.filter(listing =>
+      filtered = filtered.filter((listing) =>
         listing.title.toLowerCase().includes(filters.model.toLowerCase())
       );
     }
 
-    // Price range filter
     if (filters.priceMin) {
-      filtered = filtered.filter(listing =>
-        listing.price >= parseInt(filters.priceMin)
+      filtered = filtered.filter(
+        (listing) => listing.price >= parseInt(filters.priceMin)
       );
     }
     if (filters.priceMax) {
-      filtered = filtered.filter(listing =>
-        listing.price <= parseInt(filters.priceMax)
+      filtered = filtered.filter(
+        (listing) => listing.price <= parseInt(filters.priceMax)
       );
     }
 
-    // Mileage filter
     if (filters.mileage) {
-      filtered = filtered.filter(listing =>
-        listing.mileage <= parseInt(filters.mileage)
+      filtered = filtered.filter(
+        (listing) => listing.mileage <= parseInt(filters.mileage)
       );
     }
 
-    // Engine mods filter
-    if (filters.engineMods.length > 0) {
-      filtered = filtered.filter(listing =>
-        filters.engineMods.some(mod =>
-          listing.mods.some(listingMod =>
-            listingMod.toLowerCase().includes(mod.toLowerCase())
-          )
+    // Mods
+    const modFilter = (modType: string[], category: string[]) =>
+      modType.length === 0 || modType.some((mod) =>
+        category.some((listingMod) =>
+          listingMod.toLowerCase().includes(mod.toLowerCase())
         )
       );
-    }
 
-    // Suspension mods filter
-    if (filters.suspensionMods.length > 0) {
-      filtered = filtered.filter(listing =>
-        filters.suspensionMods.some(mod =>
-          listing.mods.some(listingMod =>
-            listingMod.toLowerCase().includes(mod.toLowerCase())
-          )
-        )
-      );
-    }
+    filtered = filtered.filter((listing) =>
+      modFilter(filters.engineMods, listing.mods) &&
+      modFilter(filters.suspensionMods, listing.mods) &&
+      modFilter(filters.bodyMods, listing.mods) &&
+      modFilter(filters.wheelsMods, listing.mods)
+    );
 
-    // Body mods filter
-    if (filters.bodyMods.length > 0) {
-      filtered = filtered.filter(listing =>
-        filters.bodyMods.some(mod =>
-          listing.mods.some(listingMod =>
-            listingMod.toLowerCase().includes(mod.toLowerCase())
-          )
-        )
-      );
-    }
-
-    // Wheels mods filter
-    if (filters.wheelsMods.length > 0) {
-      filtered = filtered.filter(listing =>
-        filters.wheelsMods.some(mod =>
-          listing.mods.some(listingMod =>
-            listingMod.toLowerCase().includes(mod.toLowerCase())
-          )
-        )
-      );
-    }
-
-    // Then sort the filtered listings
+    // Sort
     switch (sortOption) {
       case "price-asc":
         return filtered.sort((a, b) => a.price - b.price);
@@ -225,16 +151,34 @@ const Listings = () => {
       case "mileage-asc":
         return filtered.sort((a, b) => a.mileage - b.mileage);
       case "year-desc":
-        // For this mock data, we don't have year as a separate field
-        // In a real app, you would sort by year
-        return filtered;
+        return filtered; // Not available in this mock data
       case "newest":
       default:
-        // For mock data, we'll just return as is
-        // In a real app, you would sort by date added
         return filtered;
     }
-  }, [filters, sortOption]);
+  }, [filters, sortOption, listings]);
+
+  const paginatedListings = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredAndSortedListings.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredAndSortedListings, currentPage]);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+  };
+  
+  const nextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+  
+  const prevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+  const totalPages = Math.ceil(filteredAndSortedListings.length / itemsPerPage);
+  // Show loading, error, or empty states
+  if (loading) return <MainLayout><div className="p-8">Loading...</div></MainLayout>;
+  if (error) return <MainLayout><div className="p-8 text-red-600">Error: {error.message}</div></MainLayout>;
+  if (listings.length === 0) return <MainLayout><div className="p-8">No listings found.</div></MainLayout>;
 
   return (
     <MainLayout>
@@ -256,12 +200,12 @@ const Listings = () => {
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                   <p className="text-gray-600 mb-2 sm:mb-0">
-                    Showing <span className="font-bold">{filteredAndSortedListings.length}</span> results
+                    Showing <span className="font-bold">{itemsPerPage}</span> results
                   </p>
                   <div className="flex items-center">
                     <span className="mr-2">Sort by:</span>
                     <select
-                      className="border border-gray-300 rounded-md p-2 cursor-pointer hover:border-oneoffautos-blue focus:border-oneoffautos-blue focus:outline-none transition-colors"
+                      className="border border-gray-300 rounded-md p-2"
                       value={sortOption}
                       onChange={handleSortChange}
                     >
@@ -276,31 +220,48 @@ const Listings = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredAndSortedListings.map((listing) => (
-                  <ListingCard key={listing.id} listing={listing} />
+              {paginatedListings.map((listing) => (
+                  <ListingCard key={listing.slug} listing={listing} />
                 ))}
               </div>
-
               {/* Pagination */}
-              <div className="mt-8 flex justify-center">
-                <div className="flex space-x-1">
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white">
-                    Previous
-                  </button>
-                  <button className="px-4 py-2 border border-oneoffautos-blue rounded-md bg-oneoffautos-blue text-white">
-                    1
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white">
-                    2
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white">
-                    3
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white">
-                    Next
-                  </button>
-                </div>
+            <div className="mt-8 flex justify-center">
+              <div className="flex space-x-1">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
+                >
+                  Previous
+                </button>
+
+                {/* You can dynamically render page buttons */}
+                {[...Array(totalPages)].map((_, idx) => {
+                  const pageNum = idx + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => goToPage(pageNum)}
+                      className={`px-4 py-2 border rounded-md ${
+                        currentPage === pageNum
+                          ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
+                          : "border-gray-300 text-oneoffautos-blue bg-white"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
+                >
+                  Next
+                </button>
               </div>
+            </div>
             </div>
           </div>
         </div>

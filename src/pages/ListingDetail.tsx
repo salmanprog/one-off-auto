@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MainLayout from "../components/layouts/MainLayout"; // Import MainLayout
-
+import { useFetch } from "../hooks/request";
 // Assuming a more detailed listing structure might exist or be fetched
 interface DetailedListing {
   id: string;
@@ -19,20 +19,7 @@ interface DetailedListing {
 }
 
 // Placeholder data - replace with actual data fetching logic
-const dummyListing: DetailedListing = {
-  id: '1',
-  title: 'Modified 2018 Ford Mustang GT',
-  price: 35000,
-  location: 'Los Angeles, CA',
-  mileage: 25000,
-  image: '/product-img-1.avif', // Primary image from the listing data
-  mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
-  description: 'This stunning 2018 Ford Mustang GT features a powerful turbocharger upgrade, a performance suspension kit for improved handling, and a custom exhaust system that provides an aggressive sound. Low mileage and well-maintained.',
-  additionalImages: [
-    '/product-img-2.avif', // Provided image 1
-    '/product-img-1.avif', // Provided image 2 (using one provided path twice for demonstration)
-  ],
-};
+
 
 // Placeholder for related listings - replace with actual fetching logic
 const dummyRelatedListings = [
@@ -59,28 +46,63 @@ const dummyRelatedListings = [
 
 const ListingDetail = () => {
   const { listingId } = useParams<{ listingId: string }>();
+  const { loading, data, error } = useFetch("user_vehicle_list", "mount", listingId);
 
-  // In a real application, you would fetch data based on listingId
-  const listing = dummyListing; // Using dummy data for now
+  // Fallback dummy listing
+  const dummyListing: DetailedListing = {
+    id: '1',
+    title: 'Modified 2018 Ford Mustang GT',
+    price: 35000,
+    location: 'Los Angeles, CA',
+    mileage: 25000,
+    image: '/product-img-1.avif',
+    mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
+    description: 'This stunning 2018 Ford Mustang GT features a powerful turbocharger upgrade...',
+    additionalImages: [
+      '/product-img-2.avif',
+      '/product-img-1.avif',
+    ],
+  };
 
-  const allImages = [listing.image, ...listing.additionalImages];
-  const [mainImage, setMainImage] = useState(allImages[0]); // State for the main image
+  // Use fetched data if available, otherwise fall back to dummyListing
+  const listing: DetailedListing = useMemo(() => {
+    return data
+      ? {
+          id: data.id,
+          title: data.vehicle_title,
+          price: data.vehicle_price,
+          location: data.vehicle_owner_address,
+          mileage: data.vehicle_mileage,
+          image: data.image_url,
+          mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
+          description: data.vehicle_descripition ? data.vehicle_descripition : 'No description provided.',
+          additionalImages: data.media?.map((m: any) => m.file_url) || [],
+        }
+      : dummyListing;
+  }, [data]);
+
+  const [mainImage, setMainImage] = useState<string>(dummyListing.image);
+    const [allImages, setAllImages] = useState<string[]>([]);
+    
+    useEffect(() => {
+      const rawImages = [listing.image, ...listing.additionalImages];
+      const uniqueImages = Array.from(new Set(rawImages));
+      setAllImages(uniqueImages);
+      setMainImage(uniqueImages[0]);
+    }, [listing]);
+  
 
   const handlePreviousClick = () => {
     const currentIndex = allImages.indexOf(mainImage);
     const previousIndex = (currentIndex - 1 + allImages.length) % allImages.length;
     setMainImage(allImages[previousIndex]);
   };
-
+  
   const handleNextClick = () => {
     const currentIndex = allImages.indexOf(mainImage);
     const nextIndex = (currentIndex + 1) % allImages.length;
     setMainImage(allImages[nextIndex]);
   };
-
-  if (!listing) {
-    return <div>Loading or Listing not found...</div>;
-  }
 
   return (
     <MainLayout>
@@ -111,13 +133,13 @@ const ListingDetail = () => {
             </div>
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-4">
-              {allImages.map((img, index) => (
+            {allImages.map((img, index) => (
                 <img
-                  key={index}
+                  key={`${img}-${index}`}
                   src={img}
                   alt={`${listing.title} - Thumbnail ${index + 1}`}
-                  className={`w-full h-auto object-cover rounded-lg shadow-md cursor-pointer ${img === mainImage ? 'ring-2 ring-blue-500' : ''}`} // Add active state styling
-                  onClick={() => setMainImage(img)} // Click to change main image
+                  className={`w-full h-auto object-cover rounded-lg shadow-md cursor-pointer ${img === mainImage ? 'ring-2 ring-blue-500' : ''}`}
+                  onClick={() => setMainImage(img)}
                 />
               ))}
             </div>
