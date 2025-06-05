@@ -24,7 +24,7 @@ const Listings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Adjust as needed
 
-  const { data, loading, error } = useFetch("user_vehicle_list");
+  const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?limit=5000');
 
   const listings = useMemo(() => {
     if (!data) return [];
@@ -175,10 +175,10 @@ const Listings = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
   const totalPages = Math.ceil(filteredAndSortedListings.length / itemsPerPage);
-  // Show loading, error, or empty states
+  // Show loading, error, or empty states 
   if (loading) return <MainLayout><div className="p-8">Loading...</div></MainLayout>;
   if (error) return <MainLayout><div className="p-8 text-red-600">Error: {error.message}</div></MainLayout>;
-  if (listings.length === 0) return <MainLayout><div className="p-8">No listings found.</div></MainLayout>;
+  if (!loading && listings.length === 0) return <MainLayout><div className="p-8">No listings found.</div></MainLayout>;
 
   return (
     <MainLayout>
