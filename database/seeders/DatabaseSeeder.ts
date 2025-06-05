@@ -31,34 +31,6 @@ export default class extends BaseSeeder {
         created_at: new Date(),
       },
       {
-        title: 'Contractor',
-        slug: strSlug('contractor'),
-        type: 'user',
-        is_super_admin: '0',
-        created_at: new Date(),
-      },
-      {
-        title: 'Center',
-        slug: strSlug('manager'),
-        type: 'user',
-        is_super_admin: '0',
-        created_at: new Date(),
-      },
-      {
-        title: 'Customer',
-        slug: strSlug('customer'),
-        type: 'user',
-        is_super_admin: '0',
-        created_at: new Date(),
-      },
-      {
-        title: 'Crew',
-        slug: strSlug('crew'),
-        type: 'user',
-        is_super_admin: '0',
-        created_at: new Date(),
-      },
-      {
         title: 'App User',
         slug: strSlug('App User'),
         type: 'user',
@@ -100,7 +72,22 @@ export default class extends BaseSeeder {
           is_email_verify: '1',
           email_verify_at: new Date(),
           created_at: new Date()
-      }
+      },
+      {
+        user_group_id: 3,
+        user_type: 'user',
+        name: 'Herry',
+        username: 'herry',
+        slug: 'herry',
+        email: 'herry@yopmail.com',
+        dob:'1996-05-20',
+        age:29,
+        gender:'Male',
+        password: await passwordHash.generate('Herry@123'),
+        is_email_verify: '1',
+        email_verify_at: new Date(),
+        created_at: new Date()
+    }
     ])
   }
 
