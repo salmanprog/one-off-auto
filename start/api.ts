@@ -42,6 +42,7 @@ Route
   .group(() => {
 
     //User
+    Route.get('view/user','Api/UsersController.userDetail').as('user.detail');
     Route.post('user/logout','Api/UsersController.userLogout').as('user.logout');
     
     // Media

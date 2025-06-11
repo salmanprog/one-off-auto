@@ -27,6 +27,8 @@ class Vehicle
 
   private static async jsonSchema(record: object,request:object)
   {
+    const createdAt = record.created_at;
+    const formattedDate = createdAt ? new Date(createdAt).toISOString().split("T")[0] : '';
       return {
           id: record.id,
           vehicle_category_id: record.vehicle_category_id,
@@ -48,7 +50,7 @@ class Vehicle
           vehicle_owner_email: record.vehicle_owner_email,
           vehicle_owner_phone: record.vehicle_owner_phone,
           media: await Media.initResponse(record.media,request),
-          created_at: record.created_at
+          created_at: formattedDate
       }
   }
 

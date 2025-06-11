@@ -21,7 +21,7 @@ class VehicleHook
         query.preload('vehicleCategory')
         query.preload('user')
         query.preload('media')
-        query.orderBy('id','desc')
+        query.where('status','1').orderBy('id','desc')
     }
 
     /**
@@ -38,6 +38,7 @@ class VehicleHook
         let slug      = await Vehicle.generateSlug(params.vehicle_title);
         params.slug       = slug
         params.user_id    = request.user().id
+        params.status    = '1'
         params.created_at = currentDateTime();
 
     }

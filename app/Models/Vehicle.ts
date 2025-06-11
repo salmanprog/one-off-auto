@@ -60,6 +60,9 @@ export default class Vehicle extends RestModel
     @column()
     public vehicle_owner_phone: string
 
+    @column()
+    public status: number
+
     @column.dateTime({ autoCreate: true })
     public created_at: DateTime
 
@@ -90,7 +93,7 @@ export default class Vehicle extends RestModel
     public static fillable()
     {
         return [
-          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_title','vehicle_descripition','vehicle_modification','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','created_at','updated_at','deleted_at'
+          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_title','vehicle_descripition','vehicle_modification','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','status','created_at','updated_at','deleted_at'
         ]
     }
 

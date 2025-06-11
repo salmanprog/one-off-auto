@@ -98,21 +98,6 @@ class UserHook
         Request.macro('apiToken', function () {
             return api_token;
         });
-
-        if(!_.isEmpty(request_params.services_arr)){
-            for(let i=0;i<request_params.services_arr.length;i++){
-                let slug = await UserSelectedServices.generateSlug('slctd_'+record.id+request_params.services_arr[i])
-                let get_service = await Services.query().where('id',request_params.services_arr[i]).first();
-                let insert_services = await UserSelectedServices.create({
-                    user_id:record.id,
-                    service_id:request_params.services_arr[i],
-                    slug:slug,
-                    service_name:get_service.title,
-                    service_amount:get_service.amount,
-                    created_at: currentDateTime()
-                })
-            }
-        }
         //send welcome email to user
         // if( Env.get('MAIL_SANDBOX') == 0 ){
         //     let email_params = {
@@ -138,43 +123,7 @@ class UserHook
         }
 
         let request_params = request.all();
-        if(!_.isEmpty(request_params.services_arr)){
-
-            let get_user = await User.query().where('slug',slug).first();
-            let get_delete_services = await UserSelectedServices.query().whereNotIn('service_id',request_params.services_arr).where('user_id',get_user.id)
-            if(!_.isEmpty(get_delete_services)){    
-                for(let j=0;j<get_delete_services.length;j++){
-                    //console.log('delete_Service_id.........................................',get_delete_services[j].service_id)
-                    let delete_services = await UserSelectedServices.query().where('service_id',get_delete_services[j].service_id).where('user_id',get_user.id).delete();
-                }
-            }
-            let get_remaing_services = await UserSelectedServices.query().where('user_id',get_user.id)
-            let remaing_service_ids = [];
-            if(!_.isEmpty(get_remaing_services)){    
-                for(let k=0;k<get_remaing_services.length;k++){
-                    remaing_service_ids.push(get_remaing_services[k].service_id.toString())
-                }
-                //console.log('remaing_service_ids.........................................',remaing_service_ids)
-            }
-            let new_services = _.xor(request_params.services_arr, remaing_service_ids);
-            if(!_.isEmpty(new_services)){
-                //console.log('insert_service_ids.........................................',new_services)
-
-                for(let i=0;i<new_services.length;i++){
-                    let slug = await UserSelectedServices.generateSlug('slctd_'+get_user.id+new_services[i])
-                    let get_service = await Services.query().where('id',new_services[i]).first();
-                    let insert_services = await UserSelectedServices.create({
-                        user_id:get_user.id,
-                        service_id:new_services[i],
-                        slug:slug,
-                        service_name:get_service.title,
-                        service_amount:get_service.amount,
-                        created_at: currentDateTime()
-                    })
-                }
-            }
-            
-        }
+        
 
     }
 

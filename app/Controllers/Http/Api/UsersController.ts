@@ -680,4 +680,28 @@ export default class UsersController extends RestController
         this.__sendResponse(200,'User has been retrived successfully',users);
         return;
     }
+
+    public async userDetail(ctx: HttpContextContract)
+    {
+        this.__request  = ctx.request;
+        this.__response = ctx.response;
+        //check validation
+        let validationRules = schema.create({
+        })
+        try{
+          await this.__request.validate({ schema: validationRules })
+        } catch(error){
+            return this.sendError(
+              'Validation Message',
+              this.setValidatorMessagesResponse(error.messages),
+              400
+            )
+        }
+        //get user by email
+        let user = this.__request.user();
+        //send response
+        this.__is_paginate = false;
+        await this.__sendResponse(200,'User detail retrive successfully',user);
+        return;
+    }
 }

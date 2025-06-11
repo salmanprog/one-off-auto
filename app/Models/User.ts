@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 import jwt from 'jsonwebtoken'
 import RestModel from './RestModel'
 import UserApiToken from 'App/Models/UserApiToken'
+import Vehicles from 'App/Models/Vehicle'
 import moment from 'moment';
 const passwordHash = require('password-hash')
 
@@ -82,6 +83,9 @@ export default class User extends RestModel
 
     @column()
     public email_otp_created_at: DateTime | null
+
+    @column()
+    public status: number
 
     @column.dateTime({ autoCreate: true })
     public created_at: DateTime
@@ -380,103 +384,12 @@ export default class User extends RestModel
     public static async dashBoard(user_id:number,user_group_id:number)
     {
         let dashboard = {}
-        if(user_group_id == 2){
-            let total_user = await this.query().whereNotIn('user_group_id',[1,2]).whereNull('deleted_at').getCount();
-            let total_contractor = await this.query().where('user_group_id',3).whereNull('deleted_at').getCount();
-            let total_customer = await this.query().where('user_group_id',5).whereNull('deleted_at').getCount();
-            let total_manager = await this.query().where('user_group_id',4).whereNull('deleted_at').getCount();
-            let total_crew = await this.query().where('user_group_id',6).whereNull('deleted_at').getCount();
-            let total_job = await Job.query().whereNull('deleted_at').getCount();
-            let total_order = await Order.query().whereNull('deleted_at').getCount();
-            let total_category = await ProductCategory.query().whereNull('deleted_at').getCount();
-            let total_services = await Services.query().whereNull('deleted_at').getCount();
+            let total_user = await this.query().whereNotIn('user_group_id',[3]).whereNull('deleted_at').getCount();
+            let total_active_vehicle = await Vehicles.query().where('status','1').whereNull('deleted_at').getCount();
+            let total_pending_vehicle = await Vehicles.query().where('status','0').whereNull('deleted_at').getCount();
             dashboard.total_user = Number(total_user);
-            dashboard.contractor = Number(total_contractor);
-            dashboard.customer = Number(total_customer);
-            dashboard.manager = Number(total_manager);
-            dashboard.crew = Number(total_crew);
-            dashboard.job = Number(total_job);
-            dashboard.order = Number(total_order);
-            dashboard.category = Number(total_category);
-            dashboard.services = Number(total_services);
-        }else if(user_group_id == 3){ //Contractor
-            let get_user = await this.getUserHierarchy(user_id);
-            var remove_current_id = _.without(get_user, user_id);
-            let total_order = await Order.query().where('created_by_id',user_id).whereNull('deleted_at').getCount();
-            let total_customer = await this.query().where('user_group_id',5).where('parent_id',user_id).whereNull('deleted_at');
-            let totalCrew = await Database.from('jobs')
-                                            .leftJoin('jobs_assigners', 'jobs_assigners.job_id', 'jobs.id')
-                                            .where('jobs.created_by_id', user_id)
-                                            .count('jobs_assigners.job_id as total_crew')                                      
-            let total_manager = []
-            for(let j=0;j<total_customer.length;j++){
-                let get_manager = await this.query().where('user_group_id',4).where('parent_id',total_customer[j].id).whereNull('deleted_at').getCount();
-                if(get_manager > 0){
-                    total_manager.push(get_manager)
-                }
-            }
-            let total_job = Job.query().whereNull('deleted_at')
-            total_job.where(function (query) {
-                query.whereIn('created_by_id',get_user)
-                    .orWhereIn('parent_id',get_user);
-            });
-            let job = await total_job.count('* as count');
-            let number_of_job = _.isEmpty(job) ? '0' : job[0].$extras.count
-            dashboard.total_user = Number(remove_current_id.length);
-            dashboard.customer = Number(total_customer.length);
-            dashboard.manager = Number(total_manager.length);
-            dashboard.crew = Number(totalCrew[0].total_crew);
-            dashboard.job = Number(number_of_job);
-            dashboard.order = Number(total_order);
-        }else if(user_group_id == 5){//Customer
-            let get_user = await this.getUserHierarchy(user_id);
-            var remove_current_id = _.without(get_user, user_id);
-            let total_order = await Order.query().where('created_by_id',user_id).whereNull('deleted_at').getCount();
-            let manager = await this.query().where('user_group_id',4).where('parent_id',user_id).whereNull('deleted_at');
-            let totalCrew = await Database.from('jobs')
-                                            .leftJoin('jobs_assigners', 'jobs_assigners.job_id', 'jobs.id')
-                                            .where('jobs.target_id', user_id)
-                                            .count('jobs_assigners.job_id as total_crew') 
-            let total_job = Job.query().whereNull('deleted_at')
-            total_job.where(function (query) {
-                query.whereIn('created_by_id',get_user)
-                    .orWhereIn('parent_id',get_user);
-            });
-            let job = await total_job.count('* as count');
-            let number_of_job = _.isEmpty(job) ? '0' : job[0].$extras.count
-            dashboard.total_user = Number(remove_current_id.length);
-            dashboard.manager = Number(manager.length);
-            dashboard.crew = Number(totalCrew[0].total_crew);
-            dashboard.job = Number(number_of_job);
-            dashboard.order = Number(total_order);
-        }else if(user_group_id == 4){//Manager
-            let get_user = await this.getUserHierarchy(user_id);
-            var remove_current_id = _.without(get_user, user_id);
-            let total_order = await Order.query().where('created_by_id',user_id).whereNull('deleted_at').getCount();
-            let total_job = Job.query().whereNull('deleted_at')
-            total_job.where(function (query) {
-                query.whereIn('created_by_id',get_user)
-                    .orWhereIn('parent_id',get_user);
-            });
-            let job = await total_job.count('* as count');
-            let number_of_job = _.isEmpty(job) ? '0' : job[0].$extras.count
-            dashboard.job = Number(number_of_job);
-            dashboard.order = Number(total_order);
-        }else if(user_group_id == 6){//Crew
-            var now = new Date();
-            var dateString = moment(now).format('YYYY-MM-DD');
-            let startOfDay = moment(dateString).startOf('day').toDate();
-            let endOfDay = moment(dateString).endOf('day').toDate();
-            let today_job = await JobAssignee.query()
-                            .where('crew_id', user_id)
-                            .whereBetween('created_at', [startOfDay, endOfDay]) // Using whereBetween to cover the entire day
-                            .whereNull('deleted_at')
-                            .getCount();
-            let total_job = await JobAssignee.query().where('crew_id',user_id).whereNull('deleted_at').getCount();
-            dashboard.today_job = Number(today_job);
-            dashboard.total_job = Number(total_job);
-        }
-        
+            dashboard.total_active_vehicle = Number(total_active_vehicle);
+            dashboard.total_pending_vehicle = Number(total_pending_vehicle);
         return dashboard;
     }
 }

@@ -20,6 +20,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
       {
@@ -38,6 +39,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
       {
@@ -56,6 +58,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
       {
@@ -74,6 +77,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
       {
@@ -92,6 +96,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
       {
@@ -110,6 +115,7 @@ export default class extends BaseSeeder {
         vehicle_owner_address: 'Los Angeles, CA',
         vehicle_owner_email: 'herry@yopmail.com',
         vehicle_owner_phone: '1231231234',
+        status: '1',
         created_at: new Date(),
       },
     ])
