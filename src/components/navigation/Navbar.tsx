@@ -4,16 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Facebook, Instagram, Youtube } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import Logo from "../common/Logo";
+import { useFetch } from "../../hooks/request";
+import _ from "lodash";
 
   const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("session");
+  const { data } = useFetch("get_user_detail");
+  const dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+   
   const handleLogout = () => {
     localStorage.removeItem("session");
     navigate("/signin");
@@ -83,8 +87,8 @@ import Logo from "../common/Logo";
             <div className="hidden md:flex items-center space-x-3 ml-4">
               {isAuthenticated ? (
                 <>
-                  <Link to="/sell-your-ride" className="btn-secondary">
-                    Sell Your Ride
+                  <Link to={`/${dashboardUrl}`} className="btn-secondary">
+                    Dashboard
                   </Link>
                   <button
                     onClick={handleLogout}

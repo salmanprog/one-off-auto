@@ -5,6 +5,7 @@ import { fetchListings, getLoggedInUser, deleteListing } from "@/lib/api"; // Im
 import { Listing, User } from "@/lib/api"; // Import interfaces
 import ViewListingDialog from './ViewListingDialog'; // Import dialogs
 import EditListingDialog from './EditListingDialog';
+import { useFetch } from "../../hooks/request";
 // import ChangeListingStatusDialog from './ChangeListingStatusDialog'; // Not needed for user listings
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"; // Import AlertDialog
 
@@ -16,36 +17,31 @@ const UserListings: React.FC = () => {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false); // State for View Dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for Edit Dialog
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false); // State for Delete Dialog
-  const [selectedListingId, setSelectedListingId] = useState<number | null>(null); // State to hold the selected listing ID
-
+  const [selectedListingId, setSelectedListingId] = useState<number | null>(null); // State to hold the 
+  // selected listing ID
+  const { data } = useFetch("get_vehicle_list");
+  const [currentPage, setCurrentPage] = useState(1);
+  const listingsPerPage = 3;
+  const indexOfLastListing = currentPage * listingsPerPage;
+  const indexOfFirstListing = indexOfLastListing - listingsPerPage;
+  const currentListings = listings.slice(indexOfFirstListing, indexOfLastListing);
+  const totalPages = Math.ceil(listings.length / listingsPerPage);
   // Fetch logged-in user and their listings on component mount
   useEffect(() => {
-    const loadUserDataAndListings = async () => {
-      try {
-        const user = await getLoggedInUser();
-        setLoggedInUser(user);
-        if (user?.username) {
-          setLoading(true);
-          const userListings = await fetchListings(user.username);
-          setListings(userListings);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching user data or listings:", error);
-        setLoading(false);
-      }
-    };
-
-    loadUserDataAndListings();
-  }, []); // Empty dependency array means this runs once on mount
+    if (data) {
+      setLoading(true);
+      setListings(data);
+      setLoading(false);
+    }
+  }, [data]);
 
   // Function to reload listings (e.g., after edit or delete)
   const reloadListings = async () => {
-     if (loggedInUser?.username) {
+     if (data) {
        setLoading(true);
        try {
-         const userListings = await fetchListings(loggedInUser.username);
-         setListings(userListings);
+         //const userListings = await fetchListings(loggedInUser.username);
+         setListings(data);
        } catch (error) {
          console.error("Error reloading listings:", error);
        } finally {
@@ -130,17 +126,17 @@ const UserListings: React.FC = () => {
                </TableRow>
              </TableHeader>
              <TableBody>
-               {listings.map(listing => (
+               {currentListings.map(listing => (
                  <TableRow key={listing.id}>
                    <TableCell className="font-medium">{listing.id}</TableCell>
-                   <TableCell>{listing.listingTitle}</TableCell>
-                   <TableCell>{listing.vehicleType}</TableCell>
-                   <TableCell>{listing.make}</TableCell>
-                   <TableCell>{listing.model}</TableCell>
-                   <TableCell>{listing.year}</TableCell>
-                   <TableCell>{listing.price}</TableCell>
-                   <TableCell>{listing.status}</TableCell>
-                   <TableCell>{listing.datePosted}</TableCell>
+                   <TableCell>{listing.vehicle_title}</TableCell>
+                   <TableCell>{listing.vehicle_category.title}</TableCell>
+                   <TableCell>{listing.vehicle_make}</TableCell>
+                   <TableCell>{listing.vehicle_model}</TableCell>
+                   <TableCell>{listing.vehicle_year}</TableCell>
+                   <TableCell>{listing.vehicle_price}</TableCell>
+                   <TableCell>{listing.vehicle_owner_email}</TableCell>
+                   <TableCell>{listing.created_at}</TableCell>
                    <TableCell className="text-right">
                      <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>
                      <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleEdit(listing.id)}>Edit</Button>
@@ -150,26 +146,40 @@ const UserListings: React.FC = () => {
                ))}
              </TableBody>
            </Table>
-         ) : (loggedInUser ? (
-           <p>You have no listings yet.</p>
-         ) : (
-           <p>Please log in to view your listings.</p>
-         ))}
+         ) : <p>You have no listings yet.</p> }
+         <div className="flex justify-center mt-4 space-x-2">
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous
+        </Button>
+        <span className="self-center">
+          Page {currentPage} of {totalPages}
+        </span>
+        <Button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </Button>
+      </div>
+
          </div>
 
          {/* Render Dialogs */}
          <ViewListingDialog
-           isOpen={isViewDialogOpen}
-           onClose={handleCloseViewDialog}
-           listingId={selectedListingId}
-         />
+            isOpen={isViewDialogOpen}
+            onClose={handleCloseViewDialog}
+            listing={listings.find(listing => listing.id === selectedListingId) || null}
+          />
 
-         <EditListingDialog
-           isOpen={isEditDialogOpen}
-           onClose={handleCloseEditDialog}
-           listingId={selectedListingId}
-           onSave={reloadListings} // Pass reloadListings to refresh after edit
-         />
+          <EditListingDialog
+            isOpen={isEditDialogOpen}
+            onClose={handleCloseEditDialog}
+            listing={listings.find(listing => listing.id === selectedListingId) || null}
+            onSave={reloadListings}
+          />
 
          {/* Delete Listing Confirmation Dialog */}
          <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

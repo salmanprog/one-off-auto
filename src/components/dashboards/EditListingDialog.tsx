@@ -1,201 +1,161 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fetchListings, updateListingData } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { Listing } from "@/lib/api";
+import { XIcon } from "lucide-react";
+
+// 🧠 Assume these are imported properly:
+// import { updateListing, deleteMediaItem } from "@/lib/api";
 
 interface EditListingDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  listingId: number | null;
   onSave: () => void;
+  listing: Listing | null;
 }
 
-const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, listingId, onSave }) => {
-  const [listingData, setListingData] = useState<Listing | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [editedData, setEditedData] = useState<Partial<Listing> | null>(null);
+const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, onSave, listing }) => {
+  const [formData, setFormData] = useState({
+    vehicle_title: "",
+    vehicle_make: "",
+    vehicle_model: "",
+    vehicle_year: "",
+    vehicle_price: "",
+    vehicle_mileage: "",
+    vehicle_descripition: "",
+  });
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [media, setMedia] = useState<any[]>([]);
 
   useEffect(() => {
-    if (isOpen && listingId !== null) {
-      setLoading(true);
-      fetchListings()
-        .then(listings => {
-          const listing = listings.find(l => l.id === listingId);
-          setListingData(listing || null);
-          setEditedData(listing ? { ...listing } : null);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error(`Error fetching listing ${listingId}:`, error);
-          setLoading(false);
-        });
-    } else {
-      setListingData(null);
-      setEditedData(null);
-      setLoading(false);
+    if (listing) {
+      setFormData({
+        vehicle_title: listing.vehicle_title ?? "",
+        vehicle_make: listing.vehicle_make ?? "",
+        vehicle_model: listing.vehicle_model ?? "",
+        vehicle_year: listing.vehicle_year?.toString() ?? "",
+        vehicle_price: listing.vehicle_price?.toString() ?? "",
+        vehicle_mileage: listing.vehicle_mileage ?? "",
+        vehicle_descripition: listing.vehicle_descripition ?? "",
+      });
+      setMedia(listing.media || []);
     }
-  }, [isOpen, listingId]);
+  }, [listing]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setEditedData({ ...editedData, [id]: value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSelectChange = (field: keyof Partial<Listing>, value: string) => {
-     setEditedData({ ...editedData, [field]: value });
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.vehicle_title.trim()) newErrors.vehicle_title = "Title is required.";
+    if (!formData.vehicle_make.trim()) newErrors.vehicle_make = "Make is required.";
+    if (!formData.vehicle_model.trim()) newErrors.vehicle_model = "Model is required.";
+    if (!formData.vehicle_year.trim()) newErrors.vehicle_year = "Year is required.";
+    if (!formData.vehicle_price.trim()) newErrors.vehicle_price = "Price is required.";
+    if (!formData.vehicle_mileage.trim()) newErrors.vehicle_mileage = "Mileage is required.";
+    if (!formData.vehicle_descripition.trim()) newErrors.vehicle_descripition = "Description is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = () => {
-    if (listingId !== null && editedData) {
-      console.log(`Saving changes for listing with ID: ${listingId}`, editedData);
-      updateListingData(listingId, editedData)
-        .then(() => {
-          alert(`Listing ${listingId} updated.`);
-          onSave();
-          onClose();
-        })
-        .catch(error => {
-          console.error(`Error updating listing ${listingId}:`, error);
-          alert(`Failed to update listing ${listingId}.`);
-        });
+  const handleSubmit = async () => {
+    if (!listing || !validate()) return;
+
+    try {
+      await updateListing(listing.id, {
+        ...listing,
+        ...formData,
+        vehicle_year: parseInt(formData.vehicle_year),
+        vehicle_price: parseFloat(formData.vehicle_price),
+      });
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error("Failed to update listing", error);
     }
   };
 
-  const statusOptions = ['Pending Approval', 'Active', 'Sold', 'Expired'];
-  const vehicleTypeOptions = ['Sedan', 'Coupe', 'SUV', 'Truck', 'Motorcycle', 'Other'];
+  const handleDeleteImage = async (mediaId: number) => {
+    try {
+      await deleteMediaItem(mediaId);
+      setMedia(prev => prev.filter(item => item.id !== mediaId));
+    } catch (error) {
+      console.error("Failed to delete media", error);
+      alert("Could not delete image.");
+    }
+  };
+
+  if (!listing) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg md:max-w-xl lg:max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Edit Listing</DialogTitle>
-          <DialogDescription>
-            Editing details for Listing ID: {listingId}
-          </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-           {loading ? (
-             <p>Loading listing data...</p>
-           ) : editedData ? (
-             <form>
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="listingTitle" className="text-right">Listing Title</Label>
-                 <Input
-                   id="listingTitle"
-                   value={editedData.listingTitle || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3"
-                 />
-               </div>
 
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="vehicleType" className="text-right">Vehicle Type</Label>
-                 <Select onValueChange={(value) => handleSelectChange('vehicleType', value)} value={editedData.vehicleType || ''}>
-                   <SelectTrigger className="col-span-3">
-                     <SelectValue placeholder="Select vehicle type" />
-                   </SelectTrigger>
-                   <SelectContent>
-                     {vehicleTypeOptions.map(type => (
-                       <SelectItem key={type} value={type}>{type}</SelectItem>
-                     ))}
-                   </SelectContent>
-                 </Select>
-               </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            ["vehicle_title", "Title"],
+            ["vehicle_make", "Make"],
+            ["vehicle_model", "Model"],
+            ["vehicle_year", "Year"],
+            ["vehicle_price", "Price"],
+            ["vehicle_mileage", "Mileage"],
+            ["vehicle_descripition", "Description", "col-span-2"],
+          ].map(([name, label, extraClass = ""]) => (
+            <div key={name} className={extraClass}>
+              <label className="block text-sm font-medium mb-1">{label}</label>
+              <Input
+                name={name}
+                value={formData[name as keyof typeof formData]}
+                onChange={handleChange}
+                type={
+                  name.includes("year") || name.includes("price")
+                    ? "number"
+                    : "text"
+                }
+                placeholder={label}
+              />
+              {errors[name as string] && (
+                <p className="text-red-500 text-sm mt-1">{errors[name as string]}</p>
+              )}
+            </div>
+          ))}
 
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="make" className="text-right">Make</Label>
-                 <Input
-                   id="make"
-                   value={editedData.make || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3"
-                 />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="model" className="text-right">Model</Label>
-                 <Input
-                   id="model"
-                   value={editedData.model || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3"
-                 />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="year" className="text-right">Year</Label>
-                 <Input
-                   id="year"
-                   value={editedData.year?.toString() || ''} 
-                   onChange={handleInputChange}
-                   className="col-span-3"
-                   type="number"
-                 />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="price" className="text-right">Price</Label>
-                 <Input
-                   id="price"
-                   value={editedData.price || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3"
-                 />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="description" className="text-right">Description</Label>
-                 <textarea
-                   id="description"
-                   value={editedData.description || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3 border rounded-md p-2"
-                   rows={4}
-                  />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="modifications" className="text-right">Modifications</Label>
-                 <textarea
-                   id="modifications"
-                   value={editedData.modifications || ''}
-                   onChange={handleInputChange}
-                   className="col-span-3 border rounded-md p-2"
-                    rows={4}
-                  />
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label htmlFor="status" className="text-right">Status</Label>
-                 <Select onValueChange={(value) => handleSelectChange('status', value)} value={editedData.status || ''}>
-                   <SelectTrigger className="col-span-3">
-                     <SelectValue placeholder="Select a status" />
-                   </SelectTrigger>
-                   <SelectContent>
-                     {statusOptions.map(status => (
-                       <SelectItem key={status} value={status}>{status}</SelectItem>
-                     ))}
-                   </SelectContent>
-                 </Select>
-               </div>
-
-               <div className="grid grid-cols-4 items-center gap-4 mb-4">
-                 <Label className="text-right">Vehicle Photos</Label>
-                 <div className="col-span-3">[Photo upload/display area]</div>
-               </div>
-
-             </form>
-           ) : (
-             <p>Listing data not found.</p>
-           )}
+          {media.length > 0 && (
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-1">Images</label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {media.map((img) => (
+                  <div key={img.id} className="relative group">
+                    <img
+                      src={img.file_url}
+                      alt="Listing"
+                      className="w-full h-40 object-cover rounded border"
+                    />
+                    <button
+                      onClick={() => handleDeleteImage(img.id)}
+                      className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-100"
+                      title="Delete image"
+                    >
+                      <XIcon className="h-4 w-4 text-red-600" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave} disabled={loading || !editedData}>Save changes</Button>
+
+        <DialogFooter className="mt-4">
+          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSubmit}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

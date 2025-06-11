@@ -7,12 +7,24 @@ const api = {
       url: 'user/logout',
       method: "POST",
     },
+    get_user_detail: {
+      url: 'view/user',
+      method: "GET",
+    },
     get_dashboard: {
       url: 'user/dashboard',
       method: "GET",
     },
     create_users: {
       url: 'user',
+      method: "POST",
+    },
+    update_users: {
+      url: 'user',
+      method: "PUT",
+    },
+    users_change_password: {
+      url: 'user/change-password',
       method: "POST",
     },
     get_vehicle_categories: {

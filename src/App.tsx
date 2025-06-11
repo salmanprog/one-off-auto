@@ -37,8 +37,8 @@ const App = () => (
           <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/listings/:listingId" element={<ListingDetail />} />
-          <Route path="/admin-dashboard/*" element={<DashboardLayout />} />
-          <Route path="/user-dashboard/*" element={<DashboardLayout />} />
+          <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
+          <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
