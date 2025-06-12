@@ -8,7 +8,7 @@ function PrivateRoute({ children }) {
         return     <>{children}</>
      }
      else {
-         return <Navigate to='/admin/login/zekkmdvhkm' />
+         return <Navigate to='/' />
      }
 }
 
