@@ -3,11 +3,11 @@ const constants = {
 
   admin_login_url: "/login/zekkmdvhkm",
 
-  api_base_url: "http://127.0.0.1:3333/api/",
+  api_base_url: "https://one-off.sitestaginglink.com/api/",
 
-  base_url: "http://127.0.0.1:3333/admin",
+  base_url: "https://one-off.sitestaginglink.com",
 
-  node_chat_url: "http://127.0.0.1:3333/",
+  node_chat_url: "https://one-off.sitestaginglink.com/",
 
   default_language: "en",
 
