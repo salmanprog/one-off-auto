@@ -40,7 +40,7 @@ const helpers = {
   },
   removeStorageData: function () {
     localStorage.clear();
-    let login_url = constants.base_url + constants.admin_login_url;
+    let login_url = constants.base_url;
     window.location.href = login_url;
   },
   dateFormat: function (given_date) {
