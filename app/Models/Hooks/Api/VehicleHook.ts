@@ -21,7 +21,7 @@ class VehicleHook
         query.preload('vehicleCategory')
         query.preload('user')
         query.preload('media')
-        query.where('status','1').orderBy('id','desc')
+        query.whereIn('status',['1','2']).orderBy('id','desc')
     }
 
     /**
@@ -90,22 +90,36 @@ class VehicleHook
     {
         let req = request.all();
         let get_vehicle = await Vehicle.query().where('slug', slug).first();
-        if( !_.isEmpty(get_vehicle) ){
-            if( !_.isEmpty(req.delete_vehicle_images) ){
-                let delete_image_id = JSON.parse(req.delete_vehicle_images); 
-                for(let i = 0; i < delete_image_id.length; i++){
-                    await Database.from('media').where('id', delete_image_id[i]).delete();
-                }
-            }
-            if( !_.isEmpty(req.vehicle_images) ){
-                let image_id = JSON.parse(req.vehicle_images);
-                for(let i = 0; i < image_id.length; i++){
-                    await Database.from('media').where('id', image_id[i]).update({
-                        module: 'vehicle',
-                        module_id: get_vehicle.id,
-                        created_at: currentDateTime()
-                    });
-                }
+        
+        if( !_.isEmpty(req.deleted_image_ids) ){
+            let arr = JSON.parse(req.deleted_image_ids)
+            let delete_images = await Media.query().whereIn('id',arr).delete();
+        }
+
+        if( !_.isEmpty(request.files('vehicle_images')) ){
+            let images = request.files('vehicle_images');
+            let image_url  = '';
+            for(let i = 0; i < images.length; i++){
+                    image_url  = await FileUpload.doUpload(images[i],'vehicle');
+                let slug = await Media.generateSlug('med_veh'+get_vehicle.id+'_'+i);
+                await Database.table('media').insert({
+                                user_id: request.user().id,
+                                slug: slug,
+                                module: 'vehicle',
+                                module_id: get_vehicle.id,
+                                filename: 'dumy_' + Math.floor((Math.random() * 100) + 1) + new Date().getTime(),
+                                original_name: 'dumy_' + Math.floor((Math.random() * 100) + 1) + new Date().getTime(),
+                                file_url: image_url,
+                                file_url_blur: '0000',
+                                thumbnail_url: image_url,
+                                mime_type: 'image/jpeg',
+                                file_type: 'image',
+                                driver: 'local',
+                                media_type: 'public',
+                                meta: '',
+                                created_at: currentDateTime()
+                            });
+
             }
         }
     }

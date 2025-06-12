@@ -29,6 +29,14 @@ class Vehicle
   {
     const createdAt = record.created_at;
     const formattedDate = createdAt ? new Date(createdAt).toISOString().split("T")[0] : '';
+    let status_text = ''
+    if(record.status == '0'){
+      status_text = 'Pending'
+    }else if(record.status == '1'){
+      status_text = 'Approved'
+    }else{
+      status_text = 'Expired'
+    }
       return {
           id: record.id,
           vehicle_category_id: record.vehicle_category_id,
@@ -50,6 +58,7 @@ class Vehicle
           vehicle_owner_email: record.vehicle_owner_email,
           vehicle_owner_phone: record.vehicle_owner_phone,
           media: await Media.initResponse(record.media,request),
+          status: status_text,
           created_at: formattedDate
       }
   }
