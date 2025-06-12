@@ -20,6 +20,7 @@ const UserListings: React.FC = () => {
   const [selectedListingId, setSelectedListingId] = useState<number | null>(null); // State to hold the 
   // selected listing ID
   const { data } = useFetch("get_vehicle_list");
+  const { postData } = useFetch("delete_vehicle", "submit");
   const [currentPage, setCurrentPage] = useState(1);
   const listingsPerPage = 3;
   const indexOfLastListing = currentPage * listingsPerPage;
@@ -68,8 +69,13 @@ const UserListings: React.FC = () => {
   const confirmDelete = async () => {
     if (selectedListingId !== null) {
       try {
-        await deleteListing(selectedListingId);
-        alert(`Listing ${selectedListingId} deleted.`); // Or use a toast
+        const fd = new FormData();
+        const callback = (receivedData: any) => {
+          window.location.reload();
+        };
+        postData(fd, callback, selectedListingId);
+        //await deleteListing(selectedListingId);
+        //alert(`Listing ${selectedListingId} deleted.`); // Or use a toast
         reloadListings(); // Refresh the list after deletion
         setIsDeleteDialogOpen(false);
         setSelectedListingId(null);
@@ -135,12 +141,12 @@ const UserListings: React.FC = () => {
                    <TableCell>{listing.vehicle_model}</TableCell>
                    <TableCell>{listing.vehicle_year}</TableCell>
                    <TableCell>{listing.vehicle_price}</TableCell>
-                   <TableCell>{listing.vehicle_owner_email}</TableCell>
+                   <TableCell>{listing.status}</TableCell>
                    <TableCell>{listing.created_at}</TableCell>
                    <TableCell className="text-right">
                      <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>
                      <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleEdit(listing.id)}>Edit</Button>
-                     <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(listing.id)}>Delete</Button>
+                     <Button variant="ghost" size="sm" onClick={() => handleDeleteClick(listing.slug)}>Delete</Button>
                    </TableCell>
                  </TableRow>
                ))}

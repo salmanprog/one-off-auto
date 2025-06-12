@@ -48,11 +48,11 @@ const api = {
       method: "GET",
     },
     update_vehicle: {
-      url: 'vehicle/{id}',
+      url: 'vehicle',
       method: "PUT",
     },
     delete_vehicle: {
-      url: 'vehicle/{id}',
+      url: 'vehicle',
       method: "DELETE",
     },
   };

@@ -200,7 +200,7 @@ const Listings = () => {
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                   <p className="text-gray-600 mb-2 sm:mb-0">
-                    Showing <span className="font-bold">{itemsPerPage}</span> results
+                    Showing <span className="font-bold">{filteredAndSortedListings.length}</span> results
                   </p>
                   <div className="flex items-center">
                     <span className="mr-2">Sort by:</span>

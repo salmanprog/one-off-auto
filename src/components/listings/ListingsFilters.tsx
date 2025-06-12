@@ -75,66 +75,46 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               {/* Make Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Make</label>
-                <select
+                <input
+                  type="text"
+                  placeholder="Enter make"
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.make}
                   onChange={(e) => onFilterChange({ make: e.target.value })}
-                >
-                  <option value="">All Makes</option>
-                  <option value="honda">Honda</option>
-                  <option value="toyota">Toyota</option>
-                  <option value="subaru">Subaru</option>
-                  <option value="ford">Ford</option>
-                  <option value="chevrolet">Chevrolet</option>
-                  <option value="bmw">BMW</option>
-                </select>
+                />
               </div>
 
               {/* Model Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Model</label>
-                <select
+                <input
+                  type="text"
+                  placeholder="Enter model"
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.model}
                   onChange={(e) => onFilterChange({ model: e.target.value })}
-                >
-                  <option value="">All Models</option>
-                  <option value="civic">Civic</option>
-                  <option value="wrx">WRX</option>
-                  <option value="mustang">Mustang</option>
-                  <option value="m3">M3</option>
-                </select>
+                />
               </div>
 
               {/* Year Range */}
               <div>
                 <label className="block text-sm font-medium mb-1">Year</label>
                 <div className="flex items-center space-x-2">
-                  <select
+                <input
+                    type="number"
+                    placeholder="From"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.yearFrom}
                     onChange={(e) => onFilterChange({ yearFrom: e.target.value })}
-                  >
-                    <option value="">From</option>
-                    <option value="2020">2020</option>
-                    <option value="2015">2015</option>
-                    <option value="2010">2010</option>
-                    <option value="2000">2000</option>
-                    <option value="1990">1990</option>
-                  </select>
+                  />
                   <span>-</span>
-                  <select
+                  <input
+                    type="number"
+                    placeholder="To"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.yearTo}
                     onChange={(e) => onFilterChange({ yearTo: e.target.value })}
-                  >
-                    <option value="">To</option>
-                    <option value="2023">2023</option>
-                    <option value="2020">2020</option>
-                    <option value="2015">2015</option>
-                    <option value="2010">2010</option>
-                    <option value="2000">2000</option>
-                  </select>
+                  />
                 </div>
               </div>
 
@@ -179,148 +159,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
           )}
         </div>
 
-        {/* Modification Filters */}
-        <div className="mb-6">
-          <div
-            className="flex items-center justify-between cursor-pointer"
-            onClick={() => setModFiltersOpen(!modFiltersOpen)}
-          >
-            <h3 className="text-lg font-bold mb-2">Modifications</h3>
-            {modFiltersOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </div>
 
-          {modFiltersOpen && (
-            <div className="space-y-4 mt-3">
-              {/* Engine Mods */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Engine Modifications</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      checked={filters.engineMods.includes('engine swap')}
-                      onChange={(e) => {
-                        const newEngineMods = e.target.checked
-                          ? [...filters.engineMods, 'engine swap']
-                          : filters.engineMods.filter(mod => mod !== 'engine swap');
-                        onFilterChange({ engineMods: newEngineMods });
-                      }}
-                    />
-                    <span>Engine Swap</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      checked={filters.engineMods.includes('turbo')}
-                      onChange={(e) => {
-                        const newEngineMods = e.target.checked
-                          ? [...filters.engineMods, 'turbo']
-                          : filters.engineMods.filter(mod => mod !== 'turbo');
-                        onFilterChange({ engineMods: newEngineMods });
-                      }}
-                    />
-                    <span>Turbo/Supercharger</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      checked={filters.engineMods.includes('tune')}
-                      onChange={(e) => {
-                        const newEngineMods = e.target.checked
-                          ? [...filters.engineMods, 'tune']
-                          : filters.engineMods.filter(mod => mod !== 'tune');
-                        onFilterChange({ engineMods: newEngineMods });
-                      }}
-                    />
-                    <span>ECU Tune</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      checked={filters.engineMods.includes('exhaust')}
-                      onChange={(e) => {
-                        const newEngineMods = e.target.checked
-                          ? [...filters.engineMods, 'exhaust']
-                          : filters.engineMods.filter(mod => mod !== 'exhaust');
-                        onFilterChange({ engineMods: newEngineMods });
-                      }}
-                    />
-                    <span>Exhaust System</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Suspension Mods */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Suspension</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Coilovers</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Air Suspension</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Lowering Springs</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Adjustable Control Arms</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Body Mods */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Body Modifications</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Wide Body Kit</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Custom Paint</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Carbon Fiber Parts</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Wing/Spoiler</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Wheels & Tires */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Wheels & Tires</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Aftermarket Wheels</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Performance Tires</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Custom Wheel Size</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
         {/* Filter Actions */}
         <div className="flex flex-col gap-2 mt-4">
