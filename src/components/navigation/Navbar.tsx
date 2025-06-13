@@ -14,9 +14,13 @@ import _ from "lodash";
   };
 
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("session");
-  const { data } = useFetch("get_user_detail");
-  const dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+   const isAuthenticated = !!localStorage.getItem("session");
+   let dashboardUrl = '';
+   
+   if(isAuthenticated){
+    const { data } = useFetch("get_user_detail");
+      dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+   }
    
   const handleLogout = () => {
     localStorage.removeItem("session");
