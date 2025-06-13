@@ -7,7 +7,7 @@ const HomePage = () => {
   const navigate = useNavigate(); // ← initialize the hook
 
   const handleRedirect = () => {
-    navigate('/'); // ← change this path to your target route
+    navigate('/admin/login/zekkmdvhkm'); // ← change this path to your target route
   };
 
   return (

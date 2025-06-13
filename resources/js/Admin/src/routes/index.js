@@ -134,7 +134,7 @@ const Loading = ()=>{
 function App() {
     return (
         <Routes>
-        <Route exact path="/" element={<Home />} /> 
+        {/* <Route exact path="/" element={<Home />} /> 
         <Route exact path="/content/:slug" element={<ContentPages />}/>
         <Route exact path="/invite/:slug" element={<InviteUser />}/>
         <Route exact path="/admin/login/zekkmdvhkm" element={<AuthRoute><Login /></AuthRoute>} />
@@ -244,7 +244,7 @@ function App() {
 
         <Route exact path="/admin/users-feedbacks" element={<PrivateRoute><ApplicationAdminFeedback /></PrivateRoute>}/>
         <Route exact path="/admin/users-feedbacks/view/:slug?" element={<PrivateRoute><ApplicationAdminFeedbackView /></PrivateRoute>}/>
-        
+         */}
         </Routes>
     );
 }
