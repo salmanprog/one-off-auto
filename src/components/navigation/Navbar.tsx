@@ -18,7 +18,7 @@ import _ from "lodash";
    let dashboardUrl = '';
    
    if(isAuthenticated){
-    const { data } = useFetch("get_user_detail");
+       const { data } = useFetch("get_user_detail");
       dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
    }
    

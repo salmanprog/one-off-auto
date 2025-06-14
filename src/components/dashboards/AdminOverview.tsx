@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchOverviewStats, fetchRecentActivity } from "@/lib/api"; // Import mock API functions
 import { useFetch } from "../../hooks/request";
 
-const { data, loading, error } = useFetch("get_dashboard");
-console.log(data)
+// const { data, loading, error } = useFetch("get_dashboard");
+// console.log(data)
 interface OverviewStats {
   totalUsers: number;
   activeListings: number;
