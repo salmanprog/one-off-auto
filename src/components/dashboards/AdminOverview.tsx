@@ -3,8 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchOverviewStats, fetchRecentActivity } from "@/lib/api"; // Import mock API functions
 import { useFetch } from "../../hooks/request";
 
-// const { data, loading, error } = useFetch("get_dashboard");
-// console.log(data)
+
 interface OverviewStats {
   totalUsers: number;
   activeListings: number;
@@ -22,6 +21,7 @@ const AdminOverview: React.FC = () => {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingActivity, setLoadingActivity] = useState(true);
+  const { data } = useFetch("get_dashboard");
 
   useEffect(() => {
     // Fetch Overview Stats
@@ -74,7 +74,7 @@ const AdminOverview: React.FC = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : stats?.totalUsers ?? 'N/A'}</div>
+            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : data?.total_user ?? 'N/A'}</div>
             {/* <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p> */}
@@ -102,7 +102,7 @@ const AdminOverview: React.FC = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : stats?.activeListings ?? 'N/A'}</div>
+            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : data?.total_active_vehicle ?? 'N/A'}</div>
             {/* <p className="text-xs text-muted-foreground">
               +15.5% from last month
             </p> */}
@@ -128,7 +128,7 @@ const AdminOverview: React.FC = () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : stats?.pendingListings ?? 'N/A'}</div>
+            <div className="text-2xl font-bold">{loadingStats ? 'Loading...' : data?.total_pending_vehicle ?? 'N/A'}</div>
             {/* <p className="text-xs text-muted-foreground">
               +5.2% from last month
             </p> */}

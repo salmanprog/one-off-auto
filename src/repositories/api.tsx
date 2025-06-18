@@ -12,7 +12,7 @@ const api = {
       method: "GET",
     },
     get_dashboard: {
-      url: 'user/dashboard',
+      url: 'admin/dashboard',
       method: "GET",
     },
     create_users: {
