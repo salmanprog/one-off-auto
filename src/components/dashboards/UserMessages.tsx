@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { getLoggedInUser, fetchChatSessionsForUser, User, ChatSession, ChatMessage, fetchChatMessages, sendChatMessage, fetchUserById } from '@/lib/api'; // Import necessary API functions and interfaces
 import { FileText, Image, Mic, Paperclip, Send } from 'lucide-react'; // Import icons for different message types and attachment
 
-const UserMessages: React.FC = () => {
+interface UserMessagesProps {
+  hideSidebar?: boolean;
+}
+
+const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar }) => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
@@ -164,49 +168,47 @@ const UserMessages: React.FC = () => {
   };
 
   return (
-    <div className="flex h-full">
-      {/* Sidebar for chat sessions */}
-      <aside className="w-64 bg-gray-100 p-4 overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Chats</h3>
-        {loadingUser || loadingSessions ? (
-          <p>Loading chats...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : chatSessions.length === 0 ? (
-          <p>No chats found.</p>
-        ) : (
-          <ul className="space-y-2">
-            {chatSessions.map(session => {
-              const otherParticipantId = session.buyerId === loggedInUser?.id ? session.sellerId : session.buyerId;
-              const otherUser = otherUsers[otherParticipantId];
-              const latestMessage = session.messages[session.messages.length - 1]; // Get latest message (mock)
+    <div className={hideSidebar ? "h-full" : "flex h-full"}>
+      {!hideSidebar && (
+        <aside className="w-64 bg-gray-100 p-4 overflow-y-auto">
+          <h3 className="text-lg font-semibold mb-4">Chats</h3>
+          {loadingUser || loadingSessions ? (
+            <p>Loading chats...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : chatSessions.length === 0 ? (
+            <p>No chats found.</p>
+          ) : (
+            <ul className="space-y-2">
+              {chatSessions.map(session => {
+                const otherParticipantId = session.buyerId === loggedInUser?.id ? session.sellerId : session.buyerId;
+                const otherUser = otherUsers[otherParticipantId];
+                const latestMessage = session.messages[session.messages.length - 1]; // Get latest message (mock)
 
-              return (
-                <li
-                  key={session.id}
-                  className={`cursor-pointer p-2 rounded ${selectedSessionId === session.id ? 'bg-blue-200' : 'hover:bg-gray-200'}`}
-                  onClick={() => handleSelectSession(session.id)}
-                >
-                  <p className="font-medium">{otherUser ? otherUser.fullName || otherUser.username : 'Loading user...'}</p>
-                  {/* Optionally show a snippet of the last message */}
-                  {latestMessage && (
-                    <p className="text-sm text-gray-600 truncate">
-                      {latestMessage.type === 'text' ? latestMessage.content : `[${latestMessage.type.charAt(0).toUpperCase() + latestMessage.type.slice(1)}]`}
-                    </p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </aside>
-
+                return (
+                  <li
+                    key={session.id}
+                    className={`cursor-pointer p-2 rounded ${selectedSessionId === session.id ? 'bg-blue-200' : 'hover:bg-gray-200'}`}
+                    onClick={() => handleSelectSession(session.id)}
+                  >
+                    <p className="font-medium">{otherUser ? otherUser.fullName || otherUser.username : 'Loading user...'}</p>
+                    {/* Optionally show a snippet of the last message */}
+                    {latestMessage && (
+                      <p className="text-sm text-gray-600 truncate">
+                        {latestMessage.type === 'text' ? latestMessage.content : `[${latestMessage.type.charAt(0).toUpperCase() + latestMessage.type.slice(1)}]`}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </aside>
+      )}
       {/* Main chat area */}
       <main className="flex-1 p-4 flex flex-col">
         <h2 className="text-2xl font-bold mb-4">Chatroom</h2>
-        {selectedSessionId === null ? (
-          <p>Select a chat to view messages.</p>
-        ) : loadingMessages ? (
+        {loadingMessages ? (
           <p>Loading messages...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
@@ -215,7 +217,7 @@ const UserMessages: React.FC = () => {
             {/* Messages Display Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 rounded-md">
               {messages.length === 0 ? (
-                <p>No messages yet.</p>
+                <p className="text-gray-400 text-center">No messages yet.</p>
               ) : (
                 messages.map(message => (
                   <div
@@ -248,7 +250,7 @@ const UserMessages: React.FC = () => {
               <button
                 onClick={handleAttachmentClick}
                 className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!selectedSessionId}
+                // Always enabled in popup
               >
                 <Paperclip size={24} />
               </button>
@@ -275,14 +277,14 @@ const UserMessages: React.FC = () => {
                       handleSendMessage();
                     }
                   }}
-                  disabled={!selectedSessionId}
+                  // Always enabled in popup
                 />
               )}
 
               <button
                 onClick={handleSendMessage}
                 className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                disabled={!selectedSessionId || (!newMessageContent.trim() && !selectedFile)}
+                disabled={!newMessageContent.trim() && !selectedFile}
               >
                  <Send size={24} />
               </button>
