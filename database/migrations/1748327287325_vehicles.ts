@@ -14,6 +14,8 @@ export default class extends BaseSchema {
       table.string('vehicle_year',255).notNullable()
       table.string('vehicle_mileage',255).notNullable()
       table.string('vehicle_price',255).notNullable()
+      table.string('vehicle_primarily_used',255).notNullable()
+      table.string('vehicle_stock_parts',255).notNullable().defaultTo('yes')
       table.string('vehicle_title',255).notNullable()
       table.text('vehicle_descripition').notNullable()
       table.text('vehicle_modification').notNullable()

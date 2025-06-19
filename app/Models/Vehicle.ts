@@ -40,6 +40,12 @@ export default class Vehicle extends RestModel
     public vehicle_price: string
 
     @column()
+    public vehicle_primarily_used: string
+
+    @column()
+    public vehicle_stock_parts: string
+
+    @column()
     public vehicle_title: string
 
     @column()
@@ -93,7 +99,7 @@ export default class Vehicle extends RestModel
     public static fillable()
     {
         return [
-          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_title','vehicle_descripition','vehicle_modification','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','status','created_at','updated_at','deleted_at'
+          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_primarily_used','vehicle_stock_parts','vehicle_title','vehicle_descripition','vehicle_modification','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','status','created_at','updated_at','deleted_at'
         ]
     }
 

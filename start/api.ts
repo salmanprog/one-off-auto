@@ -24,6 +24,8 @@ Route
     Route.post('user/login','Api/UsersController.login').as('user.login');
     // Vehicle
     Route.resource('user/vehicle', 'Api/VehicleController').except(['create','update','destroy']);
+    // Vehicle Make
+    Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store
     Route.resource('user', 'Api/UsersController')
       .except(['destroy'])
@@ -53,6 +55,12 @@ Route
 
     // Vehicle
     Route.resource('vehicle', 'Api/VehicleController');
+
+    // Vehicle Make
+    Route.resource('vehicle-make', 'Api/VehicleMakeController');
+
+    // Vehicle Model
+    Route.resource('vehicle-model', 'Api/VehicleModelController');
     
     //Notifications
     Route.post('notification/test-notification','Api/NotificationController.sendTestNotification').as('test-notification');
