@@ -45,22 +45,15 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           </div>
 
           <div className="mt-3">
-            <div className="text-sm font-medium mb-1 text-gray-700">Modified With:</div>
+            <div className="text-sm font-medium mb-1 text-gray-700">Vehicle is primarily used for?</div>
             <div className="flex flex-wrap gap-1">
-              {listing.mods.slice(0, 3).map((mod, index) => (
                 <span
-                  key={index}
+                  key='0'
                   className="text-xs bg-gray-100 text-gray-700 rounded-full px-2 py-1 flex items-center"
                 >
                   <CheckCircle2 size={12} className="mr-1 text-oneoffautos-blue" />
-                  {mod}
+                  {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}
                 </span>
-              ))}
-              {listing.mods.length > 3 && (
-                <span className="text-xs bg-gray-100 text-gray-700 rounded-full px-2 py-1">
-                  +{listing.mods.length - 3} more
-                </span>
-              )}
             </div>
           </div>
         </div>

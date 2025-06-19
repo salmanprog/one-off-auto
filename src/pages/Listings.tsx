@@ -37,8 +37,14 @@ const Listings = () => {
       slug: item.slug,
       title: item.vehicle_title,
       price: item.vehicle_price,
+      vehicle_make: item.vehicle_make,
+      model: item.vehicle_model,
+      vehicle_year: item.vehicle_year,
+      vehicle_primarily_used: item.vehicle_primarily_used,
+      vehicle_stock_parts: item.vehicle_stock_parts,
       location: item.vehicle_owner_address,
       mileage: item.vehicle_mileage,
+      vehicle_modification: item.vehicle_modification,
       image: item.image_url, // Optional chaining + fallback
       mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
     }));
@@ -100,13 +106,13 @@ const Listings = () => {
 
     if (filters.make) {
       filtered = filtered.filter((listing) =>
-        listing.title.toLowerCase().includes(filters.make.toLowerCase())
+        listing.vehicle_make.toLowerCase().includes(filters.make.toLowerCase())
       );
     }
 
     if (filters.model) {
       filtered = filtered.filter((listing) =>
-        listing.title.toLowerCase().includes(filters.model.toLowerCase())
+        listing.model.toLowerCase().includes(filters.model.toLowerCase())
       );
     }
 
@@ -166,16 +172,17 @@ const Listings = () => {
   const goToPage = (page: number) => {
     setCurrentPage(page);
   };
-  
+
   const nextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
-  
+
   const prevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
+
   const totalPages = Math.ceil(filteredAndSortedListings.length / itemsPerPage);
-  // Show loading, error, or empty states 
+
   if (loading) return <MainLayout><div className="p-8">Loading...</div></MainLayout>;
   if (error) return <MainLayout><div className="p-8 text-red-600">Error: {error.message}</div></MainLayout>;
   if (!loading && listings.length === 0) return <MainLayout><div className="p-8">No listings found.</div></MainLayout>;
@@ -193,6 +200,7 @@ const Listings = () => {
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 onResetFilters={resetFilters}
+                listings={listings} // Pass listings here
               />
             </div>
 
@@ -220,48 +228,48 @@ const Listings = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {paginatedListings.map((listing) => (
+                {paginatedListings.map((listing) => (
                   <ListingCard key={listing.slug} listing={listing} />
                 ))}
               </div>
+
               {/* Pagination */}
-            <div className="mt-8 flex justify-center">
-              <div className="flex space-x-1">
-                <button
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
-                >
-                  Previous
-                </button>
+              <div className="mt-8 flex justify-center">
+                <div className="flex space-x-1">
+                  <button
+                    onClick={prevPage}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
 
-                {/* You can dynamically render page buttons */}
-                {[...Array(totalPages)].map((_, idx) => {
-                  const pageNum = idx + 1;
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => goToPage(pageNum)}
-                      className={`px-4 py-2 border rounded-md ${
-                        currentPage === pageNum
-                          ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
-                          : "border-gray-300 text-oneoffautos-blue bg-white"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+                  {[...Array(totalPages)].map((_, idx) => {
+                    const pageNum = idx + 1;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => goToPage(pageNum)}
+                        className={`px-4 py-2 border rounded-md ${
+                          currentPage === pageNum
+                            ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
+                            : "border-gray-300 text-oneoffautos-blue bg-white"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
 
-                <button
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
-                >
-                  Next
-                </button>
+                  <button
+                    onClick={nextPage}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-oneoffautos-blue bg-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </div>

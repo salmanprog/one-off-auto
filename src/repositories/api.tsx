@@ -39,12 +39,20 @@ const api = {
       url: 'vehicle',
       method: "GET",
     },
+    get_vehicle_make_list: {
+      url: 'user/user-vehicle-make',
+      method: "GET",
+    },
     user_vehicle_list: {
       url: 'user/vehicle',
       method: "GET",
     },
     get_vehicle_details: {
       url: 'vehicle/{id}',
+      method: "GET",
+    },
+    get_vehicle_make: {
+      url: 'vehicle-make',
       method: "GET",
     },
     update_vehicle: {

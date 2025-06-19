@@ -1,6 +1,6 @@
-
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Filter, Search, ChevronDown, ChevronUp } from "lucide-react";
+import { useFetch } from "../../hooks/request";
 
 // Import the FilterState interface
 interface FilterState {
@@ -22,16 +22,95 @@ interface ListingsFiltersProps {
   filters: FilterState;
   onFilterChange: (newFilters: Partial<FilterState>) => void;
   onResetFilters: () => void;
+  listings: any[]; // Make sure listings is an array here
 }
 
 const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   filters,
   onFilterChange,
-  onResetFilters
+  onResetFilters,
+  listings = [] // Default empty array if listings are undefined
 }) => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [standardFiltersOpen, setStandardFiltersOpen] = useState(true);
   const [modFiltersOpen, setModFiltersOpen] = useState(true);
+  const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list");
+
+  if (loading) return <div>Loading makes...</div>;
+  if (error) return <div>Error loading makes: {error.message}</div>;
+
+  // Function to apply filters to the listings data
+  const applyFilters = () => {
+    let filteredListings = [...listings]; // Start with all listings
+
+    // Search Term Filter
+    if (filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      filteredListings = filteredListings.filter(
+        (listing) =>
+          listing.title.toLowerCase().includes(searchLower) ||
+          listing.model.toLowerCase().includes(searchLower) ||
+          listing.mods.some((mod) => mod.toLowerCase().includes(searchLower))
+      );
+    }
+
+    // Make Filter
+    if (filters.make) {
+      filteredListings = filteredListings.filter((listing) =>
+        listing.vehicle_make.toLowerCase().includes(filters.make.toLowerCase())
+      );
+    }
+
+    // Model Filter
+    if (filters.model) {
+      filteredListings = filteredListings.filter((listing) =>
+        listing.model.toLowerCase().includes(filters.model.toLowerCase())
+      );
+    }
+
+    // Year Range Filter (exact match or within the range)
+    if (filters.yearFrom) {
+      const yearFrom = parseInt(filters.yearFrom, 10); // Convert to number
+      filteredListings = filteredListings.filter((listing) => {
+        const listingYear = parseInt(listing.vehicle_year, 10); // Convert vehicle year to number
+        return listingYear >= yearFrom;
+      });
+    }
+
+    if (filters.yearTo) {
+      const yearTo = parseInt(filters.yearTo, 10); // Convert to number
+      filteredListings = filteredListings.filter((listing) => {
+        const listingYear = parseInt(listing.vehicle_year, 10); // Convert vehicle year to number
+        return listingYear <= yearTo;
+      });
+    }
+
+    // Price Range Filter
+    if (filters.priceMin) {
+      const priceMin = parseInt(filters.priceMin, 10); // Convert to number
+      filteredListings = filteredListings.filter(
+        (listing) => parseInt(listing.price, 10) >= priceMin // Convert price to number
+      );
+    }
+    if (filters.priceMax) {
+      const priceMax = parseInt(filters.priceMax, 10); // Convert to number
+      filteredListings = filteredListings.filter(
+        (listing) => parseInt(listing.price, 10) <= priceMax // Convert price to number
+      );
+    }
+
+    // Mileage Filter
+    if (filters.mileage) {
+      filteredListings = filteredListings.filter((listing) =>
+        parseInt(listing.mileage.replace(/[^0-9]/g, "")) <= parseInt(filters.mileage) // Clean mileage and compare
+      );
+    }
+
+    return filteredListings;
+  };
+
+  // Apply filters to the listings data when the filter state changes
+  const filteredListings = applyFilters();
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
@@ -47,7 +126,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
         {filtersOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
 
-      <div className={`${filtersOpen ? 'block' : 'hidden'} md:block`}>
+      <div className={`${filtersOpen ? "block" : "hidden"} md:block`}>
         {/* Search and main filters */}
         <div className="mb-6 flex items-center border border-gray-300 rounded-md bg-white">
           <Search className="text-gray-400 ml-3" size={20} />
@@ -75,13 +154,19 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               {/* Make Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Make</label>
-                <input
-                  type="text"
-                  placeholder="Enter make"
+                <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.make}
                   onChange={(e) => onFilterChange({ make: e.target.value })}
-                />
+                >
+                  <option value="">Select Make</option>
+                  {vehicleMakes &&
+                    vehicleMakes.map((make: { id: string; title: string }) => (
+                      <option key={make.id} value={make.id}>
+                        {make.title}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               {/* Model Filter */}
@@ -96,12 +181,12 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 />
               </div>
 
-              {/* Year Range */}
+              {/* Year Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Year</label>
                 <div className="flex items-center space-x-2">
-                <input
-                    type="number"
+                  <input
+                    type="text"
                     placeholder="From"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.yearFrom}
@@ -109,7 +194,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                   />
                   <span>-</span>
                   <input
-                    type="number"
+                    type="text"
                     placeholder="To"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.yearTo}
@@ -118,7 +203,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 </div>
               </div>
 
-              {/* Price Range */}
+              {/* Price Range Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Price Range ($)</label>
                 <div className="flex items-center space-x-2">
@@ -140,7 +225,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 </div>
               </div>
 
-              {/* Mileage Range */}
+              {/* Mileage Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Mileage</label>
                 <select
@@ -159,15 +244,11 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
           )}
         </div>
 
-
-
         {/* Filter Actions */}
         <div className="flex flex-col gap-2 mt-4">
           <button
             className="w-full py-2 px-3 text-sm font-medium bg-oneoffautos-blue text-white rounded-md hover:bg-blue-800 transition-colors"
             onClick={() => {
-              // Apply filters is automatic as we're using controlled components
-              // This button is just for UX, we could add additional logic here if needed
               setFiltersOpen(false);
             }}
           >

@@ -18,6 +18,8 @@ const FeaturedListings = () => {
       price: item.vehicle_price,
       location: item.vehicle_owner_address,
       mileage: item.vehicle_mileage,
+      vehicle_primarily_used: item.vehicle_primarily_used,
+      vehicle_stock_parts: item.vehicle_stock_parts,
       image: item.image_url,
       mods: item.mods || ["Built Engine", "Garrett Turbo", "Coilovers"], // Fallback if API has no mods
     }));

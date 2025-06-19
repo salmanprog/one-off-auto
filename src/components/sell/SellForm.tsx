@@ -8,6 +8,7 @@ import Helper from "../../helpers";
 
 const SellForm = () => {
   const { data } = useFetch("get_vehicle_categories");
+  const { data:vehicle_make } = useFetch("get_vehicle_make");
   const { loading, postData } = useFetch("create_vehicle", "submit");
   const currentYear = new Date().getFullYear();
   const currentUser = Helper.getStorageData("session");
@@ -34,7 +35,7 @@ const SellForm = () => {
   const nextStep = async () => {
     // Validate current step fields before proceeding
     const valid = await trigger([
-      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year", "vehicle_mileage", "vehicle_price", "vehicle_title", "vehicle_descripition", "vehicle_modification"
+      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year", "vehicle_mileage", "vehicle_price", "vehicle_primarily_used", "vehicle_title", "vehicle_descripition", "vehicle_modification"
     ]);
     if (valid) {
       setStep(2);
@@ -95,15 +96,21 @@ const SellForm = () => {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Make</label>
-                  <input
+                  <select
                     name="vehicle_make"
                     id="vehicle_make"
-                    type="text"
-                    autoComplete="vehicle_make"
                     {...register("vehicle_make", { required: true })}
                     className="w-full p-3 border border-gray-300 rounded-md"
-                  />
-                  {errors.vehicle_make && <p className="text-red-500 text-sm">Make Required</p>}
+                  >
+                    <option value="">Select Vehicle Make</option>
+                    {!_.isEmpty(vehicle_make) &&
+                      vehicle_make.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.vehicle_make && 
+                    <p className="text-red-500 text-sm">Vehicle Make Required</p>
+                  }
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -157,6 +164,53 @@ const SellForm = () => {
                     className="w-full p-3 border border-gray-300 rounded-md"
                   />
                   {errors.vehicle_price && <p className="text-red-500 text-sm">Price Required</p>}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">What the vehicle is primarily used for?</label>
+                  <select
+                    name="vehicle_primarily_used"
+                    id="vehicle_primarily_used"
+                    {...register("vehicle_primarily_used", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Primarily Use</option>
+                    <option key="daily_driver" value="Daily Driver">Daily Driver</option>
+                    <option key="straight_line_racing" value="Straight line racing (1/8 mile, 1/4 mile, etc.)">Straight line racing (1/8 mile, 1/4 mile, etc.)</option>
+                    <option key="drift_racing" value="Drift Racing">Drift Racing</option>
+                    <option key="mud_bogging" value="Mud Bogging">Mud Bogging</option>
+                  </select>
+                  {errors.vehicle_primarily_used && 
+                    <p className="text-red-500 text-sm">Vehicle Primarily Use Required</p>
+                  }
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Do you still have any of the stock parts?</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="yes"
+                        defaultChecked
+                        {...register("vehicle_stock_parts", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="no"
+                        {...register("vehicle_stock_parts", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                  {errors.vehicle_stock_parts && (
+                    <p className="text-red-500 text-sm">Please select Yes or No</p>
+                  )}
                 </div>
               </div>
               <div>
