@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { fetchUsers } from "@/lib/api"; // Import fetchUsers to get user data
 import { User } from "@/lib/api"; // Import User interface
+import { useFetch } from "../../hooks/request"; // Custom hook for fetching data
 
 interface ViewUserDialogProps {
   isOpen: boolean;
@@ -11,28 +12,34 @@ interface ViewUserDialogProps {
 
 const ViewUserDialog: React.FC<ViewUserDialogProps> = ({ isOpen, onClose, userId }) => {
   const [userData, setUserData] = useState<User | null>(null); // State to hold user data
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Loading state
+  
+  // Fetch users using the `useFetch` hook
+  const { data, error } = useFetch("get_users", "mount");
+
+  // Debugging logs to check the structure
+  
 
   useEffect(() => {
     if (isOpen && userId !== null) {
-      setLoading(true);
-      // In a real application, fetch a single user by ID. Using fetchUsers and finding for mock.
-      fetchUsers()
-        .then(users => {
-          const user = users.find(u => u.id === userId);
-          setUserData(user || null);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error(`Error fetching user ${userId}:`, error);
-          setLoading(false);
-        });
+      setLoading(true); // Set loading state to true
+
+      if (Array.isArray(data)) {
+        // Find the user matching the userId
+        const user = data.find((u: User) => u.slug === userId);
+        console.log("User found:", user); // Log the found user
+        
+        setUserData(user || null);  // Set userData or null if not found
+      } else {
+        setUserData(null); // If data is not an array or user is not found
+      }
+
+      setLoading(false);  // Stop loading once the data is fetched or processed
     } else {
-      // Reset state when dialog is closed or userId is null
-      setUserData(null);
-      setLoading(false); // Ensure loading is false when closed
+      setUserData(null);  // Reset userData if dialog is closed or userId is null
+      setLoading(false);
     }
-  }, [isOpen, userId]); // Refetch when dialog opens or userId changes
+  }, [isOpen, userId, data]);  // Trigger when dialog opens or userId/data changes
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -44,21 +51,20 @@ const ViewUserDialog: React.FC<ViewUserDialogProps> = ({ isOpen, onClose, userId
           </DialogDescription>
         </DialogHeader>
         {loading ? (
-          <p>Loading user data...</p>
+          <p>Loading user data...</p> // Show loading message
         ) : userData ? (
           <div className="grid gap-4 py-4 text-sm">
-            <p><span className="font-medium">User ID:</span> {userData.id}</p>
-            <p><span className="font-medium">Email:</span> {userData.username}</p> {/* Using username as email */}
+            <p><span className="font-medium">User Name:</span> {userData.name}</p>
+            <p><span className="font-medium">Email:</span> {userData.email}</p> {/* Displaying username as email */}
             <p><span className="font-medium">Status:</span> {userData.status}</p>
-            <p><span className="font-medium">Registration Date:</span> {userData.registrationDate}</p>
-            {/* Add more user details as needed */}
+            <p><span className="font-medium">Registration Date:</span> {userData.created_at}</p>
           </div>
         ) : (
-          <p>User data not found.</p>
+          <p>User data not found.</p> // If user data is not found
         )}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default ViewUserDialog; 
+export default ViewUserDialog;

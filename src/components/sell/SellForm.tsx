@@ -58,6 +58,7 @@ const SellForm = () => {
         fd.append("vehicle_images", image); // this creates an array-like entry
       });
     }
+    fd.append('status', '0');
     const callback = (receivedData) => {
     };
     postData(fd, callback);

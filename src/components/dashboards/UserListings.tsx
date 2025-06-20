@@ -141,7 +141,7 @@ const UserListings: React.FC = () => {
                    <TableCell>{listing.vehicle_model}</TableCell>
                    <TableCell>{listing.vehicle_year}</TableCell>
                    <TableCell>{listing.vehicle_price}</TableCell>
-                   <TableCell>{listing.status}</TableCell>
+                   <TableCell>{listing.status_text}</TableCell>
                    <TableCell>{listing.created_at}</TableCell>
                    <TableCell className="text-right">
                      <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>

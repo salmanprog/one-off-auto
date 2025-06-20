@@ -11,6 +11,10 @@ const api = {
       url: 'view/user',
       method: "GET",
     },
+    get_users: {
+      url: 'user',
+      method: "GET",
+    },
     get_dashboard: {
       url: 'admin/dashboard',
       method: "GET",

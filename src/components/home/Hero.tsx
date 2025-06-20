@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, ChevronDown, ArrowRight } from "lucide-react";
@@ -10,15 +9,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useFetch } from "../../hooks/request";
 
 const Hero = () => {
   const [makeValue, setMakeValue] = useState("");
   const [modelValue, setModelValue] = useState("");
   const [yearValue, setYearValue] = useState("");
+  const { data, loading, error } = useFetch("get_vehicle_make_list");
+
+  // Function to validate number input
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    // Allow only numbers (including decimals) in the input fields for model and year
+    if (/^\d*\.?\d*$/.test(value)) {
+      if (name === "modelValue") setModelValue(value);  // Only update if it's a valid number
+      else if (name === "yearValue") setYearValue(value);  // Only update if it's a valid number
+    }
+  };
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-oneoffautos-blue to-blue-900 py-16 md:py-24">
-      {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20"
@@ -29,10 +39,6 @@ const Hero = () => {
             backgroundBlendMode: "overlay"
           }}
         ></div>
-
-        {/* Abstract shapes */}
-        <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-oneoffautos-red opacity-20 blur-3xl"></div>
-        <div className="absolute -left-24 top-1/2 h-96 w-96 rounded-full bg-blue-400 opacity-20 blur-3xl"></div>
       </div>
 
       <div className="container-custom relative z-10">
@@ -76,41 +82,34 @@ const Hero = () => {
                     <SelectValue placeholder="Make" />
                   </SelectTrigger>
                   <SelectContent position="popper" className="bg-white">
-                    <SelectItem value="honda">Honda</SelectItem>
-                    <SelectItem value="toyota">Toyota</SelectItem>
-                    <SelectItem value="nissan">Nissan</SelectItem>
-                    <SelectItem value="ford">Ford</SelectItem>
-                    <SelectItem value="chevrolet">Chevrolet</SelectItem>
+                    {data &&
+                    data.map((make: { id: string; title: string }) => (
+                        <SelectItem value={make.id}>{make.title}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <Select value={modelValue} onValueChange={setModelValue}>
-                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm">
-                    <SelectValue placeholder="Model" />
-                  </SelectTrigger>
-                  <SelectContent position="popper" className="bg-white">
-                    <SelectItem value="civic">Civic</SelectItem>
-                    <SelectItem value="corolla">Corolla</SelectItem>
-                    <SelectItem value="mustang">Mustang</SelectItem>
-                    <SelectItem value="350z">350Z</SelectItem>
-                    <SelectItem value="camaro">Camaro</SelectItem>
-                  </SelectContent>
-                </Select>
+                {/* Model input field changed to text */}
+                <input
+                  type="text"
+                  name="modelValue"
+                  value={modelValue}
+                  onChange={handleNumberChange}
+                  placeholder="Model"
+                  className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg"
+                />
               </div>
               <div>
-                <Select value={yearValue} onValueChange={setYearValue}>
-                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm">
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                  <SelectContent position="popper" className="bg-white">
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                    <SelectItem value="2021">2021</SelectItem>
-                    <SelectItem value="2020">2020</SelectItem>
-                    <SelectItem value="2019">2019</SelectItem>
-                  </SelectContent>
-                </Select>
+                {/* Year input field changed to text */}
+                <input
+                  type="text"
+                  name="yearValue"
+                  value={yearValue}
+                  onChange={handleNumberChange}
+                  placeholder="Year"
+                  className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg"
+                />
               </div>
             </div>
             <div className="flex items-center">
@@ -121,11 +120,6 @@ const Hero = () => {
               />
               <Link to="/listings" className="bg-oneoffautos-red hover:bg-red-700 transition-all duration-300 text-white px-4 py-3 rounded-r-lg flex items-center justify-center hover:shadow-md">
                 <Search size={20} />
-              </Link>
-            </div>
-            <div className="mt-4 flex justify-center">
-              <Link to="/listings" className="text-white/80 hover:text-white text-sm flex items-center transition-colors">
-                Advanced search <ChevronDown size={14} className="ml-1" />
               </Link>
             </div>
           </div>

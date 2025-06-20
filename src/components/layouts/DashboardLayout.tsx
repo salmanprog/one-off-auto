@@ -21,11 +21,13 @@ const DashboardLayout: React.FC = () => {
   const navLinks = isAdminDashboard
     ? [
         { path: '/admin-dashboard', label: 'Overview' },
+        { path: '/', label: 'Home' },
         { path: '/admin-dashboard/users', label: 'User Management' },
         { path: '/admin-dashboard/listings', label: 'Listing Management' },
       ]
     : isUserDashboard
     ? [
+        { path: '/', label: 'Home' },
         { path: '/user-dashboard', label: 'Account Settings' },
         { path: '/user-dashboard/listings', label: 'My Listings' },
         { path: '/user-dashboard/notifications', label: 'Notifications' },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,36 +7,58 @@ import { fetchUsers, updateUserStatus } from "@/lib/api"; // Import mock API fun
 import { User } from "@/lib/api"; // Import User interface
 import ViewUserDialog from "./ViewUserDialog"; // Import ViewUserDialog
 import EditUserDialog from "./EditUserDialog"; // Import EditUserDialog
+import { useFetch } from "../../hooks/request";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"; // Import AlertDialog components
 
 const AdminUserManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false); // State for View Dialog
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for Edit Dialog
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null); // State to hold the selected user ID
+  const [users, setUsers] = useState<User[]>([]); // Users array
+  const [loading, setLoading] = useState(true); // Loading state
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false); // View Dialog state
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // Edit Dialog state
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null); // Selected User ID state
+  const [searchTerm, setSearchTerm] = useState(""); // Search input state
+  const [statusFilter, setStatusFilter] = useState("all"); // Status filter state (All, Active, Inactive)
 
-  // New state for status change confirmation dialogs
-  const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = useState(false);
-  const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false);
-  const [userToChangeStatusId, setUserToChangeStatusId] = useState<number | null>(null);
-
+  // Fetch users using the `useFetch` hook
+  const { data } = useFetch("get_users");
+  const { postData } = useFetch("update_users", "submit");
+  // Load users function that gets triggered when needed
   const loadUsers = () => {
     setLoading(true);
-    fetchUsers()
-      .then(data => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching users:", error);
-        setLoading(false);
-      });
+
+    if (Array.isArray(data)) {
+      setUsers(data); // Set users if the data is an array
+    } else {
+      setUsers([]); // Fallback in case data is null or malformed
+    }
+
+    setLoading(false); // Set loading to false after the data is loaded
   };
 
   useEffect(() => {
-    loadUsers(); // Initial load
-  }, []);
+    loadUsers(); // Initial load of users
+  }, [data]); // Re-run when data changes
+
+  // Handle search input change
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Handle filter by status change
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+  };
+
+  // Filter users based on search term and status filter
+  const filteredUsers = users.filter((user) => {
+    const matchesSearchTerm =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()); // Filter by name
+
+    const matchesStatusFilter =
+      statusFilter === "all" || user.status.toLowerCase() === statusFilter.toLowerCase();
+
+    return matchesSearchTerm && matchesStatusFilter;
+  });
 
   const handleView = (userId: number) => {
     setSelectedUserId(userId);
@@ -49,49 +71,21 @@ const AdminUserManagement: React.FC = () => {
   };
 
   const handleDeactivateClick = (userId: number) => {
-      setUserToChangeStatusId(userId);
-      setIsDeactivateDialogOpen(true);
+    const fd = new FormData();
+    fd.append("status", '0');
+    const callback = (receivedData: any) => {
+      window.location.reload();
+    };
+    postData(fd, callback, userId);
   };
 
   const handleActivateClick = (userId: number) => {
-      setUserToChangeStatusId(userId);
-      setIsActivateDialogOpen(true);
-  };
-
-  const confirmDeactivate = () => {
-    if (userToChangeStatusId !== null) {
-       updateUserStatus(userToChangeStatusId, 'Inactive') // Call mock API to update status
-        .then(() => {
-          // alert(`User ${userToChangeStatusId} deactivated.`); // Or use a toast
-          loadUsers(); // Refresh the user list after deactivation
-          setIsDeactivateDialogOpen(false);
-          setUserToChangeStatusId(null);
-        })
-        .catch(error => {
-          console.error("Error deactivating user:", error);
-          // alert(`Failed to deactivate user ${userToChangeStatusId}.`); // Or use a toast
-          setIsDeactivateDialogOpen(false);
-          setUserToChangeStatusId(null);
-        });
-    }
-  };
-
-  const confirmActivate = () => {
-    if (userToChangeStatusId !== null) {
-      updateUserStatus(userToChangeStatusId, 'Active') // Call mock API to update status
-       .then(() => {
-         // alert(`User ${userToChangeStatusId} activated.`); // Or use a toast
-         loadUsers(); // Refresh the user list after activation
-         setIsActivateDialogOpen(false);
-         setUserToChangeStatusId(null);
-       })
-       .catch(error => {
-         console.error("Error activating user:", error);
-         // alert(`Failed to activate user ${userToChangeStatusId}.`); // Or use a toast
-         setIsActivateDialogOpen(false);
-         setUserToChangeStatusId(null);
-       });
-    }
+    const fd = new FormData();
+    fd.append("status", '1');
+    const callback = (receivedData: any) => {
+     window.location.reload();
+    };
+    postData(fd, callback, userId);
   };
 
   const handleCloseViewDialog = () => {
@@ -111,8 +105,13 @@ const AdminUserManagement: React.FC = () => {
 
       {/* User Management Tools (Search/Filter) */}
       <div className="flex items-center mb-4">
-        <Input placeholder="Search users..." className="max-w-sm mr-4" />
-        <Select>
+        <Input
+          placeholder="Search users by name..."
+          className="max-w-sm mr-4"
+          value={searchTerm}
+          onChange={handleSearchChange} // Handle search input change
+        />
+        <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
           <SelectTrigger className="w-[180px] mr-4">
             <SelectValue placeholder="Filter by Status" />
           </SelectTrigger>
@@ -128,33 +127,30 @@ const AdminUserManagement: React.FC = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         {loading ? (
           <p>Loading users...</p>
-        ) : users.length > 0 ? (
+        ) : filteredUsers.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>User ID</TableHead>
-                <TableHead>Email</TableHead> {/* Using email as username */}
-                {/* <TableHead>Role</TableHead> Removed */}
+                <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Registration Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.map(user => (
+              {filteredUsers.map(user => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.id}</TableCell>
-                  <TableCell>{user.username}</TableCell> {/* Display email */}
-                  {/* <TableCell>{user.role}</TableCell> Removed */}
+                  <TableCell>{user.name}</TableCell>
                   <TableCell>{user.status}</TableCell>
-                  <TableCell>{user.registrationDate}</TableCell>
+                  <TableCell>{user.created_at}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(user.id)}>View</Button>
-                    <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleEdit(user.id)}>Edit</Button>
                     {user.status === 'Active' ? (
-                      <Button variant="ghost" size="sm" onClick={() => handleDeactivateClick(user.id)}>Deactivate</Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDeactivateClick(user.slug)}>Deactivate</Button>
                     ) : (
-                      <Button variant="ghost" size="sm" onClick={() => handleActivateClick(user.id)}>Activate</Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleActivateClick(user.slug)}>Activate</Button>
                     )}
                   </TableCell>
                 </TableRow>
@@ -180,40 +176,9 @@ const AdminUserManagement: React.FC = () => {
         onSave={loadUsers} // Pass loadUsers to refresh the list after save
       />
 
-       {/* Deactivate User Confirmation Dialog */}
-       <AlertDialog open={isDeactivateDialogOpen} onOpenChange={setIsDeactivateDialogOpen}>
-         <AlertDialogContent>
-           <AlertDialogHeader>
-             <AlertDialogTitle>Confirm Deactivation</AlertDialogTitle>
-             <AlertDialogDescription>
-               Are you sure you want to deactivate user with ID {userToChangeStatusId}? This action cannot be undone.
-             </AlertDialogDescription>
-           </AlertDialogHeader>
-           <AlertDialogFooter>
-             <AlertDialogCancel onClick={() => setUserToChangeStatusId(null)}>Cancel</AlertDialogCancel>
-             <AlertDialogAction onClick={confirmDeactivate}>Deactivate</AlertDialogAction>
-           </AlertDialogFooter>
-         </AlertDialogContent>
-       </AlertDialog>
-
-       {/* Activate User Confirmation Dialog */}
-       <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>
-         <AlertDialogContent>
-           <AlertDialogHeader>
-             <AlertDialogTitle>Confirm Activation</AlertDialogTitle>
-             <AlertDialogDescription>
-               Are you sure you want to activate user with ID {userToChangeStatusId}?
-             </AlertDialogDescription>
-           </AlertDialogHeader>
-           <AlertDialogFooter>
-             <AlertDialogCancel onClick={() => setUserToChangeStatusId(null)}>Cancel</AlertDialogCancel>
-             <AlertDialogAction onClick={confirmActivate}>Activate</AlertDialogAction>
-           </AlertDialogFooter>
-         </AlertDialogContent>
-       </AlertDialog>
-
+      
     </div>
   );
 };
 
-export default AdminUserManagement; 
+export default AdminUserManagement;

@@ -35,7 +35,7 @@ const ChangeListingStatusDialog: React.FC<ChangeListingStatusDialogProps> = ({ i
   };
 
   // Options for listing status (should ideally come from a central place)
-  const statusOptions = ['Pending Approval', 'Active', 'Sold', 'Expired'];
+  const statusOptions = ['Approved', 'Disapproved', 'close'];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
