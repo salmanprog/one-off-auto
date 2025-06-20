@@ -109,5 +109,18 @@ export default class Vehicle extends RestModel
         let query = await this.query().where('slug',slug).count('id as total');
         return query[0].$extras.total == 0 ? slug : slug + query[0].$extras.total + rand(111,999);
     }
+
+    public static async getVehicleLists(limit:number)
+    {
+        let show_limit = !_.isEmpty(limit) ? limit : 3;
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').whereIn('status',['1','2']).orderBy('id','desc').limit(show_limit)
+        return record;
+    }
+
+    public static async getVehicleBySlug(slug: string)
+    {
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').where('slug',slug).first();
+        return record;
+    }
 }
 module.exports = Vehicle;

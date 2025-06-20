@@ -35,7 +35,7 @@ class Vehicle
     }else if(record.status == '1'){
       status_text = 'Approved'
     }else{
-      status_text = 'Expired'
+      status_text = 'Sold'
     }
       return {
           id: record.id,
@@ -60,7 +60,8 @@ class Vehicle
           vehicle_owner_email: record.vehicle_owner_email,
           vehicle_owner_phone: record.vehicle_owner_phone,
           media: await Media.initResponse(record.media,request),
-          status: status_text,
+          status_text: status_text,
+          status: record.status,
           created_at: formattedDate
       }
   }

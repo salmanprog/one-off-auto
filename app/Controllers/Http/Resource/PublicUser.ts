@@ -24,6 +24,14 @@ class PublicUser
 
   private static async jsonSchema(record: object,request:object)
   {
+    const createdAt = record.created_at;
+    const formattedDate = createdAt ? new Date(createdAt).toISOString().split("T")[0] : '';
+    let status_text = ''
+    if(record.status == '0'){
+      status_text = 'De-Active'
+    }else if(record.status == '1'){
+      status_text = 'Active'
+    }
       return {
           id: record.id,
           name: record.name,
@@ -31,13 +39,8 @@ class PublicUser
           email: record.email,
           mobile_no: record.mobile_number,
           image_url: !_.isEmpty(record.image_url) ?  await storageUrl(record.image_url) : baseUrl('/images/user-placeholder.jpg'),
-          company_name:record.company_name,
-          company_address:record.company_address,
-          company_mobile_number:record.company_mobile_number,
-          company_email_address:record.company_email_address,
-          user_link:record.user_link,
-          is_link:record.is_link,
-          created_at: record.created_at
+          status: status_text,
+          created_at: formattedDate
       }
   }
 

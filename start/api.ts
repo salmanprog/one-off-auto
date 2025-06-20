@@ -23,7 +23,8 @@ Route
     Route.post('user/forgot-password','Api/UsersController.forgotPassword').as('user.forgot-password')
     Route.post('user/login','Api/UsersController.login').as('user.login');
     // Vehicle
-    Route.resource('user/vehicle', 'Api/VehicleController').except(['create','update','destroy']);
+    Route.get('user/vehicle', 'Api/VehicleController.userVehicleListing').as('user.vehicle');
+    Route.get('user/vehicle/:slug', 'Api/VehicleController.viewUserVehicle').as('view.user.vehicle');
     // Vehicle Make
     Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store

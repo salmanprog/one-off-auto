@@ -182,4 +182,55 @@ export default class VehicleController extends RestController
     {
 
     }
+
+    public async userVehicleListing(ctx: HttpContextContract)
+    {
+        this.__request  = ctx.request;
+        this.__response = ctx.response;
+        //check validation
+        let validationRules = schema.create({
+        })
+        try{
+          await this.__request.validate({ schema: validationRules })
+        } catch(error){
+            return this.sendError(
+              'Validation Message',
+              this.setValidatorMessagesResponse(error.messages),
+              400
+            )
+        }
+        let params = this.__request.all();
+        //get user by email
+        let record = await Vehicle.getVehicleLists(params.limit);
+        //send response
+        this.__is_paginate = false;
+        await this.__sendResponse(200,'User vehicle retrive successfully',record);
+        return;
+    }
+
+    public async viewUserVehicle(ctx: HttpContextContract)
+    {
+        this.__request  = ctx.request;
+        this.__response = ctx.response;
+        this.__params   = ctx.params;
+        //check validation
+        let validationRules = schema.create({
+        })
+        try{
+          await this.__request.validate({ schema: validationRules })
+        } catch(error){
+            return this.sendError(
+              'Validation Message',
+              this.setValidatorMessagesResponse(error.messages),
+              400
+            )
+        }
+        let slug = this.__params.slug
+        //get vehicle by slug
+        let record = await Vehicle.getVehicleBySlug(slug);
+        //send response
+        this.__is_paginate = false;
+        await this.__sendResponse(200,'User vehicle retrive successfully',record);
+        return;
+    }
 }

@@ -18,10 +18,15 @@ class VehicleHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
+        let user = request.user();
+        if(user.user_group_id == 3){
+            query.where('user_id',user.id)
+        }
+        //console.log('user............................',user.id)
         query.preload('vehicleCategory')
         query.preload('user')
         query.preload('media')
-        query.whereIn('status',['1','2']).orderBy('id','desc')
+        query.whereIn('status',['0','1','2']).orderBy('id','desc')
     }
 
     /**
@@ -38,7 +43,7 @@ class VehicleHook
         let slug      = await Vehicle.generateSlug(params.vehicle_title);
         params.slug       = slug
         params.user_id    = request.user().id
-        params.status    = '1'
+        params.status    = _.isEmpty(params.status) ? '1' : params.status
         params.created_at = currentDateTime();
 
     }

@@ -186,7 +186,7 @@ export default class UsersController extends RestController
     protected async beforeUpdateLoadModel()
     {
         let user = this.__request.user();
-        if( user.slug != this.__params.id ){
+        if( user.slug != this.__params.id && user.user_group_id != 2 ){
             this.__is_error = true;
             return this.sendError(
               'Validation Message',
