@@ -5,6 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MainLayout from "../components/layouts/MainLayout"; // Import MainLayout
 import { useFetch } from "../hooks/request";
+import ListingCard from "../components/listings/ListingCard";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../components/ui/carousel";
+import { Dialog, DialogTrigger, DialogContent } from "../components/ui/dialog";
+import UserMessages from "../components/dashboards/UserMessages";
 // Assuming a more detailed listing structure might exist or be fetched
 interface DetailedListing {
   id: string;
@@ -29,7 +33,7 @@ const dummyRelatedListings = [
     price: 65000,
     location: 'Miami, FL',
     mileage: 10000,
-    image: '/images/product-img-1.avif', // Placeholder image
+    image: '/product-img-1.avif', // Placeholder image
     mods: ['Pro-Touring Build', 'LS Engine Swap'],
   },
   {
@@ -38,15 +42,78 @@ const dummyRelatedListings = [
     price: 28000,
     location: 'Seattle, WA',
     mileage: 80000,
-    image: '/images/product-img-2.avif', // Placeholder image
+    image: '/product-img-2.avif', // Placeholder image
     mods: ['Forged Engine Internals', 'Big Turbo Kit'],
   },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },{
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  {
+    id: '3',
+    title: 'JDM Tuned 2005 Subaru WRX STI',
+    price: 28000,
+    location: 'Seattle, WA',
+    mileage: 80000,
+    image: '/product-img-2.avif', // Placeholder image
+    mods: ['Forged Engine Internals', 'Big Turbo Kit'],
+  },
+  
   // Add more dummy listings as needed
 ];
 
 const ListingDetail = () => {
   const { listingId } = useParams<{ listingId: string }>();
-  const { loading, data, error } = useFetch("user_vehicle_list", "mount", listingId);
+  const { loading, data, postData, fetchApi } = useFetch("user_vehicle_list", "mount", listingId);
 
   // Fallback dummy listing
   const dummyListing: DetailedListing = {
@@ -82,7 +149,7 @@ const ListingDetail = () => {
           vehicle_modification: data.vehicle_modification,
           mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
           description: data.vehicle_descripition ? data.vehicle_descripition : 'No description provided.',
-          additionalImages: data.media?.map((m: any) => m.file_url) || [],
+          additionalImages: data.media?.map((m: { file_url: string }) => m.file_url) || [],
         }
       : dummyListing;
   }, [data]);
@@ -199,8 +266,15 @@ const ListingDetail = () => {
             </Card>
 
             {/* Add more details or a contact form here */}
-            {/* Contact Seller Button */}
-            <button className="btn-primary">Contact Seller</button>
+            {/* Contact Seller Button with Chat Pop-up */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="btn-primary">Contact Seller</button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <UserMessages hideSidebar={true} />
+              </DialogContent>
+            </Dialog>
 
           </div>
         </div>
@@ -208,13 +282,18 @@ const ListingDetail = () => {
         {/* Related Products Section */}
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Products</h2>
-          {/* Placeholder for related product cards - replace with actual mapping */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {/* Related Listing Cards would go here, e.g., using the ListingCard component */}
-             {/* {dummyRelatedListings.map(relatedListing => (
-              <ListingCard key={relatedListing.id} listing={relatedListing} />
-            ))} */}
-             <div className="text-gray-600">Related products coming soon...</div>
+          <div className="relative">
+            <Carousel opts={{ align: 'start', slidesToScroll: 1 }}>
+              <CarouselContent>
+                {dummyRelatedListings.map(relatedListing => (
+                  <CarouselItem key={relatedListing.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                    <ListingCard listing={relatedListing} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
         </div>
       </div>
