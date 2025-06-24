@@ -1,265 +1,239 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { getLoggedInUser, fetchChatSessionsForUser, User, ChatSession, ChatMessage, fetchChatMessages, sendChatMessage, fetchUserById } from '@/lib/api'; // Import necessary API functions and interfaces
-import { FileText, Image, Mic, Paperclip, Send } from 'lucide-react'; // Import icons for different message types and attachment
+import { useSocket } from "../sockets/SocketContext"; // Import socket from context
+import { Paperclip, Send } from 'lucide-react'; // Import icons
+import Helper from "../../helpers";
+import { useFetch } from "../../hooks/request";
 
 interface UserMessagesProps {
   hideSidebar?: boolean;
+  listing?: any;  // Changed `listing` type to `any` to support undefined or null
 }
 
-const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar }) => {
+const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar, listing }) => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
-  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([]); // State to hold messages for the selected session
-  const [newMessageContent, setNewMessageContent] = useState(''); // State for the message input field
-  const [selectedFile, setSelectedFile] = useState<File | null>(null); // State to hold the selected file
-  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for the hidden file input
-  const [loadingUser, setLoadingUser] = useState(true);
-  const [loadingSessions, setLoadingSessions] = useState(false);
-  const [loadingMessages, setLoadingMessages] = useState(false); // State for loading messages
-  const [error, setError] = useState<string | null>(null);
-  const [otherUsers, setOtherUsers] = useState<{[key: number]: User}>({}); // State to store other users' data
+  const [messages, setMessages] = useState<ChatMessage[]>([]); // Messages for selected session
+  const [newMessageContent, setNewMessageContent] = useState(''); // Message input content
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // File selected for message
+  const fileInputRef = useRef<HTMLInputElement>(null); // Ref for file input
+  const socket = useSocket(); // Get socket instance from context
+  const authUser = Helper.getStorageData("session");
+  const { postData } = useFetch("upload_media", "submit");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch logged-in user
-    getLoggedInUser()
-      .then(user => {
-        setLoggedInUser(user);
-        setLoadingUser(false);
-      })
-      .catch(err => {
-        console.error('Error fetching logged-in user:', err);
-        setError('Failed to load user data.');
-        setLoadingUser(false);
-      });
-  }, []);
+    // Only set logged-in user on mount
+    setLoggedInUser(authUser);
+  }, []);  // Empty dependency array ensures this runs only once on mount
 
+  // Listen for incoming messages and recent chat messages
   useEffect(() => {
-    // Fetch chat sessions once logged-in user is available
-    if (loggedInUser) {
-      setLoadingSessions(true);
-      fetchChatSessionsForUser(loggedInUser.id)
-        .then(sessions => {
-          setChatSessions(sessions);
-          setLoadingSessions(false);
-        })
-        .catch(err => {
-          console.error('Error fetching chat sessions:', err);
-          setError('Failed to load chat sessions.');
-          setLoadingSessions(false);
-        });
-    }
-  }, [loggedInUser]);
-
-  useEffect(() => {
-    // Fetch messages when selectedSessionId changes
-    if (selectedSessionId !== null) {
-      setLoadingMessages(true);
-      fetchChatMessages(selectedSessionId)
-        .then(messages => {
-          setMessages(messages);
-          setLoadingMessages(false);
-        })
-        .catch(err => {
-          console.error(`Error fetching messages for session ${selectedSessionId}:`, err);
-          setError('Failed to load messages.');
-          setLoadingMessages(false);
-        });
-    } else {
-      setMessages([]); // Clear messages if no session is selected
-    }
-  }, [selectedSessionId]); // Refetch messages when selected session changes
-
-  useEffect(() => {
-    // Fetch user data for other participants in chat sessions
-    if (chatSessions.length > 0 && loggedInUser) {
-      const otherUserIds = chatSessions.map(session =>
-        session.buyerId === loggedInUser.id ? session.sellerId : session.buyerId
-      );
-      // Fetch unique user IDs
-      const uniqueUserIds = Array.from(new Set(otherUserIds));
-
-      uniqueUserIds.forEach(userId => {
-        if (!otherUsers[userId]) { // Avoid refetching already fetched users
-          fetchUserById(userId)
-            .then(user => {
-              if (user) {
-                setOtherUsers(prevUsers => ({ ...prevUsers, [userId]: user }));
-              }
-            })
-            .catch(err => console.error(`Error fetching user ${userId}:`, err));
+    if (socket && loggedInUser) {
+      // Listen for incoming messages
+      socket.on('_recieve_message', (newMessage: ChatMessage) => {
+        if (newMessage.data?.reciever_id === loggedInUser.id) {
+          setMessages((prevMessages) => [...prevMessages, newMessage.data]);
         }
       });
-    }
-  }, [chatSessions, loggedInUser, otherUsers]); // Refetch when sessions or loggedInUser change
 
-  const handleSelectSession = (sessionId: number) => {
-    setSelectedSessionId(sessionId);
-    setMessages([]); // Clear messages when changing session
-    setNewMessageContent(''); // Clear text input field
-    setSelectedFile(null); // Clear selected file
-  };
-
-  const handleSendMessage = async () => {
-    if (selectedSessionId !== null && loggedInUser) {
-      try {
-        if (selectedFile) {
-          // Determine file type for mock message
-          const fileType = selectedFile.type.startsWith('image/') ? 'image' : 'file';
-          const placeholderUrl = fileType === 'image' ? 'https://via.placeholder.com/300/attached_image.jpg' : 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Placeholder URL
-
-          const newMessage = await sendChatMessage(
-            selectedSessionId,
-            loggedInUser.id,
-            selectedFile.name, // Use file name as content for now, or add a caption field
-            fileType,
-            placeholderUrl,
-            selectedFile.name
-          );
-          setMessages(prevMessages => [...prevMessages, newMessage]);
-          setSelectedFile(null); // Clear selected file after sending
-        } else if (newMessageContent.trim() !== '') {
-          // Send text message
-          const newMessage = await sendChatMessage(selectedSessionId, loggedInUser.id, newMessageContent, 'text');
-          setMessages(prevMessages => [...prevMessages, newMessage]);
-          setNewMessageContent('');
+      // Listen for recent chat messages
+      socket.on('_recent_chat', (response: { code: number; message: string; data: ChatMessage[] }) => {
+        if (response.code === 200) {
+          setMessages(response.data); // Set messages with the recent chat data
+        } else {
+          console.error('Failed to retrieve recent chat.');
         }
-      } catch (error) {
-        console.error('Error sending message:', error);
-        setError('Failed to send message.');
+      });
+
+      // Cleanup when the component unmounts
+      return () => {
+        socket.off('_recieve_message');
+        socket.off('_recent_chat');
+      };
+    }
+  }, [socket, loggedInUser]); // This effect depends on `socket` and `loggedInUser`
+
+  useEffect(() => {
+    if (loggedInUser && listing) {
+      const messageParams = {
+        reciever_id: listing.user_id?.toString(),  // Ensure `listing.user_id` is not undefined
+        sender_id: loggedInUser.id?.toString(),  // Ensure `loggedInUser.id` is not undefined
+      };
+
+      if (messageParams.reciever_id && messageParams.sender_id) {
+        socket?.emit('_load_recent_chat', messageParams);
+        socket?.emit('_sender_read_messages', {reciever_id: loggedInUser.id?.toString()}, (response: any) => {
+            if (response.code === 200) {
+              console.log('MyMessage:', response.data.total_messages);
+            }  
+          });
+      } else {
+        console.error("Invalid user or listing data");
       }
     }
-  };
+  }, [loggedInUser, listing, socket]); // Run this effect when loggedInUser or listing changes
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      setNewMessageContent(''); // Clear text message when a file is selected
+  const handleSendMessage = async () => {
+    if (loggedInUser && socket && listing) {
+      let messageContent = newMessageContent.trim();
+    let type = 'text';
+
+    if (uploadedImageUrl) {
+      messageContent = uploadedImageUrl;
+      type = 'image';
+    }
+
+    if (!messageContent) return;
+
+    const message = {
+      reciever_id: listing.user_id?.toString(),
+      sender_id: loggedInUser.id?.toString(),
+      message: messageContent,
+      type: type,
+    };
+
+      // Emit the message to both sender and receiver
+      socket.emit('_send_message', message, (response: any) => {
+        if (response.code === 200) {
+          console.log('Message sent successfully:', response.data);
+          
+          // Add the new message to the UI immediately (for the sender)
+          setMessages(prevMessages => [
+            ...prevMessages,
+            { ...response.data, id: Date.now(), timestamp: new Date().toISOString() }
+          ]);
+
+          setNewMessageContent(''); // Clear the input after sending
+          setUploadedImageUrl(null);
+
+          socket?.emit('_user_chat_read_unread_messages', {sender_id: loggedInUser.id?.toString(),reciever_id: listing.user_id?.toString()}, (response: any) => {
+            if (response.code === 200) {
+              console.log('Message Total successfully:', response.data.total_messages);
+            }  
+          });
+        } else {
+          console.error('Error sending message:', response.message);
+        }
+      });
     }
   };
 
-  const handleAttachmentClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const renderMessageContent = (message: ChatMessage) => {
-    switch (message.type) {
-      case 'text':
-        return <p className="text-sm break-words">{message.content}</p>;
-      case 'image':
-        return message.url ? <img src={message.url} alt="Image" className="max-w-xs rounded-md" /> : <p>Invalid image message</p>;
-      case 'file':
-        return message.url ? (
-          <a href={message.url} target="_blank" rel="noopener noreferrer" className="flex items-center text-blue-600 hover:underline">
-            <FileText size={16} className="mr-1" />
-            {message.fileName || 'File'}
-          </a>
-        ) : <p>Invalid file message</p>;
-      case 'voice':
-        return message.url ? (
-          <audio controls src={message.url}>
-            Your browser does not support the audio element.
-          </audio>
-        ) : <p>Invalid voice message</p>;
-      default:
-        return <p>Unsupported message type</p>;
+  const uploadFile = async (file: File) => {
+    try {
+      const fd = new FormData();
+      fd.append("file_url", file);
+      fd.append("file_type", 'image');
+      fd.append("thumbnail_url", file);
+     
+      const callback = (receivedData: any) => {
+        const fileUrl = receivedData?.data?.file_url;
+        setUploadedImageUrl(fileUrl);
+      };
+      postData(fd, callback);
+     
+    } catch (error) {
+      console.error("Upload error:", error);
     }
   };
 
   return (
     <div className={hideSidebar ? "h-full" : "flex h-full"}>
-      {!hideSidebar && (
-        <aside className="w-64 bg-gray-100 p-4 overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-4">Chats</h3>
-          {loadingUser || loadingSessions ? (
-            <p>Loading chats...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : chatSessions.length === 0 ? (
-            <p>No chats found.</p>
-          ) : (
-            <ul className="space-y-2">
-              {chatSessions.map(session => {
-                const otherParticipantId = session.buyerId === loggedInUser?.id ? session.sellerId : session.buyerId;
-                const otherUser = otherUsers[otherParticipantId];
-                const latestMessage = session.messages[session.messages.length - 1]; // Get latest message (mock)
-
-                return (
-                  <li
-                    key={session.id}
-                    className={`cursor-pointer p-2 rounded ${selectedSessionId === session.id ? 'bg-blue-200' : 'hover:bg-gray-200'}`}
-                    onClick={() => handleSelectSession(session.id)}
-                  >
-                    <p className="font-medium">{otherUser ? otherUser.fullName || otherUser.username : 'Loading user...'}</p>
-                    {/* Optionally show a snippet of the last message */}
-                    {latestMessage && (
-                      <p className="text-sm text-gray-600 truncate">
-                        {latestMessage.type === 'text' ? latestMessage.content : `[${latestMessage.type.charAt(0).toUpperCase() + latestMessage.type.slice(1)}]`}
-                      </p>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </aside>
-      )}
       {/* Main chat area */}
       <main className="flex-1 p-4 flex flex-col">
-        <h2 className="text-2xl font-bold mb-4">Chatroom</h2>
-        {loadingMessages ? (
-          <p>Loading messages...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <div className="flex flex-col h-full">
-            {/* Messages Display Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 rounded-md">
-              {messages.length === 0 ? (
-                <p className="text-gray-400 text-center">No messages yet.</p>
-              ) : (
-                messages.map(message => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.senderId === loggedInUser?.id ? 'justify-end' : 'justify-start'}`}
-                  >
+        <h2 className="text-2xl font-bold mb-4">Send a Message to {listing?.vehicle_owner_name}</h2>
+
+        <div className="flex flex-col h-full">
+          {/* Messages Display Area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 rounded-md">
+            {messages.length === 0 ? (
+              <p className="text-gray-400 text-center">No messages yet.</p>
+            ) : (
+              messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.sender_id === loggedInUser?.id ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className="flex items-center space-x-2">
+                    {message.sender_id !== loggedInUser?.id && (
+                      <div className="flex items-center">
+                        <img
+                          src={message.user?.image_url}
+                          alt="User"
+                          className="w-10 h-10 rounded-full mr-2"
+                        />
+                        <p className="text-sm font-semibold">{message.user?.name || 'Unknown'}</p> 
+                      </div>
+                    )}
                     <div
-                      className={`rounded-lg p-3 max-w-[70%] ${message.senderId === loggedInUser?.id ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'}`}
+                      className={`rounded-lg p-3 max-w-[70%] ${message.sender_id === loggedInUser?.id ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'}`} // Color the sender's and receiver's messages differently
                     >
-                      {renderMessageContent(message)}
-                      <span className="text-xs opacity-75 mt-1 block text-right">
-                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      {/* Render the content of the message */}
+                      {message.type === 'text' && (
+                        <p className="text-sm break-words">{message.message}</p>
+                      )}
+                      {message.type === 'image' && (
+                        <img
+                          src={message.message}
+                          alt="Sent"
+                          className="max-w-[200px] rounded-md border"
+                        />
+                      )}
                     </div>
+                    {message.sender_id === loggedInUser?.id && (
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm font-semibold">{message.user?.name}</p> {/* Display sender's name */}
+                        <img
+                          src={message.user?.image_url} // Access sender's image
+                          alt="User"
+                          className="w-10 h-10 rounded-full ml-2"
+                        />
+                      </div>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
+                </div>
+              ))
+            )}
+          </div>
 
-            {/* Message Input Area */}
-            <div className="mt-4 flex items-center">
-              {/* Hidden file input */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={handleFileSelect}
-              />
-              {/* Attachment button */}
-              <button
-                onClick={handleAttachmentClick}
-                className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                // Always enabled in popup
-              >
-                <Paperclip size={24} />
-              </button>
+          {/* Message Input Area */}
+          <div className="mt-4 flex items-center space-x-2">
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
 
-              {selectedFile ? (
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                const maxSizeMB = 5;
+
+                if (!allowedTypes.includes(file.type)) {
+                  alert("Only JPEG, PNG, or WEBP images are allowed.");
+                  return;
+                }
+
+                if (file.size > maxSizeMB * 1024 * 1024) {
+                  alert(`Image size should be less than ${maxSizeMB}MB.`);
+                  return;
+                }
+                if (file) {
+                  //setSelectedFile(file);
+                  uploadFile(file); // <- Upload on select
+                }
+              }}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="p-2 text-gray-500 hover:text-gray-700"
+            >
+              <Paperclip size={24} />
+            </button>
+
+            {uploadedImageUrl ? (
                 <div className="flex-1 border rounded-md p-2 flex items-center justify-between">
-                  <span className="text-sm truncate">{selectedFile.name}</span>
+                  <span className="text-sm text-blue-600 truncate">{uploadedImageUrl}</span>
                   <button
-                    onClick={() => setSelectedFile(null)}
+                    onClick={() => setUploadedImageUrl(null)}
                     className="ml-2 text-red-500 hover:text-red-700"
                   >
                     &times;
@@ -272,28 +246,20 @@ const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar }) => {
                   placeholder="Type a message..."
                   value={newMessageContent}
                   onChange={(e) => setNewMessageContent(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSendMessage();
-                    }
-                  }}
-                  // Always enabled in popup
                 />
               )}
-
-              <button
-                onClick={handleSendMessage}
-                className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                disabled={!newMessageContent.trim() && !selectedFile}
-              >
-                 <Send size={24} />
-              </button>
-            </div>
+            <button
+              onClick={handleSendMessage}
+              className="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              disabled={!newMessageContent.trim() && !uploadedImageUrl}
+            >
+              <Send size={24} />
+            </button>
           </div>
-        )}
+        </div>
       </main>
     </div>
   );
 };
 
-export default UserMessages; 
+export default UserMessages;

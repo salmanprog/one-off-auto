@@ -67,6 +67,22 @@ const api = {
       url: 'vehicle',
       method: "DELETE",
     },
+    get_related_vehicle: {
+      url: 'user/related/vehicle',
+      method: "GET",
+    },
+    chat_unread_messages: {
+      url: 'chat/unread-messages',
+      method: "GET",
+    },
+    user_in_chatroom: {
+      url: 'chat/user-in-chatRoom',
+      method: "POST",
+    },
+    upload_media: {
+      url: 'media',
+      method: "POST",
+    },
   };
   
   export default api;

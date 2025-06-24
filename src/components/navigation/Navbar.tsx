@@ -1,27 +1,60 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Facebook, Instagram, Youtube } from "lucide-react";
+import { Menu, X, Facebook, Instagram, Youtube, Bell } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import Logo from "../common/Logo";
 import { useFetch } from "../../hooks/request";
+import { useSocket } from "../sockets/SocketContext"; // Import socket from context
 import _ from "lodash";
+import Helper from "../../helpers";
 
   const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-
+  const socket = useSocket();
   const navigate = useNavigate();
    const isAuthenticated = !!localStorage.getItem("session");
+   const authUser = Helper.getStorageData("session");
    let dashboardUrl = '';
-   
-   if(isAuthenticated){
-       const { data } = useFetch("get_user_detail");
-      dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
-   }
-   
+   let user_group = 0;
+   useEffect(() => {
+    if (socket && isAuthenticated) {
+      socket.on('_read_unread_messages', (unreadMessage: ChatMessage) => {
+        if (unreadMessage.data?.total_messages) {
+          if (unreadMessage.data?.user_id == authUser?.id) {
+              setTotalUnreadMessages(unreadMessage.data?.total_messages)
+          }
+        }
+      });
+
+      socket.on('_read_messages', (myUnreadMessage: ChatMessage) => {
+        if (myUnreadMessage.data?.total_messages) {
+          console.log('_read_messages.data?.user_id',authUser?.id)
+              setTotalUnreadMessages(myUnreadMessage.data?.total_messages)
+        }
+      });
+      // // Cleanup when the component unmounts
+      return () => {
+        socket.off('_read_unread_messages');
+        socket.off('_read_messages');
+      };
+    }
+  }, [socket, isAuthenticated]);
+  if(isAuthenticated){
+    const { data } = useFetch("get_user_detail");
+    const { data:chat_messages } = useFetch("chat_unread_messages");
+    dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+    user_group = data?.user_group_id
+    useEffect(() => {
+      if (chat_messages?.total_messages !== undefined) {
+        setTotalUnreadMessages(chat_messages.total_messages);
+      }
+    }, [chat_messages]);
+ } 
   const handleLogout = () => {
     localStorage.removeItem("session");
     navigate("/signin");
@@ -85,6 +118,19 @@ import _ from "lodash";
               >
                 <Youtube size={20} />
               </a>
+              {user_group !== 2 && (
+                <a
+                href={`/${dashboardUrl}/messages`}
+                rel="noopener noreferrer"
+                className="relative text-gray-600 hover:text-oneoffautos-blue transition-colors"
+                aria-label="Notification"
+                >
+                <Bell size={20} />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold px-[6px] py-[1px] rounded-full">
+                {totalUnreadMessages}
+                </span>
+              </a>
+            )}
             </div>
 
             {/* CTA and Auth Buttons */}
