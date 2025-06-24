@@ -25,6 +25,7 @@ Route
     // Vehicle
     Route.get('user/vehicle', 'Api/VehicleController.userVehicleListing').as('user.vehicle');
     Route.get('user/vehicle/:slug', 'Api/VehicleController.viewUserVehicle').as('view.user.vehicle');
+    Route.get('user/related/vehicle/:slug', 'Api/VehicleController.userRelatedVehicle').as('user.related.vehicle');
     // Vehicle Make
     Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store
@@ -66,6 +67,9 @@ Route
     //Notifications
     Route.post('notification/test-notification','Api/NotificationController.sendTestNotification').as('test-notification');
 
+    // Chat
+    Route.get('chat/unread-messages','Api/ChatController.unreadMessages').as('unread-messages');
+    Route.post('chat/user-in-chatRoom','Api/ChatGroupController.userInChatRoom').as('user-in-chatRoom');
     // Route.post('gateway/customer','Api/GatewayController.customer').as('gateway-customer');
     // Route.post('gateway/card','Api/GatewayController.customerCard').as('gateway-card');
     // Route.post('gateway/card/default','Api/GatewayController.makeDefaultCard').as('gateway-default-card');

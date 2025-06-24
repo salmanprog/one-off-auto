@@ -44,7 +44,7 @@ class MediaHook
                 params.thumbnail_url = params.file_url
             }   
 
-            params.slug = Math.floor( ( Math.random() * 100) + 1 ) + new Date().getTime();
+            params.slug = await Media.generateSlug('med_') + Math.floor( ( Math.random() * 100) + 1 ) + new Date().getTime();
             params.user_id = request.user().id
             params.module = ''
             params.module_id = 0

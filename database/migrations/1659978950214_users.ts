@@ -21,6 +21,7 @@ export default class extends BaseSchema {
       table.enu('profile_type',['Public','Private']).notNullable().defaultTo('Public')
       table.string('password',255).notNullable()
       table.text('image_url').nullable()
+      table.enu('is_socket',['1','0']).nullable().defaultTo('0')
       table.enu('status',['1','0']).notNullable().defaultTo('1')
       table.enu('is_email_verify',['1','0']).notNullable().defaultTo('0')
       table.timestamp('email_verify_at').nullable()

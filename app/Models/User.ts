@@ -85,6 +85,9 @@ export default class User extends RestModel
     public email_otp_created_at: DateTime | null
 
     @column()
+    public is_socket: number
+
+    @column()
     public status: number
 
     @column.dateTime({ autoCreate: true })
@@ -119,7 +122,7 @@ export default class User extends RestModel
     {
         return [
           'user_group_id','created_by','parent_id','user_type','name','nick_name','username','slug','email','mobile_number','dob','age','password','image_url',
-          'gender','profile_type','is_email_verify','email_verify_at','status','platform_type','platform_id',
+          'gender','profile_type','is_email_verify','email_verify_at','is_socket','status','platform_type','platform_id',
           'email_otp','email_otp_created_at','created_at','updated_at','deleted_at'
         ]
     }

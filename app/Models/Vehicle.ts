@@ -117,6 +117,13 @@ export default class Vehicle extends RestModel
         return record;
     }
 
+    public static async getRelatedVehicleLists(slug:string,limit:number)
+    {
+        let show_limit = !_.isEmpty(limit) ? limit : 9;
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').whereIn('status',['1','2']).where('slug','<>',slug).orderBy('id','desc').limit(show_limit)
+        return record;
+    }
+
     public static async getVehicleBySlug(slug: string)
     {
         let record = await this.query().preload('vehicleCategory').preload('user').preload('media').where('slug',slug).first();
