@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Phone, Mail } from "lucide-react";
@@ -11,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo and About */}
           <div>
-           <Logo className="max-w-[150px]" />
+           <Logo className="max-w-[150px]" variant="white" />
             <p className="mt-4 text-gray-300">
               The premier marketplace for enthusiasts buying and selling unique modified vehicles.
             </p>
@@ -128,8 +127,8 @@ const Footer = () => {
               <Link to="/privacy-policy" className="text-gray-400 hover:text-white text-sm">
                 Privacy Policy
               </Link>
-              <Link to="/terms-of-service" className="text-gray-400 hover:text-white text-sm">
-                Terms of Service
+              <Link to="/terms-and-conditions" className="text-gray-400 hover:text-white text-sm">
+                Terms and Conditions
               </Link>
             </div>
           </div>

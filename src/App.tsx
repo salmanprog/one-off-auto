@@ -17,6 +17,8 @@ import GuestRoute from "./components/authroute/GuestRoute";
 import AdminDashboard from "./components/dashboards/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import ListingDetail from "./pages/ListingDetail";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 
 const queryClient = new QueryClient();
@@ -39,6 +41,8 @@ const App = () => (
           <Route path="/listings/:listingId" element={<ListingDetail />} />
           <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
           <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
