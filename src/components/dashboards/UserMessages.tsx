@@ -17,8 +17,10 @@ const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar, listing }) => 
   const fileInputRef = useRef<HTMLInputElement>(null); // Ref for file input
   const socket = useSocket(); // Get socket instance from context
   const authUser = Helper.getStorageData("session");
+  const { data } = useFetch("chat_listing");
   const { postData } = useFetch("upload_media", "submit");
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   useEffect(() => {
     // Only set logged-in user on mount
@@ -73,48 +75,75 @@ const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar, listing }) => 
   }, [loggedInUser, listing, socket]); // Run this effect when loggedInUser or listing changes
 
   const handleSendMessage = async () => {
-    if (loggedInUser && socket && listing) {
+    const currentChatTarget = selectedUser || listing;
+  
+    if (loggedInUser && socket && currentChatTarget) {
       let messageContent = newMessageContent.trim();
-    let type = 'text';
-
-    if (uploadedImageUrl) {
-      messageContent = uploadedImageUrl;
-      type = 'image';
-    }
-
-    if (!messageContent) return;
-
-    const message = {
-      reciever_id: listing.user_id?.toString(),
-      sender_id: loggedInUser.id?.toString(),
-      message: messageContent,
-      type: type,
-    };
-
-      // Emit the message to both sender and receiver
+      let type = 'text';
+  
+      if (uploadedImageUrl) {
+        messageContent = uploadedImageUrl;
+        type = 'image';
+      }
+  
+      if (!messageContent) return;
+  
+      const message = {
+        reciever_id: currentChatTarget.user?.id?.toString() || currentChatTarget.user_id?.toString(),
+        sender_id: loggedInUser.id?.toString(),
+        message: messageContent,
+        type: type,
+      };
+  
+      console.log("Sending message:", message); // For debug
+  
       socket.emit('_send_message', message, (response: any) => {
         if (response.code === 200) {
           console.log('Message sent successfully:', response.data);
-          
-          // Add the new message to the UI immediately (for the sender)
+  
           setMessages(prevMessages => [
             ...prevMessages,
             { ...response.data, id: Date.now(), timestamp: new Date().toISOString() }
           ]);
-
-          setNewMessageContent(''); // Clear the input after sending
+  
+          setNewMessageContent('');
           setUploadedImageUrl(null);
-
-          socket?.emit('_user_chat_read_unread_messages', {sender_id: loggedInUser.id?.toString(),reciever_id: listing.user_id?.toString()}, (response: any) => {
+  
+          socket?.emit('_user_chat_read_unread_messages', {
+            sender_id: loggedInUser.id?.toString(),
+            reciever_id: message.reciever_id,
+          }, (response: any) => {
             if (response.code === 200) {
               console.log('Message Total successfully:', response.data.total_messages);
-            }  
+            }
           });
         } else {
           console.error('Error sending message:', response.message);
         }
       });
+    } else {
+      console.warn("No chat target (listing or selectedUser) found.");
     }
+  };
+
+  const handleSelectSession = (userId: number) => {
+    const selected = data.find((chat) => chat.user.id === userId);
+    if (!selected || !loggedInUser) return;
+  
+    setSelectedUser(selected);
+  
+    const messageParams = {
+      reciever_id: selected.user.id.toString(),
+      sender_id: loggedInUser.id.toString(),
+    };
+  
+    socket?.emit('_load_recent_chat', messageParams);
+  
+    socket?.emit('_sender_read_messages', { reciever_id: loggedInUser.id.toString() }, (response: any) => {
+      if (response.code === 200) {
+        console.log('MyMessage:', response.data.total_messages);
+      }
+    });
   };
 
   const uploadFile = async (file: File) => {
@@ -137,6 +166,36 @@ const UserMessages: React.FC<UserMessagesProps> = ({ hideSidebar, listing }) => 
 
   return (
     <div className={hideSidebar ? "h-full" : "flex h-full"}>
+      {!listing && (
+        <aside className="w-64 bg-gray-100 p-4 overflow-y-auto">
+        <h3 className="text-lg font-semibold mb-4">Chats</h3>
+      
+        {!data ? (
+          <p className="text-red-500">Something went wrong. Please reload.</p>
+        ) : data.length === 0 ? (
+          <p>No chats found.</p>
+        ) : (
+          <ul className="space-y-2">
+            {data.map((chat_history) => (
+              <li
+                key={chat_history.id}
+                className="cursor-pointer p-2 rounded bg-blue-200 hover:bg-blue-300 transition"
+                onClick={() => handleSelectSession(chat_history.user.id)}
+              >
+                <div className="flex items-center space-x-2">
+                  <img
+                    src={chat_history.user?.image_url || '/default-avatar.png'}
+                    alt={chat_history.user?.name}
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <p className="font-medium text-sm">{chat_history.user?.name || 'Unknown User'}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </aside>
+      )}
       {/* Main chat area */}
       <main className="flex-1 p-4 flex flex-col">
         <h2 className="text-2xl font-bold mb-4">Send a Message to {listing?.vehicle_owner_name}</h2>

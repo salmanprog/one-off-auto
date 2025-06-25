@@ -16,6 +16,7 @@ const SignUp = () => {
     for (const key in values) {
       fd.append(key, values[key]);
     }
+    fd.append('user_group_id', '3');
     fd.append('device_type', 'android');
     fd.append('device_id', '1234567890');
     fd.append('device_token', '1234567890');

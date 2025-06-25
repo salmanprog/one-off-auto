@@ -83,6 +83,10 @@ const api = {
       url: 'media',
       method: "POST",
     },
+    chat_listing: {
+      url: 'chat/listing',
+      method: "GET",
+    },
   };
   
   export default api;

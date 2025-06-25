@@ -118,19 +118,19 @@ import Helper from "../../helpers";
               >
                 <Youtube size={20} />
               </a>
-              {user_group !== 2 && (
+              {isAuthenticated && user_group !== 2 && (
                 <a
-                href={`/${dashboardUrl}/messages`}
-                rel="noopener noreferrer"
-                className="relative text-gray-600 hover:text-oneoffautos-blue transition-colors"
-                aria-label="Notification"
+                  href={`/${dashboardUrl}/messages`}
+                  rel="noopener noreferrer"
+                  className="relative text-gray-600 hover:text-oneoffautos-blue transition-colors"
+                  aria-label="Notification"
                 >
-                <Bell size={20} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold px-[6px] py-[1px] rounded-full">
-                {totalUnreadMessages}
-                </span>
-              </a>
-            )}
+                  <Bell size={20} />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold px-[6px] py-[1px] rounded-full">
+                    {totalUnreadMessages}
+                  </span>
+                </a>
+              )}
             </div>
 
             {/* CTA and Auth Buttons */}
