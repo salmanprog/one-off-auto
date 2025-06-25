@@ -68,6 +68,7 @@ Route
     Route.post('notification/test-notification','Api/NotificationController.sendTestNotification').as('test-notification');
 
     // Chat
+    Route.get('chat/listing','Api/ChatGroupController.chatListing').as('chat-listing');
     Route.get('chat/unread-messages','Api/ChatController.unreadMessages').as('unread-messages');
     Route.post('chat/user-in-chatRoom','Api/ChatGroupController.userInChatRoom').as('user-in-chatRoom');
     // Route.post('gateway/customer','Api/GatewayController.customer').as('gateway-customer');

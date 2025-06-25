@@ -1,25 +1,18 @@
-import _, { isEmpty } from 'lodash';
+'use strict'
+import _ from 'lodash';
+import {baseUrl,storageUrl} from 'App/Helpers/Index'
 import PublicUser from './PublicUser';
-import PublicVendor from './PublicVendor';
 import Chat from 'App/Models/Chat';
 
-export default class ChatGroup
+
+class ChatGroup
 {
-  headers: {};
-  static headers: any;
-
-  constructor()
+  protected static async initResponse(data: object,request:object)
   {
-      this.headers = {};
-  }
-
-  protected static async initResponse(data: any,request:any)
-  {
-      this.headers = request.headers();
       if( _.isEmpty(data) )
         return [];
 
-      let response:any;
+      let response;
       if( Array.isArray(data) ){
         response = []
         for(var i=0; i < data.length; i++)
@@ -32,29 +25,30 @@ export default class ChatGroup
       return response;
   }
 
-  private static async jsonSchema(record: any,request:any)
+  private static async jsonSchema(record: object,request:object)
   {
-      let user_obj;
+    let user_obj;
       
-      if(request.user().id == record.sender_id){
-        user_obj = await PublicVendor.initResponse(record.Reciever,request)
-      }else{
-        user_obj = await PublicUser.initResponse(record.Sender,request)
-      }
-      let lastmessage =await Chat.getlastMessage(record.id)
-      return {
-          id: record.id,
-          //sender: await PublicUser.initResponse(record.Sender,request),
-          //reciever: await PublicVendor.initResponse(record.Reciever,request),
-          user:user_obj,
-          slug: record.slug,
-          //reciever_seen: record.reciever_seen,
-          //sender_seen: record.sender_seen,
-          last_message:_.isEmpty(lastmessage) ? '' : lastmessage.message,
-          message_type:_.isEmpty(lastmessage) ? '' : lastmessage.type,
-          total_unread_messages: parseInt(await Chat.getCountUnseenMessages(record.id,request.user().id)),
-          created_at: record.created_at
-      }
+    if(request.user().id == record.sender_id){
+      user_obj = await PublicUser.initResponse(record.Reciever,request)
+    }else{
+      user_obj = await PublicUser.initResponse(record.Sender,request)
+    }
+    let lastmessage =await Chat.getlastMessage(record.id)
+    return {
+        id: record.id,
+        //sender: await PublicUser.initResponse(record.Sender,request),
+        //reciever: await PublicVendor.initResponse(record.Reciever,request),
+        user:user_obj,
+        slug: record.slug,
+        //reciever_seen: record.reciever_seen,
+        //sender_seen: record.sender_seen,
+        last_message:_.isEmpty(lastmessage) ? '' : lastmessage.message,
+        message_type:_.isEmpty(lastmessage) ? '' : lastmessage.type,
+        total_unread_messages: parseInt(await Chat.getCountUnseenMessages(record.id,request.user().id)),
+        created_at: record.created_at
+    }
   }
 
 }
+module.exports = ChatGroup;

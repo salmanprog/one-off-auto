@@ -116,6 +116,7 @@ export default class ChatGroup extends RestModel
         }
     }
 
+    
     public static async getRecentChat(vendor_id:number)
     {
         let query:any = this.query().select().whereNull("deleted_at");

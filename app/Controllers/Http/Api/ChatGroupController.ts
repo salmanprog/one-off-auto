@@ -200,4 +200,29 @@ export default class ChatGroupController extends RestController
         await this.__sendResponse(200,'Retrived Messages',user);
         return;
     }
+
+    public async chatListing(ctx: HttpContextContract)
+    {
+        this.__request  = ctx.request;
+        this.__response = ctx.response;
+        //check validation
+        let validationRules = schema.create({
+        })
+        try{
+          await this.__request.validate({ schema: validationRules })
+        } catch(error){
+            return this.sendError(
+              'Validation Message',
+              this.setValidatorMessagesResponse(error.messages),
+              400
+            )
+        }
+        //get user by email
+        let user = this.__request.user();
+        let records = await ChatGroup.getRecentChat(user.id);
+        //send response
+        this.__is_paginate = false;
+        await this.__sendResponse(200,'Chat history retrive successfully',records);
+        return;
+    }
 }
