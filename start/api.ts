@@ -26,6 +26,10 @@ Route
     Route.get('user/vehicle', 'Api/VehicleController.userVehicleListing').as('user.vehicle');
     Route.get('user/vehicle/:slug', 'Api/VehicleController.viewUserVehicle').as('view.user.vehicle');
     Route.get('user/related/vehicle/:slug', 'Api/VehicleController.userRelatedVehicle').as('user.related.vehicle');
+    //Contact Us
+    Route.resource('contact-us', 'Api/ContactUsController').except(['update','destroy']);
+    //Subcriber
+    Route.resource('subscribe/user', 'Api/UserSubscriberController').except(['update','destroy']);
     // Vehicle Make
     Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store
