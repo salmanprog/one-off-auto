@@ -87,6 +87,22 @@ const api = {
       url: 'chat/listing',
       method: "GET",
     },
+    user_subscribe: {
+      url: 'subscribe/user',
+      method: "POST",
+    },
+    user_subscribe_list: {
+      url: 'subscribe/user',
+      method: "GET",
+    },
+    contact_us: {
+      url: 'contact-us',
+      method: "POST",
+    },
+    contact_us_list: {
+      url: 'contact-us',
+      method: "GET",
+    },
   };
   
   export default api;

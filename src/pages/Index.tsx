@@ -19,7 +19,6 @@ const Index = () => {
       <FeaturedListings />
       <HowItWorks />
       <AboutPreview />
-      <ButtonExamples />
       <ValueProps />
       <Testimonials />
       <CallToAction />

@@ -6,6 +6,8 @@ import AdminUserManagement from '../dashboards/AdminUserManagement';
 import AdminListingManagement from '../dashboards/AdminListingManagement';
 import UserAccountSettings from '../dashboards/UserAccountSettings';
 import UserListings from '../dashboards/UserListings';
+import AdminContactListing from '../dashboards/AdminContactListing';
+import AdminSubscriberListing from '../dashboards/AdminSubscriberListing';
 import UserInquiries from '../dashboards/UserInquiries';
 import UserNotifications from '../dashboards/UserNotifications';
 import UserMessages from '../dashboards/UserMessages'; // Import the new UserMessages component
@@ -24,6 +26,8 @@ const DashboardLayout: React.FC = () => {
         { path: '/', label: 'Home' },
         { path: '/admin-dashboard/users', label: 'User Management' },
         { path: '/admin-dashboard/listings', label: 'Listing Management' },
+        { path: '/admin-dashboard/contactlistings', label: 'Contact-us Listing' },
+        { path: '/admin-dashboard/subscriberslistings', label: 'Subscriber Listing' },
       ]
     : isUserDashboard
     ? [
@@ -45,6 +49,10 @@ const DashboardLayout: React.FC = () => {
           return <AdminUserManagement />;
         case '/admin-dashboard/listings':
           return <AdminListingManagement />;
+          case '/admin-dashboard/contactlistings':
+          return <AdminContactListing />;
+          case '/admin-dashboard/subscriberslistings':
+          return <AdminSubscriberListing />;
         default:
           return <div>Admin Dashboard Section Not Found</div>; // Or a 404 component
       }

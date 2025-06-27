@@ -92,8 +92,7 @@ import Helper from "../../helpers";
             {/* Social Icons */}
             <div className="hidden md:flex items-center space-x-3">
               <a
-                href="https://facebook.com"
-                target="_blank"
+                href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="Facebook"
@@ -101,8 +100,7 @@ import Helper from "../../helpers";
                 <Facebook size={20} />
               </a>
               <a
-                href="https://instagram.com"
-                target="_blank"
+                href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="Instagram"
@@ -110,8 +108,7 @@ import Helper from "../../helpers";
                 <Instagram size={20} />
               </a>
               <a
-                href="https://tiktok.com"
-                target="_blank"
+                href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="TikTok"

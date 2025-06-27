@@ -4,16 +4,21 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { useFetch } from "../../hooks/request";
 
 const CallToAction = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  
+  const { loading, postData } = useFetch("user_subscribe", "submit");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd send this to your backend
+    const fd = new FormData();
+    fd.append("user_email",  email);
     console.log("Email submitted:", email);
-    setSubmitted(true);
+    const callback = (receivedData) => {
+    };
+    postData(fd, callback);
+    //setSubmitted(true);
     setEmail("");
   };
   

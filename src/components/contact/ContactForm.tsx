@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+import { useFetch } from "../../hooks/request";
 
 const ContactForm = () => {
+  
+  const { loading, postData } = useFetch("contact_us", "submit");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,9 +19,15 @@ const ContactForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const fd = new FormData();
+    fd.append("name", formData.name);
+    fd.append("email", formData.email);
+    fd.append("phone", formData.phone);
+    fd.append("message", formData.message);
+    const callback = (receivedData) => {
+    };
+    postData(fd, callback);
     console.log("Contact form submitted:", formData);
-    // Here you would typically send the data to an API
-    alert("Thank you for your message! We'll get back to you soon.");
     setFormData({
       name: "",
       email: "",
@@ -75,8 +84,7 @@ const ContactForm = () => {
           <h4 className="font-bold mb-4">Connect With Us</h4>
           <div className="flex space-x-4">
             <a 
-              href="https://facebook.com" 
-              target="_blank" 
+              href="javascript:void(0);" 
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >
@@ -84,8 +92,7 @@ const ContactForm = () => {
               <Facebook size={20} />
             </a>
             <a 
-              href="https://instagram.com" 
-              target="_blank" 
+              href="javascript:void(0);" 
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >
@@ -93,8 +100,7 @@ const ContactForm = () => {
               <Instagram size={20} />
             </a>
             <a 
-              href="https://tiktok.com" 
-              target="_blank" 
+              href="javascript:void(0);" 
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Filter, Search, ChevronDown, ChevronUp } from "lucide-react";
 import { useFetch } from "../../hooks/request";
 
@@ -7,8 +7,7 @@ interface FilterState {
   searchTerm: string;
   make: string;
   model: string;
-  yearFrom: string;
-  yearTo: string;
+  year: string; // Changed to single year
   priceMin: string;
   priceMax: string;
   mileage: string;
@@ -33,7 +32,6 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
 }) => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [standardFiltersOpen, setStandardFiltersOpen] = useState(true);
-  const [modFiltersOpen, setModFiltersOpen] = useState(true);
   const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list");
 
   if (loading) return <div>Loading makes...</div>;
@@ -42,7 +40,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   // Function to apply filters to the listings data
   const applyFilters = () => {
     let filteredListings = [...listings]; // Start with all listings
-
+  
     // Search Term Filter
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
@@ -53,59 +51,45 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
           listing.mods.some((mod) => mod.toLowerCase().includes(searchLower))
       );
     }
-
+  
     // Make Filter
     if (filters.make) {
       filteredListings = filteredListings.filter((listing) =>
         listing.vehicle_make.toLowerCase().includes(filters.make.toLowerCase())
       );
     }
-
+  
     // Model Filter
     if (filters.model) {
       filteredListings = filteredListings.filter((listing) =>
         listing.model.toLowerCase().includes(filters.model.toLowerCase())
       );
     }
-
-    // Year Range Filter (exact match or within the range)
-    if (filters.yearFrom) {
-      const yearFrom = parseInt(filters.yearFrom, 10); // Convert to number
+  
+    // Year Filter (Single input)
+    if (filters.year) {
+      const year = parseInt(filters.year, 10); // Convert to number
+     
       filteredListings = filteredListings.filter((listing) => {
         const listingYear = parseInt(listing.vehicle_year, 10); // Convert vehicle year to number
-        return listingYear >= yearFrom;
+        return !isNaN(listingYear) && listingYear === year; // Filter based on exact year match
       });
     }
-
-    if (filters.yearTo) {
-      const yearTo = parseInt(filters.yearTo, 10); // Convert to number
-      filteredListings = filteredListings.filter((listing) => {
-        const listingYear = parseInt(listing.vehicle_year, 10); // Convert vehicle year to number
-        return listingYear <= yearTo;
-      });
-    }
-
+  
     // Price Range Filter
     if (filters.priceMin) {
       const priceMin = parseInt(filters.priceMin, 10); // Convert to number
       filteredListings = filteredListings.filter(
-        (listing) => parseInt(listing.price, 10) >= priceMin // Convert price to number
+        (listing) => parseInt(listing.price.replace(/[^0-9]/g, "")) >= priceMin // Remove non-numeric characters from listing price
       );
     }
     if (filters.priceMax) {
       const priceMax = parseInt(filters.priceMax, 10); // Convert to number
       filteredListings = filteredListings.filter(
-        (listing) => parseInt(listing.price, 10) <= priceMax // Convert price to number
+        (listing) => parseInt(listing.price.replace(/[^0-9]/g, "")) <= priceMax // Remove non-numeric characters from listing price
       );
     }
-
-    // Mileage Filter
-    if (filters.mileage) {
-      filteredListings = filteredListings.filter((listing) =>
-        parseInt(listing.mileage.replace(/[^0-9]/g, "")) <= parseInt(filters.mileage) // Clean mileage and compare
-      );
-    }
-
+  
     return filteredListings;
   };
 
@@ -132,7 +116,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
           <Search className="text-gray-400 ml-3" size={20} />
           <input
             type="text"
-            placeholder="Search makes, models, or mods..."
+            placeholder="Search by title"
             className="w-full p-3 border-none focus:outline-none"
             value={filters.searchTerm}
             onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
@@ -181,26 +165,16 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 />
               </div>
 
-              {/* Year Filter */}
+              {/* Year Filter (Single input) */}
               <div>
                 <label className="block text-sm font-medium mb-1">Year</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    placeholder="From"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.yearFrom}
-                    onChange={(e) => onFilterChange({ yearFrom: e.target.value })}
-                  />
-                  <span>-</span>
-                  <input
-                    type="text"
-                    placeholder="To"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.yearTo}
-                    onChange={(e) => onFilterChange({ yearTo: e.target.value })}
-                  />
-                </div>
+                <input
+                  type="text"
+                  placeholder="Enter year"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.year}
+                  onChange={(e) => onFilterChange({ year: e.target.value })}
+                />
               </div>
 
               {/* Price Range Filter */}
@@ -208,38 +182,34 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 <label className="block text-sm font-medium mb-1">Price Range ($)</label>
                 <div className="flex items-center space-x-2">
                   <input
-                    type="number"
+                    type="text"
                     placeholder="Min"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.priceMin}
-                    onChange={(e) => onFilterChange({ priceMin: e.target.value })}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ priceMin: e.target.value });
+                      }
+                    }}
                   />
                   <span>-</span>
                   <input
-                    type="number"
+                    type="text"
                     placeholder="Max"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={filters.priceMax}
-                    onChange={(e) => onFilterChange({ priceMax: e.target.value })}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ priceMax: e.target.value });
+                      }
+                    }}
                   />
                 </div>
               </div>
 
-              {/* Mileage Filter */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Mileage</label>
-                <select
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  value={filters.mileage}
-                  onChange={(e) => onFilterChange({ mileage: e.target.value })}
-                >
-                  <option value="">Any Mileage</option>
-                  <option value="25000">Under 25,000</option>
-                  <option value="50000">Under 50,000</option>
-                  <option value="100000">Under 100,000</option>
-                  <option value="150000">Under 150,000</option>
-                </select>
-              </div>
+             
             </div>
           )}
         </div>

@@ -1,10 +1,24 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Phone, Mail } from "lucide-react";
 import Logo from "../common/Logo";
+import { useFetch } from "../../hooks/request";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const { loading, postData } = useFetch("user_subscribe", "submit");
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const fd = new FormData();
+    fd.append("user_email",  email);
+    console.log("Email submitted:", email);
+    const callback = (receivedData) => {
+    };
+    postData(fd, callback);
+    //setSubmitted(true);
+    setEmail("");
+  };
   return (
     <footer className="bg-oneoffautos-blue text-white">
       <div className="container-custom py-12">
@@ -17,24 +31,21 @@ const Footer = () => {
             </p>
             <div className="flex mt-4 space-x-4">
               <a
-                href="https://facebook.com"
-                target="_blank"
+                href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
                 <Facebook size={20} />
               </a>
               <a
-                href="https://instagram.com"
-                target="_blank"
+               href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
                 <Instagram size={20} />
               </a>
               <a
-                href="https://tiktok.com"
-                target="_blank"
+               href="javascript:void(0);"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
@@ -100,11 +111,14 @@ const Footer = () => {
             <p className="text-gray-300 mb-2">
               Subscribe to our newsletter to get updates on new listings and automotive events.
             </p>
-            <form className="mt-2">
+            <form onSubmit={handleSubmit} className="mt-2">
               <div className="flex">
                 <input
                   type="email"
-                  placeholder="Your email"
+                  placeholder="Your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                   className="p-2 w-full text-gray-800 rounded-l-md focus:outline-none"
                 />
                 <button

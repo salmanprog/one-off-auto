@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, CircleDollarSign, CheckCircle2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 interface Listing {
   id: string;
@@ -18,8 +19,14 @@ interface ListingCardProps {
 }
 
 const ListingCard = ({ listing }: ListingCardProps) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/listings/${listing.slug}`);
+    // This will trigger a page reload after navigating
+    window.location.reload();
+  };
   return (
-    <Link to={`/listings/${listing.slug}`} className="block">
+    <div onClick={handleClick} className="block">
       <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg h-full transition-shadow">
         <div className="relative pb-[65%] overflow-hidden">
           <img
@@ -58,7 +65,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           </div>
         </div>
       </div>
-    </Link>
+      </div>
   );
 };
 

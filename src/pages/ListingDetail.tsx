@@ -10,6 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Dialog, DialogTrigger, DialogContent } from "../components/ui/dialog";
 import UserMessages from "../components/dashboards/UserMessages";
 import Helper from "../helpers";
+import { useNavigate } from "react-router-dom";
 // Assuming a more detailed listing structure might exist or be fetched
 interface DetailedListing {
   id: string;
@@ -119,6 +120,7 @@ const ListingDetail = () => {
   const {data:related_vehicle} = useFetch("get_related_vehicle", "mount", listingId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const authUser = Helper.getStorageData("session");
+  const navigate = useNavigate();
   // Fallback dummy listing
   const dummyListing: DetailedListing = {
     id: '1',
@@ -186,6 +188,11 @@ const ListingDetail = () => {
     setMainImage(allImages[nextIndex]);
   };
 
+  
+
+  const handleContactSeller = () => {
+    navigate(`/signin`);
+  };
   return (
     <MainLayout>
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 max-w-5xl">
@@ -276,38 +283,36 @@ const ListingDetail = () => {
 
             {/* Add more details or a contact form here */}
             {/* Contact Seller Button with Chat Pop-up */}
-            {authUser && listing?.user_id != authUser.id &&(
-            <Dialog open={isDialogOpen}
-                    onOpenChange={(open) => {
-                      setIsDialogOpen(open);
-                      if (open) {
-                        const fd = new FormData();
-                        fd.append("is_online", '1');
-                        fd.append("reciever_id", listing?.user_id);
-                        fd.append("sender_id", authUser.id);
-                        const callback = (receivedData: any) => {
-                          
-                        };
-                        postData(fd, callback);
-                      } else {
-                        const fd = new FormData();
-                        fd.append("is_online", '0');
-                        fd.append("reciever_id", listing?.user_id);
-                        fd.append("sender_id", authUser.id);
-                        const callback = (receivedData: any) => {
-                          window.location.reload();
-                        };
-                        postData(fd, callback);
-                      }
-                    }}>
-              
-              <DialogTrigger asChild>
-                <button className="btn-primary">Contact Seller</button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <UserMessages hideSidebar={true} listing={listing}/>
-              </DialogContent>
-            </Dialog>
+            {authUser && listing?.user_id !== authUser.id ? (
+              <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                setIsDialogOpen(open);
+                const fd = new FormData();
+                fd.append("reciever_id", listing?.user_id); // Reciever is the seller
+                fd.append("sender_id", authUser.id); // Sender is the logged-in user
+
+                if (open) {
+                  fd.append("is_online", '1'); // When opening the dialog, set sender as online
+                  const callback = (receivedData: any) => {
+                    // Callback logic if needed
+                  };
+                  postData(fd, callback);
+                } else {
+                  fd.append("is_online", '0'); // When closing, set sender as offline
+                  const callback = (receivedData: any) => {
+                    window.location.reload(); // Reload after closing the chat
+                  };
+                  postData(fd, callback);
+                }
+              }}>
+                <DialogTrigger asChild>
+                  <button className="btn-primary">Contact Seller</button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                  <UserMessages hideSidebar={true} listing={listing} />
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <button className="btn-primary" onClick={handleContactSeller}>Contact Seller</button>
             )}
           </div>
         </div>

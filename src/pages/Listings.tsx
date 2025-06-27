@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "../components/layouts/MainLayout";
 import ListingCard from "../components/listings/ListingCard";
 import ListingsFilters from "../components/listings/ListingsFilters";
@@ -9,8 +10,7 @@ interface FilterState {
   searchTerm: string;
   make: string;
   model: string;
-  yearFrom: string;
-  yearTo: string;
+  year: string;
   priceMin: string;
   priceMax: string;
   mileage: string;
@@ -21,6 +21,8 @@ interface FilterState {
 }
 
 const Listings = () => {
+  const navigate = useNavigate();
+  const { search } = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Adjust as needed
 
@@ -28,10 +30,7 @@ const Listings = () => {
 
   const listings = useMemo(() => {
     if (!data) return [];
-
-    // If data is an array, map it
     const vehicles = Array.isArray(data) ? data : [data];
-
     return vehicles.map((item) => ({
       id: item.id,
       slug: item.slug,
@@ -39,7 +38,7 @@ const Listings = () => {
       price: item.vehicle_price,
       vehicle_make: item.vehicle_make,
       model: item.vehicle_model,
-      vehicle_year: item.vehicle_year,
+      year: item.vehicle_year,
       vehicle_primarily_used: item.vehicle_primarily_used,
       vehicle_stock_parts: item.vehicle_stock_parts,
       location: item.vehicle_owner_address,
@@ -50,14 +49,11 @@ const Listings = () => {
     }));
   }, [data]);
 
-  const [sortOption, setSortOption] = useState("newest");
-
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
     make: "",
     model: "",
-    yearFrom: "",
-    yearTo: "",
+    year: "",
     priceMin: "",
     priceMax: "",
     mileage: "",
@@ -67,12 +63,33 @@ const Listings = () => {
     wheelsMods: [],
   });
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
-  };
+  // Step 1: Read query parameters
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const queryFilters: FilterState = {
+      searchTerm: params.get("searchTerm") || "",
+      make: params.get("make") || "",
+      model: params.get("model") || "",
+      year: params.get("year") || "",
+      priceMin: params.get("priceMin") || "",
+      priceMax: params.get("priceMax") || "",
+      mileage: params.get("mileage") || "",
+      engineMods: params.get("engineMods")?.split(",") || [],
+      suspensionMods: params.get("suspensionMods")?.split(",") || [],
+      bodyMods: params.get("bodyMods")?.split(",") || [],
+      wheelsMods: params.get("wheelsMods")?.split(",") || [],
+    };
+    setFilters(queryFilters);
+  }, [search]);
 
+  // Step 2: Update query params when filters change
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters }));
+    const updatedFilters = { ...filters, ...newFilters };
+    setFilters(updatedFilters);
+
+    // Update URL query parameters based on the new filters
+    const params = new URLSearchParams(updatedFilters as any);
+    navigate(`?${params.toString()}`);
   };
 
   const resetFilters = () => {
@@ -80,8 +97,7 @@ const Listings = () => {
       searchTerm: "",
       make: "",
       model: "",
-      yearFrom: "",
-      yearTo: "",
+      year: "",
       priceMin: "",
       priceMax: "",
       mileage: "",
@@ -90,11 +106,15 @@ const Listings = () => {
       bodyMods: [],
       wheelsMods: [],
     });
+
+    // Reset the query params in the URL
+    navigate("/listings");
   };
 
   const filteredAndSortedListings = useMemo(() => {
     let filtered = [...listings];
 
+    // Apply filters only if they are provided
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -115,15 +135,21 @@ const Listings = () => {
         listing.model.toLowerCase().includes(filters.model.toLowerCase())
       );
     }
+    
+    if(filters.year){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.year) == parseInt(filters.year)
+      );
+    }
 
     if (filters.priceMin) {
       filtered = filtered.filter(
-        (listing) => listing.price >= parseInt(filters.priceMin)
+        (listing) => parseInt(listing.price) >= parseInt(filters.priceMin)
       );
     }
     if (filters.priceMax) {
       filtered = filtered.filter(
-        (listing) => listing.price <= parseInt(filters.priceMax)
+        (listing) => parseInt(listing.price) <= parseInt(filters.priceMax)
       );
     }
 
@@ -148,21 +174,8 @@ const Listings = () => {
       modFilter(filters.wheelsMods, listing.mods)
     );
 
-    // Sort
-    switch (sortOption) {
-      case "price-asc":
-        return filtered.sort((a, b) => a.price - b.price);
-      case "price-desc":
-        return filtered.sort((a, b) => b.price - a.price);
-      case "mileage-asc":
-        return filtered.sort((a, b) => a.mileage - b.mileage);
-      case "year-desc":
-        return filtered; // Not available in this mock data
-      case "newest":
-      default:
-        return filtered;
-    }
-  }, [filters, sortOption, listings]);
+    return filtered;
+  }, [filters, listings]);
 
   const paginatedListings = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -183,9 +196,9 @@ const Listings = () => {
 
   const totalPages = Math.ceil(filteredAndSortedListings.length / itemsPerPage);
 
-  if (loading) return <MainLayout><div className="p-8">Loading...</div></MainLayout>;
-  if (error) return <MainLayout><div className="p-8 text-red-600">Error: {error.message}</div></MainLayout>;
-  if (!loading && listings.length === 0) return <MainLayout><div className="p-8">No listings found.</div></MainLayout>;
+  if (loading) return <MainLayout><div className="p-8 text-center">Loading...</div></MainLayout>;
+  if (error) return <MainLayout><div className="p-8 text-red-600 text-center">Error: {error.message}</div></MainLayout>;
+  if (!loading && listings.length === 0) return <MainLayout><div className="p-8 text-center">No listings found.</div></MainLayout>;
 
   return (
     <MainLayout>
@@ -200,7 +213,7 @@ const Listings = () => {
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 onResetFilters={resetFilters}
-                listings={listings} // Pass listings here
+                listings={listings}
               />
             </div>
 
@@ -210,20 +223,6 @@ const Listings = () => {
                   <p className="text-gray-600 mb-2 sm:mb-0">
                     Showing <span className="font-bold">{filteredAndSortedListings.length}</span> results
                   </p>
-                  <div className="flex items-center">
-                    <span className="mr-2">Sort by:</span>
-                    <select
-                      className="border border-gray-300 rounded-md p-2"
-                      value={sortOption}
-                      onChange={handleSortChange}
-                    >
-                      <option value="newest">Newest Listings</option>
-                      <option value="price-asc">Price (Low to High)</option>
-                      <option value="price-desc">Price (High to Low)</option>
-                      <option value="mileage-asc">Mileage (Low to High)</option>
-                      <option value="year-desc">Year (Newest First)</option>
-                    </select>
-                  </div>
                 </div>
               </div>
 
