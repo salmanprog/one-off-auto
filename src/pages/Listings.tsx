@@ -203,7 +203,7 @@ const Listings = () => {
   return (
     <MainLayout>
       <div className="bg-oneoffautos-lightgray">
-        <div className="container-custom py-8">
+        <div className="container-custom py-8" id="#listings">
           <h1 className="text-3xl font-bold mb-2">Vehicle Listings</h1>
           <p className="text-gray-600 mb-6">Browse our curated selection of modified vehicles.</p>
 

@@ -19,7 +19,7 @@ import DashboardLayout from "./components/layouts/DashboardLayout";
 import ListingDetail from "./pages/ListingDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
-
+import ScrollToTop from "./components/scrolltotop/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +29,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+      <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/listings" element={<Listings />} />
