@@ -103,6 +103,10 @@ const api = {
       url: 'contact-us',
       method: "GET",
     },
+    forgot_password: {
+      url: 'user/forgot-password',
+      method: "POST",
+    },
   };
   
   export default api;

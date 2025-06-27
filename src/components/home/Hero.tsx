@@ -50,7 +50,7 @@ const Hero = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <Select value={makeValue} onValueChange={setMakeValue}>
-                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm ">
+                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg">
                     <SelectValue placeholder="Make" />
                   </SelectTrigger>
                   <SelectContent position="popper" className="bg-white">
