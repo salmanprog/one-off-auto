@@ -10,6 +10,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Dialog, DialogTrigger, DialogContent } from "../components/ui/dialog";
 import UserMessages from "../components/dashboards/UserMessages";
 import Helper from "../helpers";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { MapPin, Calendar, Gauge, User, Star, Save, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // Assuming a more detailed listing structure might exist or be fetched
 interface DetailedListing {
@@ -20,8 +22,20 @@ interface DetailedListing {
   mileage: number;
   image: string;
   mods: string[];
-  description: string; // Added description field
-  additionalImages: string[]; // Added for additional images
+  description: string;
+  additionalImages: string[];
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_year?: string | number;
+  vehicle_primarily_used?: string;
+  vehicle_stock_parts?: string;
+  user_id?: string;
+  vehicle_modification?: string[];
+  vehicle_owner_name?: string;
+  vehicle_owner_address?: string;
+  vehicle_owner_email?: string;
+  vehicle_owner_phone?: string;
+  seller_avatar?: string;
 }
 
 // Placeholder data - replace with actual data fetching logic
@@ -117,7 +131,7 @@ const ListingDetail = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const { loading, data, fetchApi } = useFetch("user_vehicle_list", "mount", listingId);
   const { postData } = useFetch("user_in_chatroom", "submit");
-  const {data:related_vehicle} = useFetch("get_related_vehicle", "mount", listingId);
+  const { data: related_vehicle } = useFetch("get_related_vehicle", "mount", listingId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const authUser = Helper.getStorageData("session");
   const navigate = useNavigate();
@@ -188,41 +202,80 @@ const ListingDetail = () => {
     setMainImage(allImages[nextIndex]);
   };
 
-  
-
+  // Add state for zoom
+  const [zoomed, setZoomed] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const handleContactSeller = () => {
     navigate(`/signin`);
   };
   return (
     <MainLayout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 max-w-5xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {/* Image Gallery with Slider Overlay */}
-          <div className="space-y-4">
-            {/* Main Image Container with Overlay Buttons */}
-            <div className="relative rounded-lg shadow-md overflow-hidden aspect-square">
+      <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8 max-w-5xl">
+        {/* Heading Title */}
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">{listing.title}</h1>
+        {/* Main Content: Image | Price & Seller */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 mb-10">
+          {/* Listing Image */}
+          <div className="flex-1">
+            {/* Zoom-on-hover image container */}
+            <div
+              className="relative rounded-lg shadow-md overflow-hidden aspect-square group select-none"
+              style={{ position: 'relative' }}
+              onClick={e => {
+                e.preventDefault();
+                setZoomed(z => !z);
+                setZoomPos({ x: 50, y: 50 });
+              }}
+              onMouseMove={e => {
+                if (!zoomed) return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                setZoomPos({ x, y });
+              }}
+              onMouseLeave={() => {
+                if (zoomed) setZoomed(false);
+                setZoomPos({ x: 50, y: 50 });
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={zoomed ? 'Exit zoom' : 'Zoom image'}
+            >
               <img
                 src={mainImage}
                 alt={listing.title}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain transition-transform duration-200 bg-black"
+                style={zoomed ? {
+                  transform: `scale(3)`,
+                  transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+                  cursor: 'zoom-out',
+                } : { position: 'absolute', inset: 0 }}
+                draggable={false}
               />
-              {/* Overlay Buttons */}
+              {/* Overlay Arrow Buttons */}
               <button
                 className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full focus:outline-none"
-                onClick={handlePreviousClick}
+                onClick={e => { e.stopPropagation(); handlePreviousClick(); }}
+                type="button"
+                aria-label="Previous image"
               >
                 <ChevronLeft size={24} />
               </button>
               <button
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full focus:outline-none"
-                onClick={handleNextClick}
+                onClick={e => { e.stopPropagation(); handleNextClick(); }}
+                type="button"
+                aria-label="Next image"
               >
                 <ChevronRight size={24} />
               </button>
+              <span className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                {zoomed ? 'Click or leave to exit zoom' : 'Click to zoom'}
+              </span>
             </div>
             {/* Thumbnails */}
-            <div className="grid grid-cols-4 gap-4">
-            {allImages.map((img, index) => (
+            <div className="grid grid-cols-4 gap-4 mt-4">
+              {allImages.map((img, index) => (
                 <img
                   key={`${img}-${index}`}
                   src={img}
@@ -233,116 +286,130 @@ const ListingDetail = () => {
               ))}
             </div>
           </div>
-
-          {/* Product Details */}
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-[32px] md:leading-[1] font-bold text-gray-900 mb-8">{listing.title}</h1>
+          {/* Price & Seller Information */}
+          <div className="flex flex-col gap-6 md:w-80">
             <Card>
               <CardHeader>
                 <CardTitle>Price</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-3xl font-semibold text-gray-800">${listing.price.toLocaleString()}</p>
+                <p className="text-3xl font-semibold text-gray-800">${listing.price?.toLocaleString()}</p>
               </CardContent>
             </Card>
-
+            {/* Seller Info Card */}
             <Card>
               <CardHeader>
-                <CardTitle>Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-              <p className="text-gray-700 text-lg"><strong>Vehicle   Make:</strong> {listing.vehicle_make}</p>
-              <p className="text-gray-700 text-lg"><strong>Vehicle Model:</strong> {listing.vehicle_model}</p>
-              <p className="text-gray-700 text-lg"><strong>Vehicle Year:</strong> {listing.vehicle_year}</p>
-              <p className="text-gray-700 text-lg"><strong>Primarily Used:</strong> {listing.vehicle_primarily_used}</p>
-              <p className="text-gray-700 text-lg"><strong>Stock Parts:</strong> {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</p>
-                <p className="text-gray-700 text-lg"><strong>Location:</strong> {listing.location}</p>
-                <p className="text-gray-700 text-lg"><strong>Mileage:</strong> {listing.mileage.toLocaleString()}</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Modifications</CardTitle>
+                <CardTitle>Seller Information</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-2">
-                {listing.vehicle_modification}
+                <div className="flex flex-col items-start gap-4">
+                  <div className="flex items-center gap-4 w-full">
+                    <Avatar>
+                      <AvatarImage src={listing.seller_avatar || undefined} alt={listing.vehicle_owner_name || "Seller"} />
+                      <AvatarFallback>{listing.vehicle_owner_name ? listing.vehicle_owner_name[0] : "S"}</AvatarFallback>
+                    </Avatar>
+                    <div className="font-semibold text-lg">{listing.vehicle_owner_name || "Private Seller"}</div>
+                  </div>
+                  {authUser && listing?.user_id !== authUser.id ? (
+                    <Dialog open={isDialogOpen}
+                            onOpenChange={(open) => {
+                              setIsDialogOpen(open);
+                              if (open) {
+                                const fd = new FormData();
+                                fd.append("is_online", '1');
+                                fd.append("reciever_id", listing?.user_id);
+                                fd.append("sender_id", authUser.id);
+                                const callback = (receivedData: unknown) => {};
+                                postData(fd, callback, undefined);
+                              } else {
+                                const fd = new FormData();
+                                fd.append("is_online", '0');
+                                fd.append("reciever_id", listing?.user_id);
+                                fd.append("sender_id", authUser.id);
+                                const callback = (receivedData: unknown) => { window.location.reload(); };
+                                postData(fd, callback, undefined);
+                              }
+                            }}>
+                      <DialogTrigger asChild>
+                        <button className="btn-primary w-full">Contact Seller</button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <UserMessages hideSidebar={true} listing={listing}/>
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <button className="btn-primary" onClick={handleContactSeller}>Contact Seller</button>
+                  )}
                 </div>
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Description</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 text-lg leading-relaxed">{listing.description}</p>
-              </CardContent>
-            </Card>
-
-            {/* Add more details or a contact form here */}
-            {/* Contact Seller Button with Chat Pop-up */}
-            {authUser && listing?.user_id !== authUser.id ? (
-              <Dialog open={isDialogOpen} onOpenChange={(open) => {
-                setIsDialogOpen(open);
-                const fd = new FormData();
-                fd.append("reciever_id", listing?.user_id); // Reciever is the seller
-                fd.append("sender_id", authUser.id); // Sender is the logged-in user
-
-                if (open) {
-                  fd.append("is_online", '1'); // When opening the dialog, set sender as online
-                  const callback = (receivedData: any) => {
-                    // Callback logic if needed
-                  };
-                  postData(fd, callback);
-                } else {
-                  fd.append("is_online", '0'); // When closing, set sender as offline
-                  const callback = (receivedData: any) => {
-                    window.location.reload(); // Reload after closing the chat
-                  };
-                  postData(fd, callback);
-                }
-              }}>
-                <DialogTrigger asChild>
-                  <button className="btn-primary">Contact Seller</button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                  <UserMessages hideSidebar={true} listing={listing} />
-                </DialogContent>
-              </Dialog>
-            ) : (
-              <button className="btn-primary" onClick={handleContactSeller}>Contact Seller</button>
-            )}
           </div>
         </div>
-
+        {/* Details Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-gray-700 text-lg"><strong>Vehicle Make:</strong> {listing.vehicle_make}</p>
+            <p className="text-gray-700 text-lg"><strong>Vehicle Model:</strong> {listing.vehicle_model}</p>
+            <p className="text-gray-700 text-lg"><strong>Vehicle Year:</strong> {listing.vehicle_year}</p>
+            <p className="text-gray-700 text-lg"><strong>Primarily Used:</strong> {listing.vehicle_primarily_used}</p>
+            <p className="text-gray-700 text-lg"><strong>Stock Parts:</strong> {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</p>
+            <p className="text-gray-700 text-lg"><strong>Location:</strong> {listing.location}</p>
+            <p className="text-gray-700 text-lg"><strong>Mileage:</strong> {listing.mileage?.toLocaleString()}</p>
+          </CardContent>
+        </Card>
+        {/* Modifications Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Modifications</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {Array.isArray(listing.vehicle_modification)
+                ? listing.vehicle_modification.map((mod, idx) => (
+                    <Badge key={idx} variant="secondary">{mod}</Badge>
+                  ))
+                : <span className="text-gray-500">No modifications listed.</span>}
+            </div>
+          </CardContent>
+        </Card>
+        {/* Description Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Description</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-700 text-lg leading-relaxed">{listing.description}</p>
+          </CardContent>
+        </Card>
         {/* Related Products Section */}
         <div className="mt-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Products</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">You may also like</h2>
           {related_vehicle && related_vehicle.length > 0 && (
               <div className="relative">
                 <Carousel opts={{ align: 'start', slidesToScroll: 1 }}>
                   <CarouselContent>
-                    {related_vehicle.map((relatedListing: any) => {
+                    {Array.isArray(related_vehicle) && related_vehicle.map((relatedListing: Record<string, unknown>) => {
                       const obj = {
-                        id: relatedListing.id,
-                        slug: relatedListing.slug,
-                        title: relatedListing.vehicle_title,
-                        price: relatedListing.vehicle_price,
-                        vehicle_make: relatedListing.vehicle_make,
-                        model: relatedListing.vehicle_model,
-                        vehicle_year: relatedListing.vehicle_year,
-                        vehicle_primarily_used: relatedListing.vehicle_primarily_used,
-                        vehicle_stock_parts: relatedListing.vehicle_stock_parts,
-                        location: relatedListing.vehicle_owner_address,
-                        mileage: relatedListing.vehicle_mileage,
-                        vehicle_modification: relatedListing.vehicle_modification,
-                        image: relatedListing.image_url || '/default-image.jpg', // Fallback to default if not available
-                        mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"], // Sample mods, you can adjust this
+                        id: String(relatedListing.id ?? ''),
+                        slug: String(relatedListing.slug ?? ''),
+                        title: String(relatedListing.vehicle_title ?? ''),
+                        price: Number(relatedListing.vehicle_price ?? 0),
+                        vehicle_make: String(relatedListing.vehicle_make ?? ''),
+                        model: String(relatedListing.vehicle_model ?? ''),
+                        vehicle_year: String(relatedListing.vehicle_year ?? ''),
+                        vehicle_primarily_used: String(relatedListing.vehicle_primarily_used ?? ''),
+                        vehicle_stock_parts: String(relatedListing.vehicle_stock_parts ?? ''),
+                        location: String(relatedListing.vehicle_owner_address ?? ''),
+                        mileage: Number(relatedListing.vehicle_mileage ?? 0),
+                        vehicle_modification: relatedListing.vehicle_modification as string[] ?? [],
+                        image: String(relatedListing.image_url ?? '/default-image.jpg'),
+                        mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
                       };
                       return (
-                        <CarouselItem key={relatedListing.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                        <CarouselItem key={obj.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                           <ListingCard listing={obj} />
                         </CarouselItem>
                       );
@@ -353,7 +420,6 @@ const ListingDetail = () => {
                 </Carousel>
               </div>
             )}
-
         </div>
       </div>
     </MainLayout>
