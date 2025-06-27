@@ -301,7 +301,7 @@ export default class UsersController extends RestController
         let body_params = this.__request.all();
         let user = await User.getUserByEmail(body_params.email);
         if( _.isEmpty(user) ){
-          return this.sendError('Validation Error',{message:'Invalid email'},400);
+          return this.sendError('Validation Error',{message:'email does not match in our record'},400);
         }
         if( user.is_email_verify != 1 && Env.get('MAIL_SANDBOX') == 0 ){
           return this.sendError('Validation Error',{message:'Invalid email'},400);
@@ -313,7 +313,7 @@ export default class UsersController extends RestController
         ResetPassword.forgotPassword(user).then( () => {} );
         //send response
         this.__is_paginate = false;
-        this.__sendResponse(200,'Reset password link has been sent to your email address',{});
+        this.__sendResponse(200,'New password has been sent to your email address',{});
         return;
     }
 

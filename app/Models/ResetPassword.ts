@@ -41,7 +41,7 @@ export default class ResetPassword extends BaseModel
             link: baseUrl() + 'user/reset-password/' + resetPasswordToken,
             app_name: Env.get('APP_NAME')
         }
-        sendMail('emails/forgot-password',record.email,'Reset Password',mail_params)
+        //sendMail('emails/forgot-password',record.email,'Reset Password',mail_params)
     }
 
     public static async getResetPassReq(token)
