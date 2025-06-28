@@ -107,6 +107,14 @@ const api = {
       url: 'user/forgot-password',
       method: "POST",
     },
+    get_application_setting: {
+      url: 'application/setting',
+      method: "GET",
+    },
+    update_application_setting: {
+      url: 'application/setting',
+      method: "POST",
+    },
   };
   
   export default api;

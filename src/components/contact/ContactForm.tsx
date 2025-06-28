@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react"
 import { useFetch } from "../../hooks/request";
 
 const ContactForm = () => {
-  
+  const { data, loading: fetchLoading } = useFetch("get_application_setting");
   const { loading, postData } = useFetch("contact_us", "submit");
   const [formData, setFormData] = useState({
     name: "",
@@ -49,8 +49,8 @@ const ContactForm = () => {
             </div>
             <div>
               <h4 className="font-bold">Phone</h4>
-              <a href="tel:8702432457" className="text-oneoffautos-blue hover:underline">
-                (870) 243-2457
+              <a href={`tel:${data?.phone_number}`} className="text-oneoffautos-blue hover:underline">
+              {data?.phone_number}
               </a>
             </div>
           </div>
@@ -61,8 +61,8 @@ const ContactForm = () => {
             </div>
             <div>
               <h4 className="font-bold">Email</h4>
-              <a href="mailto:matt@oneoffautos.com" className="text-oneoffautos-blue hover:underline">
-                matt@oneoffautos.com
+              <a href={`mailto:${data?.email}`} className="text-oneoffautos-blue hover:underline">
+              {data?.email}
               </a>
             </div>
           </div>
@@ -73,9 +73,7 @@ const ContactForm = () => {
             </div>
             <div>
               <h4 className="font-bold">Office</h4>
-              <p>One Off Autos HQ, <br />
-              Automotive District, <br />
-              Gearhead Valley</p>
+              <p>{data?.office_address}</p>
             </div>
           </div>
         </div>
@@ -84,7 +82,7 @@ const ContactForm = () => {
           <h4 className="font-bold mb-4">Connect With Us</h4>
           <div className="flex space-x-4">
             <a 
-              href="javascript:void(0);" 
+              href={data?.fb_link} 
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >
@@ -92,7 +90,7 @@ const ContactForm = () => {
               <Facebook size={20} />
             </a>
             <a 
-              href="javascript:void(0);" 
+              href={data?.insta_link}
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >
@@ -100,11 +98,11 @@ const ContactForm = () => {
               <Instagram size={20} />
             </a>
             <a 
-              href="javascript:void(0);" 
+              href={data?.youtube_link} 
               rel="noopener noreferrer" 
               className="bg-oneoffautos-blue text-white p-3 rounded-full hover:bg-blue-800 transition-colors"
             >
-              <span className="sr-only">TikTok</span>
+              <span className="sr-only">Youtube</span>
               <Youtube size={20} />
             </a>
           </div>

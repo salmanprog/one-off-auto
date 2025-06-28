@@ -10,6 +10,7 @@ import AdminContactListing from '../dashboards/AdminContactListing';
 import AdminSubscriberListing from '../dashboards/AdminSubscriberListing';
 import UserInquiries from '../dashboards/UserInquiries';
 import UserNotifications from '../dashboards/UserNotifications';
+import ApplicationSettings from '../dashboards/ApplicationSettings';
 import UserMessages from '../dashboards/UserMessages'; // Import the new UserMessages component
 
 const DashboardLayout: React.FC = () => {
@@ -28,13 +29,14 @@ const DashboardLayout: React.FC = () => {
         { path: '/admin-dashboard/listings', label: 'Listing Management' },
         { path: '/admin-dashboard/contactlistings', label: 'Contact-us Listing' },
         { path: '/admin-dashboard/subscriberslistings', label: 'Subscriber Listing' },
+        { path: '/admin-dashboard/application-setting', label: 'Application Setting' },
       ]
     : isUserDashboard
     ? [
         { path: '/', label: 'Home' },
         { path: '/user-dashboard', label: 'Account Settings' },
         { path: '/user-dashboard/listings', label: 'My Listings' },
-        { path: '/user-dashboard/notifications', label: 'Notifications' },
+        //{ path: '/user-dashboard/notifications', label: 'Notifications' },
         { path: '/user-dashboard/messages', label: 'Messages' }, // Add link for Messages
       ]
     : []; // Default empty if not in a dashboard context
@@ -53,6 +55,8 @@ const DashboardLayout: React.FC = () => {
           return <AdminContactListing />;
           case '/admin-dashboard/subscriberslistings':
           return <AdminSubscriberListing />;
+          case '/admin-dashboard/application-setting':
+          return <ApplicationSettings />;
         default:
           return <div>Admin Dashboard Section Not Found</div>; // Or a 404 component
       }
@@ -60,8 +64,8 @@ const DashboardLayout: React.FC = () => {
        switch (location.pathname) {
          case '/user-dashboard/listings':
            return <UserListings />;
-         case '/user-dashboard/notifications':
-           return <UserNotifications />;
+        //  case '/user-dashboard/notifications':
+        //    return <UserNotifications />;
          case '/user-dashboard':
            return <UserAccountSettings />;
          case '/user-dashboard/messages':

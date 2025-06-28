@@ -7,6 +7,7 @@ import { useFetch } from "../../hooks/request";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
+  const { data, loading: fetchLoading } = useFetch("get_application_setting");
   const { loading, postData } = useFetch("user_subscribe", "submit");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,21 +32,21 @@ const Footer = () => {
             </p>
             <div className="flex mt-4 space-x-4">
               <a
-                href="javascript:void(0);"
+                href={data?.fb_link}
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
                 <Facebook size={20} />
               </a>
               <a
-               href="javascript:void(0);"
+               href={data?.insta_link}
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
                 <Instagram size={20} />
               </a>
               <a
-               href="javascript:void(0);"
+               href={data?.youtube_link}
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white"
               >
@@ -92,14 +93,14 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center">
                 <Phone size={16} className="mr-2" />
-                <a href="tel:8702432457" className="text-gray-300 hover:text-white transition-colors">
-                  (870) 243-2457
+                <a href={`tel:${data?.phone_number}`} className="text-gray-300 hover:text-white transition-colors">
+                {data?.phone_number}
                 </a>
               </li>
               <li className="flex items-center">
                 <Mail size={16} className="mr-2" />
-                <a href="mailto:matt@oneoffautos.com" className="text-gray-300 hover:text-white transition-colors">
-                  matt@oneoffautos.com
+                <a href={`mailto:${data?.email}`} className="text-gray-300 hover:text-white transition-colors">
+                  {data?.email}
                 </a>
               </li>
             </ul>

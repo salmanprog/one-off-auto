@@ -55,6 +55,8 @@ import Helper from "../../helpers";
       }
     }, [chat_messages]);
  } 
+ 
+  const { data:site_setting } = useFetch("get_application_setting");
   const handleLogout = () => {
     localStorage.removeItem("session");
     navigate("/signin");
@@ -92,7 +94,7 @@ import Helper from "../../helpers";
             {/* Social Icons */}
             <div className="hidden md:flex items-center space-x-3">
               <a
-                href="javascript:void(0);"
+                href={site_setting?.fb_link} 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="Facebook"
@@ -100,7 +102,7 @@ import Helper from "../../helpers";
                 <Facebook size={20} />
               </a>
               <a
-                href="javascript:void(0);"
+                href={site_setting?.insta_link}
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="Instagram"
@@ -108,7 +110,7 @@ import Helper from "../../helpers";
                 <Instagram size={20} />
               </a>
               <a
-                href="javascript:void(0);"
+                href={site_setting?.youtube_link}
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-oneoffautos-blue transition-colors"
                 aria-label="TikTok"
