@@ -102,7 +102,7 @@ class UserHook
         if( Env.get('MAIL_SANDBOX') == 0 ){
             let email_params = {
               name: record.name,
-              app_name: Env.get('APP_NAME'),
+              app_name: 'one-off-auto',
               link: Env.get('SITE_URL') + '/user/verify/' + Encryption.encrypt(record.email)
             }
             sendMail('emails/register',record.email,`Welcome to ${email_params.app_name} `,email_params);

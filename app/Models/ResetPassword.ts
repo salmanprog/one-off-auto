@@ -1,9 +1,11 @@
 import { DateTime } from 'luxon'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { baseUrl, sendMail, currentDateTime } from 'App/Helpers/Index'
+import { baseUrl, sendMail, currentDateTime, rand } from 'App/Helpers/Index'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import Env from '@ioc:Adonis/Core/Env'
+import User from 'App/Models/User';
+const passwordHash = require('password-hash')
 
 export default class ResetPassword extends BaseModel
 {
@@ -29,16 +31,20 @@ export default class ResetPassword extends BaseModel
 
     public static async forgotPassword(record)
     {
-        let resetPasswordToken = record.id + string.generateRandom(32);
-        await Database.table('reset_passwords').insert({
-            email: record.email,
-            token: resetPasswordToken,
-            created_at: currentDateTime()
-        })
+        let change_password = record.name+'@'+rand(111,999)
+        let create_new_password = await passwordHash.generate(change_password);
+        await User.updateUser({password:create_new_password},{email:record.email});
+        // let resetPasswordToken = record.id + string.generateRandom(32);
+        // await Database.table('reset_passwords').insert({
+        //     email: record.email,
+        //     token: resetPasswordToken,
+        //     created_at: currentDateTime()
+        // })
         //send reset password email
         let mail_params = {
             name: record.name,
-            link: baseUrl() + 'user/reset-password/' + resetPasswordToken,
+            //link: baseUrl() + 'user/reset-password/' + resetPasswordToken,
+            link: change_password,
             app_name: 'One-Off-auto'
         }
         sendMail('emails/forgot-password',record.email,'Reset Password',mail_params)
