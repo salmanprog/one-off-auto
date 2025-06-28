@@ -26,6 +26,8 @@ Route
     Route.get('user/vehicle', 'Api/VehicleController.userVehicleListing').as('user.vehicle');
     Route.get('user/vehicle/:slug', 'Api/VehicleController.viewUserVehicle').as('view.user.vehicle');
     Route.get('user/related/vehicle/:slug', 'Api/VehicleController.userRelatedVehicle').as('user.related.vehicle');
+    // Application Setting
+    Route.route('application/setting',['GET','POST'],'Api/ApplicationSettingController.getSetting').as('application.setting');
     //Contact Us
     Route.resource('contact-us', 'Api/ContactUsController').except(['update','destroy']);
     //Subcriber

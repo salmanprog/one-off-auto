@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import FileUpload from 'App/Libraries/FileUpload/FileUpload'
-import User from 'App/Models/User';
+import ApplicationSetting from 'App/Models/ApplicationSetting';
 import Hash from '@ioc:Adonis/Core/Hash'
 import { sendMail, currentDateTime } from 'App/Helpers/Index'
 import Database from '@ioc:Adonis/Lucid/Database'
@@ -33,7 +33,13 @@ class ApplicationSettingHook
      */
     public static async beforeCreateHook(request: object, params:object)
     {
-        
+      if( !_.isEmpty(request.file('favicon')) ){
+        params.favicon  = await FileUpload.doUpload(request.file('favicon'),'user');
+      }
+      if( !_.isEmpty(request.file('logo')) ){
+        params.logo  = await FileUpload.doUpload(request.file('logo'),'user');
+      }
+      params.created_at = currentDateTime();
     }
 
     /**
@@ -55,7 +61,12 @@ class ApplicationSettingHook
      */
     public static async beforeEditHook(request:object, params:object, slug:string)
     {
-        
+      if( !_.isEmpty(request.file('favicon')) ){
+        params.favicon  = await FileUpload.doUpload(request.file('favicon'),'user');
+      }
+      if( !_.isEmpty(request.file('logo')) ){
+        params.logo  = await FileUpload.doUpload(request.file('logo'),'user');
+      }
     }
 
     /**
