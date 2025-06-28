@@ -17,6 +17,7 @@ import GuestRoute from "./components/authroute/GuestRoute";
 import AdminDashboard from "./components/dashboards/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import ListingDetail from "./pages/ListingDetail";
+import VerifyUser from "./pages/VerifyUser";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ScrollToTop from "./components/scrolltotop/ScrollToTop";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/listings/:listingId" element={<ListingDetail />} />
+          <Route path="/user/verify/:code" element={<VerifyUser />} />
           <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
           <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

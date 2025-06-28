@@ -115,6 +115,10 @@ const api = {
       url: 'application/setting',
       method: "POST",
     },
+    verify_user: {
+      url: 'user/verify',
+      method: "GET",
+    },
   };
   
   export default api;
