@@ -14,6 +14,8 @@ import { string } from '@ioc:Adonis/Core/Helpers'
 import { rand, fileValidation } from 'App/Helpers/Index';
 const Request = Application.container.use('Adonis/Core/Request')
 const passwordHash = require('password-hash')
+import Encryption from '@ioc:Adonis/Core/Encryption'
+import { currentDateTime,currentUnixDateTime } from 'App/Helpers/Index';
 
 export default class UsersController extends RestController
 {
@@ -314,6 +316,41 @@ export default class UsersController extends RestController
         //send response
         this.__is_paginate = false;
         this.__sendResponse(200,'New password has been sent to your email address',{});
+        return;
+    }
+
+    public async verifyEmail(ctx: HttpContextContract)
+    {
+        this.__request  = ctx.request;
+        this.__response = ctx.response;
+        this.__params   = ctx.params;
+        //check validation
+        let validationRules = schema.create({
+        })
+        try{
+          await this.__request.validate({ schema: validationRules })
+        } catch(error){
+            this.__is_error = true;
+            return this.sendError(
+              'Validation Message',
+              this.setValidatorMessagesResponse(error.messages),
+              400
+            )
+        }
+        let body_params = this.__request.all();
+        let email = Encryption.decrypt(this.__params.email)
+        let user = await User.getUserByEmail(email);
+        if( _.isEmpty(user) ){
+          return this.sendError('Unauthorized',{message:'Invalid User'},400);
+        }
+        if( user.is_email_verify == '1' ){
+          return this.sendError('Validation Message',{message:'Your account has been already verified'},400);
+        }
+
+        await User.updateUser({is_email_verify:'1',email_verify_at:currentDateTime()},{email:email});
+        //send response
+        this.__is_paginate = false;
+        this.__sendResponse(200,'You have been verified',{});
         return;
     }
 

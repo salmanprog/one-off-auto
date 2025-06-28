@@ -61,13 +61,14 @@ export const currentTime = () => {
 }
 
 export const sendMail = async (email_view_path: string,to: string,subject:string,params:object) => {
-      Mail.send((message) => {
+  let check =  Mail.send((message) => {
         message
           .from(Env.get('SMTP_FROM_EMAIL'),Env.get('SMTP_FROM_NAME'))
           .to(to)
           .subject(subject)
           .htmlView(email_view_path, params)
       }).then()
+      console.log('check_email.........................',check)
 }
 
 export const fileValidation = (file,sizeInKB = 2000000, extensions=['png','jpg','jpeg']) => {

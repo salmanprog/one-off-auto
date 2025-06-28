@@ -22,6 +22,7 @@ Route
     Route.post('user/change-password','Api/UsersController.changePassword').as('user.change-password').middleware('apiAuth')
     Route.post('user/forgot-password','Api/UsersController.forgotPassword').as('user.forgot-password')
     Route.post('user/login','Api/UsersController.login').as('user.login');
+    Route.get('user/verify/:email','Api/UsersController.verifyEmail').as('verifyEmail');
     // Vehicle
     Route.get('user/vehicle', 'Api/VehicleController.userVehicleListing').as('user.vehicle');
     Route.get('user/vehicle/:slug', 'Api/VehicleController.viewUserVehicle').as('view.user.vehicle');

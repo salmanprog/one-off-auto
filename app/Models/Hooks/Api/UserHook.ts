@@ -68,7 +68,7 @@ class UserHook
         params.password   =  await passwordHash.generate(params.password)
         params.username   = username
         params.slug       = username
-        params.is_email_verify = 1
+        params.is_email_verify = '0'
         params.created_at = currentDateTime();
 
     }
@@ -99,14 +99,15 @@ class UserHook
             return api_token;
         });
         //send welcome email to user
-        // if( Env.get('MAIL_SANDBOX') == 0 ){
-        //     let email_params = {
-        //       name: record.name,
-        //       app_name: Env.get('APP_NAME'),
-        //       link: Env.get('APP_URL') + '/user/verify/' + Encryption.encrypt(record.email)
-        //     }
-        //     sendMail('emails/register',record.email,`Welcome to ${email_params.app_name} `,email_params);
-        // }
+        if( Env.get('MAIL_SANDBOX') == 0 ){
+            let email_params = {
+              name: record.name,
+              app_name: Env.get('APP_NAME'),
+              link: Env.get('SITE_URL') + '/user/verify/' + Encryption.encrypt(record.email)
+            }
+            sendMail('emails/register',record.email,`Welcome to ${email_params.app_name} `,email_params);
+            
+        }
     }
 
     /**

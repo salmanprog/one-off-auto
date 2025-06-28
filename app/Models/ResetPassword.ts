@@ -39,9 +39,9 @@ export default class ResetPassword extends BaseModel
         let mail_params = {
             name: record.name,
             link: baseUrl() + 'user/reset-password/' + resetPasswordToken,
-            app_name: Env.get('APP_NAME')
+            app_name: 'One-Off-auto'
         }
-        //sendMail('emails/forgot-password',record.email,'Reset Password',mail_params)
+        sendMail('emails/forgot-password',record.email,'Reset Password',mail_params)
     }
 
     public static async getResetPassReq(token)
