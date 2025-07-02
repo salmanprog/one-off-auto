@@ -9,6 +9,16 @@ import Helper from "../../helpers";
 const SellForm = () => {
   const { data } = useFetch("get_vehicle_categories");
   const { data:vehicle_make } = useFetch("get_vehicle_make");
+  const { data:vehicle_driver_type } = useFetch("vehicle_driver_type");
+  const { data:vehicle_motor_size } = useFetch("vehicle_motor_size");
+  const { data:vehicle_transmission_type } = useFetch("vehicle_transmission_type");
+  const { data:vehicle_fuel_type } = useFetch("vehicle_fuel_type");
+  const { data:vehicle_seller_type } = useFetch("vehicle_seller_type");
+  const { data:vehicle_statues } = useFetch("vehicle_statues");
+  const { data:vehicle_suspension_type } = useFetch("vehicle_suspension_type");
+  const { data:vehicle_hp_output } = useFetch("vehicle_hp_output");
+  const { data:vehicle_uses } = useFetch("vehicle_uses");
+  const { data:vehicle_documentation_type } = useFetch("vehicle_documentation_type");
   const { loading, postData } = useFetch("create_vehicle", "submit");
   const currentYear = new Date().getFullYear();
   const currentUser = Helper.getStorageData("session");
@@ -19,6 +29,7 @@ const SellForm = () => {
     handleSubmit,
     trigger,
     formState: { errors },
+    watch,
   } = useForm();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +46,7 @@ const SellForm = () => {
   const nextStep = async () => {
     // Validate current step fields before proceeding
     const valid = await trigger([
-      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year", "vehicle_mileage", "vehicle_price", "vehicle_primarily_used", "vehicle_title", "vehicle_descripition", "vehicle_modification"
+      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year", "vehicle_mileage", "vehicle_price", "vehicle_primarily_used", "vehicle_title", "vehicle_descripition", "vehicle_modification", "driver_type", "motor_size_cylinders", "transmition_types", "fuel_types", "seller_type", "vehicle_status", "suspension_type", "hp_output_rang", "vehicle_use", "number_of_doors"
     ]);
     if (valid) {
       setStep(2);
@@ -94,7 +105,6 @@ const SellForm = () => {
                     <p className="text-red-500 text-sm">Vehicle Type Required</p>
                   }
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-1">Make</label>
                   <select
@@ -168,7 +178,379 @@ const SellForm = () => {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Exterior Color</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    name="exterior_color"
+                    id="exterior_color"
+                    type="color"
+                    {...register("exterior_color", { required: true })}
+                    className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                  />
+                  <span className="text-sm">{watch("exterior_color") || "#000000"}</span>
+                </div>
+                {errors.exterior_color && (
+                  <p className="text-red-500 text-sm">Exterior Color Required</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Interior Color</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    name="interior_color"
+                    id="interior_color"
+                    type="color"
+                    {...register("interior_color", { required: true })}
+                    className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                  />
+                  <span className="text-sm">{watch("interior_color") || "#000000"}</span>
+                </div>
+                {errors.interior_color && (
+                  <p className="text-red-500 text-sm">Interior Color Required</p>
+                )}
+              </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-sm font-medium mb-1">Vehicle Suspension Size</label>
+                  <input
+                    name="suspension_size"
+                    id="suspension_size"
+                    type="text"
+                    autoComplete="suspension_size"
+                    {...register("suspension_size", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  />
+                  {errors.suspension_size && <p className="text-red-500 text-sm">Vehicle Suspension size Required</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vehicle Suspension Type</label>
+                  <select
+                    name="suspension_type"
+                    id="suspension_type"
+                    {...register("suspension_type", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Suspension Type</option>
+                    {!_.isEmpty(vehicle_suspension_type) &&
+                      vehicle_suspension_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.suspension_type && 
+                    <p className="text-red-500 text-sm">Vehicle Suspension Type Required</p>
+                  }
+                </div>
+              </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Chassis Reinforcement</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("chassis_reinforcement", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("chassis_reinforcement", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Audio Upgrades</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("audio_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("audio_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>     
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Wheel Width (inches):</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="range"
+                    min="5"
+                    max="20"
+                    step="1"
+                    {...register("wheel_width", { required: true })}
+                    className="w-full"
+                    id="wheel_width"
+                  />
+                  <span className="min-w-[30px] text-center">
+                    {watch("wheel_width") || "5"}
+                  </span>
+                </div>
+                {errors.wheel_width && <p className="text-red-500 text-sm">Wheel width is required</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Wheel Diameter (inches):</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="range"
+                    min="12"
+                    max="30"
+                    step="1"
+                    {...register("wheel_diameter", { required: true })}
+                    className="w-full"
+                    id="wheel_diameter"
+                  />
+                  <span className="min-w-[30px] text-center">
+                    {watch("wheel_diameter") || "12"}
+                  </span>
+                </div>
+                {errors.wheel_diameter && (
+                  <p className="text-red-500 text-sm">Wheel diameter is required</p>
+                )}
+              </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Exterior Cosmetic Upgrades</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("cosmetic_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("cosmetic_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Interior Upgrades</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("interior_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("interior_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>    
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Exterior (body) Upgrades</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("exterior_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("exterior_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Motor Upgrades</label>
+                  <div className="flex items-center gap-4 mt-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="1"
+                        {...register("motor_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      Yes
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value="0"
+                        defaultChecked
+                        {...register("motor_upgrade", { required: true })}
+                        className="mr-2"
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>   
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Drive Type</label>
+                  <select
+                    name="driver_type"
+                    id="driver_type"
+                    {...register("driver_type", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Drive Type</option>
+                    {!_.isEmpty(vehicle_driver_type) &&
+                      vehicle_driver_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.driver_type && 
+                    <p className="text-red-500 text-sm">Drive Type Required</p>
+                  }
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Motor Size (Cylinders)</label>
+                  <select
+                    name="motor_size_cylinders"
+                    id="motor_size_cylinders"
+                    {...register("motor_size_cylinders", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Motor Size</option>
+                    {!_.isEmpty(vehicle_motor_size) &&
+                      vehicle_motor_size.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.motor_size_cylinders && 
+                    <p className="text-red-500 text-sm">Vehicle Motor Size Required</p>
+                  }
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Transmission Type</label>
+                  <select
+                    name="transmition_types"
+                    id="transmition_types"
+                    {...register("transmition_types", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Transmission Type</option>
+                    {!_.isEmpty(vehicle_transmission_type) &&
+                      vehicle_transmission_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.transmition_types && 
+                    <p className="text-red-500 text-sm">Vehicle Transmission Type Required</p>
+                  }
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Fuel Type</label>
+                  <select
+                    name="fuel_types"
+                    id="fuel_types"
+                    {...register("fuel_types", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Fuel Type</option>
+                    {!_.isEmpty(vehicle_fuel_type) &&
+                      vehicle_fuel_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.fuel_types && 
+                    <p className="text-red-500 text-sm">Vehicle Fuel Type Required</p>
+                  }
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vehicle Seller Type</label>
+                  <select
+                    name="seller_type"
+                    id="seller_type"
+                    {...register("seller_type", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Type</option>
+                    {!_.isEmpty(vehicle_seller_type) &&
+                      vehicle_seller_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.seller_type && 
+                    <p className="text-red-500 text-sm">Vehicle Seller Type Required</p>
+                  }
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vehicle Status</label>
+                  <select
+                    name="vehicle_status"
+                    id="vehicle_status"
+                    {...register("vehicle_status", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Vehicle Status</option>
+                    {!_.isEmpty(vehicle_statues) &&
+                      vehicle_statues.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.vehicle_status && 
+                    <p className="text-red-500 text-sm">Vehicle Status Required</p>
+                  }
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+              <div>
                   <label className="block text-sm font-medium mb-1">What the vehicle is primarily used for?</label>
                   <select
                     name="vehicle_primarily_used"
@@ -186,6 +568,66 @@ const SellForm = () => {
                     <p className="text-red-500 text-sm">Vehicle Primarily Use Required</p>
                   }
                 </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">HP Output Range</label>
+                  <select
+                    name="hp_output_rang"
+                    id="hp_output_rang"
+                    {...register("hp_output_rang", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select HP Output Range</option>
+                    {!_.isEmpty(vehicle_hp_output) &&
+                      vehicle_hp_output.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.hp_output_rang && 
+                    <p className="text-red-500 text-sm">Vehicle HP Output Range Required</p>
+                  }
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vehicle Use</label>
+                  <select
+                    name="vehicle_use"
+                    id="vehicle_use"
+                    {...register("vehicle_use", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Vehicle Use</option>
+                    {!_.isEmpty(vehicle_uses) &&
+                      vehicle_uses.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.vehicle_use && 
+                    <p className="text-red-500 text-sm">Vehicle Use Required</p>
+                  }
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Number of Doors</label>
+                  <select
+                    name="number_of_doors"
+                    id="number_of_doors"
+                    {...register("number_of_doors", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Number of Doors</option>
+                    <option key="2" value="2">2</option>
+                    <option key="3" value="3">3</option>
+                    <option key="4" value="4">4</option>
+                    <option key="5" value="5">5</option>
+                    <option key="6" value="6">6+</option>
+                  </select>
+                  {errors.number_of_doors && 
+                    <p className="text-red-500 text-sm">Vehicle Number of Doors Required</p>
+                  }
+                </div>
+              </div>    
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">Do you still have any of the stock parts?</label>
                   <div className="flex items-center gap-4 mt-2">
@@ -212,6 +654,24 @@ const SellForm = () => {
                   {errors.vehicle_stock_parts && (
                     <p className="text-red-500 text-sm">Please select Yes or No</p>
                   )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Documentation</label>
+                  <select
+                    name="documentation_type"
+                    id="documentation_type"
+                    {...register("documentation_type", { required: true })}
+                    className="w-full p-3 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Documentation</option>
+                    {!_.isEmpty(vehicle_documentation_type) &&
+                      vehicle_documentation_type.map((item: any) => (
+                        <option key={item.id} value={item.id}>{item.title}</option>
+                      ))}
+                  </select>
+                  {errors.documentation_type && 
+                    <p className="text-red-500 text-sm">Vehicle Documentation Required</p>
+                  }
                 </div>
               </div>
               <div>

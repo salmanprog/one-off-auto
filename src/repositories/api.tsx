@@ -119,6 +119,46 @@ const api = {
       url: 'user/verify',
       method: "GET",
     },
+    vehicle_driver_type: {
+      url: 'user/vehicle-driver-type',
+      method: "GET",
+    },
+    vehicle_motor_size: {
+      url: 'user/vehicle-motor-size',
+      method: "GET",
+    },
+    vehicle_transmission_type: {
+      url: 'user/vehicle-transmission-type',
+      method: "GET",
+    },
+    vehicle_fuel_type: {
+      url: 'user/vehicle-fuel-type',
+      method: "GET",
+    },
+    vehicle_seller_type: {
+      url: 'user/vehicle-seller-type',
+      method: "GET",
+    },
+    vehicle_statues: {
+      url: 'user/vehicle-statues',
+      method: "GET",
+    },
+    vehicle_suspension_type: {
+      url: 'user/vehicle-suspension-type',
+      method: "GET",
+    },
+    vehicle_hp_output: {
+      url: 'user/vehicle-hp-output',
+      method: "GET",
+    },
+    vehicle_uses: {
+      url: 'user/vehicle-uses',
+      method: "GET",
+    },
+    vehicle_documentation_type: {
+      url: 'user/vehicle-documentation-type',
+      method: "GET",
+    },
   };
   
   export default api;
