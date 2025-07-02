@@ -35,6 +35,29 @@ Route
     Route.resource('subscribe/user', 'Api/UserSubscriberController').except(['update','destroy']);
     // Vehicle Make
     Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
+
+
+    // Vehicle Driver Type
+    Route.resource('user/vehicle-driver-type', 'Api/VehicleDriverTypeController').except(['create','update','destroy']);
+    // Vehicle Motor Size
+    Route.resource('user/vehicle-motor-size', 'Api/VehicleMotorSizeController').except(['create','update','destroy']);
+    // Vehicle Transmission Type
+    Route.resource('user/vehicle-transmission-type', 'Api/VehicleTransmissionTypeController').except(['create','update','destroy']);
+    // Vehicle Fuel Type
+    Route.resource('user/vehicle-fuel-type', 'Api/VehicleFuelTypeController').except(['create','update','destroy']);
+    // Vehicle Seller Type
+    Route.resource('user/vehicle-seller-type', 'Api/VehicleSellerTypeController').except(['create','update','destroy']);
+    // Vehicle Statuses
+    Route.resource('user/vehicle-statues', 'Api/VehicleStatusController').except(['create','update','destroy']);
+    // Vehicle Suspension Type
+    Route.resource('user/vehicle-suspension-type', 'Api/VehicleSuspensionTypeController').except(['create','update','destroy']);
+    // Vehicle HP Output Range
+    Route.resource('user/vehicle-hp-output', 'Api/VehicleHpOutRangeController').except(['create','update','destroy']);
+    // Vehicle Uses
+    Route.resource('user/vehicle-uses', 'Api/VehicleUsesController').except(['create','update','destroy']);
+    // Vehicle Documentation
+    Route.resource('user/vehicle-documentation-type', 'Api/VehicleDocumentationController').except(['create','update','destroy']);
+
     // Named as api.users.index, api.users.store
     Route.resource('user', 'Api/UsersController')
       .except(['destroy'])

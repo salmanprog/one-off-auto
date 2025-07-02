@@ -26,6 +26,16 @@ class VehicleHook
         query.preload('vehicleCategory')
         query.preload('user')
         query.preload('media')
+        query.preload('VehicleDriverType')
+        query.preload('VehicleMotorSize')
+        query.preload('VehicleTransmissionType')
+        query.preload('VehicleFuelType')
+        query.preload('VehicleSellerType')
+        query.preload('VehicleStatus')
+        query.preload('VehicleSuspensionType')
+        query.preload('VehicleHpOutRange')
+        query.preload('VehicleUses')
+        query.preload('VehicleDocumentation')
         query.whereIn('status',['0','1','2']).orderBy('id','desc')
     }
 

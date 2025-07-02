@@ -3,6 +3,16 @@ import {baseUrl,storageUrl} from 'App/Helpers/Index'
 import VehicleCategory from 'App/Controllers/Http/Resource/VehicleCategory';
 import User from 'App/Controllers/Http/Resource/PublicUser';
 import Media from 'App/Controllers/Http/Resource/Media';
+import VehicleDriverTypeRes from 'App/Controllers/Http/Resource/VehicleDriverType';
+import VehicleMotorSizeRes from 'App/Controllers/Http/Resource/VehicleMotorSize';
+import VehicleTransmissionTypeRes from 'App/Controllers/Http/Resource/VehicleTransmissionType';
+import VehicleFuelTypeRes from 'App/Controllers/Http/Resource/VehicleFuelType';
+import VehicleSellerTypeRes from 'App/Controllers/Http/Resource/VehicleSellerType';
+import VehicleStatusRes from 'App/Controllers/Http/Resource/VehicleStatus';
+import VehicleSuspensionTypeRes from 'App/Controllers/Http/Resource/VehicleSuspensionType';
+import VehicleHpOutRangeRes from 'App/Controllers/Http/Resource/VehicleHpOutRange';
+import VehicleUsesRes from 'App/Controllers/Http/Resource/VehicleUses';
+import VehicleDocumentationRes from 'App/Controllers/Http/Resource/VehicleDocumentation';
 
 class Vehicle
 {
@@ -55,6 +65,43 @@ class Vehicle
           vehicle_title: record.vehicle_title,
           vehicle_descripition: record.vehicle_descripition,
           vehicle_modification: record.vehicle_modification,
+          driver_type: record.driver_type,
+          driver_type_obj: await VehicleDriverTypeRes.initResponse(record.VehicleDriverType,request),
+          motor_size_cylinders: record.motor_size_cylinders,
+          motor_size_cylinders_obj: await VehicleMotorSizeRes.initResponse(record.VehicleMotorSize,request),
+          transmition_types: record.transmition_types,
+          transmition_types_obj: await VehicleTransmissionTypeRes.initResponse(record.VehicleTransmissionType,request),
+          fuel_types: record.fuel_types,
+          fuel_types_obj: await VehicleFuelTypeRes.initResponse(record.VehicleFuelType,request),
+          number_of_doors: record.number_of_doors,
+          exterior_color: record.exterior_color,
+          interior_color: record.interior_color,
+          seller_type: record.seller_type,
+          seller_type_obj: await VehicleSellerTypeRes.initResponse(record.VehicleSellerType,request),
+          vehicle_status: record.vehicle_status,
+          vehicle_status_obj: await VehicleStatusRes.initResponse(record.VehicleStatus,request),
+          suspension_size: record.suspension_size,
+          suspension_type: record.suspension_type,
+          suspension_type_obj: await VehicleSuspensionTypeRes.initResponse(record.VehicleSuspensionType,request),
+          chassis_reinforcement: record.chassis_reinforcement,
+          chassis_reinforcement_text: record.chassis_reinforcement_text,
+          audio_upgrade: record.audio_upgrade,
+          audio_upgrade_text: record.audio_upgrade_text,
+          wheel_width: record.wheel_width,
+          wheel_diameter: record.wheel_diameter,
+          hp_output_rang: record.hp_output_rang,
+          hp_output_rang_obj: await VehicleHpOutRangeRes.initResponse(record.VehicleHpOutRange,request),
+          cosmetic_upgrade: record.cosmetic_upgrade,
+          cosmetic_upgrade_text: record.cosmetic_upgrade_text,
+          vehicle_use: record.vehicle_use,
+          vehicle_use_obj: await VehicleUsesRes.initResponse(record.VehicleUses,request),
+          interior_upgrade: record.interior_upgrade,
+          interior_upgrade_text: record.interior_upgrade_text,
+          exterior_upgrade: record.exterior_upgrade,
+          motor_upgrade: record.motor_upgrade,
+          motor_upgrade_text: record.motor_upgrade_text,
+          documentation_type: record.documentation_type,
+          documentation_type_obj: await VehicleDocumentationRes.initResponse(record.VehicleDocumentation,request),
           vehicle_owner_name: record.vehicle_owner_name,
           vehicle_owner_address: record.vehicle_owner_address,
           vehicle_owner_email: record.vehicle_owner_email,
