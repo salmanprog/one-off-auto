@@ -18,6 +18,44 @@ interface FilterState {
   suspensionMods: string[];
   bodyMods: string[];
   wheelsMods: string[];
+  driver_type: string;
+  driver_title: string;
+  motor_size_cylinders: string;
+  motor_size_title: string;
+  transmition_types: string;
+  transmition_types_title: string;
+  fuel_types: string;
+  fuel_types_title: string;
+  number_of_doors: string;
+  exterior_color: string;
+  interior_color: string;
+  seller_type: string;
+  seller_type_title: string;
+  vehicle_status: string;
+  vehicle_status_title: string;
+  suspension_size: string;
+  suspension_type: string;
+  suspension_type_title: string;
+  chassis_reinforcement: string;
+  chassis_reinforcement_text: string;
+  audio_upgrade: string;
+  audio_upgrade_text: string;
+  wheel_width: string;
+  wheel_diameter: string;
+  hp_output_rang: string;
+  hp_output_rang_title: string;
+  cosmetic_upgrade: string;
+  cosmetic_upgrade_text: string;
+  vehicle_use: string;
+  vehicle_use_title: string;
+  interior_upgrade: string;
+  interior_upgrade_text: string;
+  exterior_upgrade: string;
+  exterior_upgrade_text: string;
+  motor_upgrade: string;
+  motor_upgrade_text: string;
+  documentation_type: string;
+  documentation_type_title: string;
 }
 
 const Listings = () => {
@@ -27,7 +65,7 @@ const Listings = () => {
   const itemsPerPage = 9; // Adjust as needed
 
   const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?limit=5000');
-
+  
   const listings = useMemo(() => {
     if (!data) return [];
     const vehicles = Array.isArray(data) ? data : [data];
@@ -44,6 +82,44 @@ const Listings = () => {
       location: item.vehicle_owner_address,
       mileage: item.vehicle_mileage,
       vehicle_modification: item.vehicle_modification,
+      driver_type: item.driver_type,
+      driver_title: item.driver_type_obj.title,
+      motor_size_cylinders: item.motor_size_cylinders,
+      motor_size_title: item.motor_size_cylinders_obj.title,
+      transmition_types: item.transmition_types,
+      transmition_types_title: item.transmition_types_obj.title,
+      fuel_types: item.fuel_types,
+      fuel_types_title: item.fuel_types_obj.title,
+      number_of_doors: item.number_of_doors,
+      exterior_color: item.exterior_color,
+      interior_color: item.interior_color,
+      seller_type: item.seller_type,
+      seller_type_title: item.seller_type_obj.title,
+      vehicle_status: item.vehicle_status,
+      vehicle_status_title: item.vehicle_status_obj.title,
+      suspension_size: item.suspension_size,
+      suspension_type: item.suspension_type,
+      suspension_type_title: item.suspension_type_obj.title,
+      chassis_reinforcement: item.chassis_reinforcement,
+      chassis_reinforcement_text: item.chassis_reinforcement_text,
+      audio_upgrade: item.audio_upgrade,
+      audio_upgrade_text: item.audio_upgrade_text,
+      wheel_width: item.wheel_width,
+      wheel_diameter: item.wheel_diameter,
+      hp_output_rang: item.hp_output_rang,
+      hp_output_rang_title: item.hp_output_rang_obj.title,
+      cosmetic_upgrade: item.cosmetic_upgrade,
+      cosmetic_upgrade_text: item.cosmetic_upgrade_text,
+      vehicle_use: item.vehicle_use,
+      vehicle_use_title: item.vehicle_use_obj.title,
+      interior_upgrade: item.interior_upgrade,
+      interior_upgrade_text: item.interior_upgrade_text,
+      exterior_upgrade: item.exterior_upgrade,
+      exterior_upgrade_text: item.exterior_upgrade_text,
+      motor_upgrade: item.motor_upgrade,
+      motor_upgrade_text: item.motor_upgrade_text,
+      documentation_type: item.documentation_type,
+      documentation_type_title: item.documentation_type_obj.title,
       image: item.image_url, // Optional chaining + fallback
       mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
     }));
@@ -61,7 +137,46 @@ const Listings = () => {
     suspensionMods: [],
     bodyMods: [],
     wheelsMods: [],
+    driver_type: "",
+    driver_title: "",
+    motor_size_cylinders: "",
+    motor_size_title: "",
+    transmition_types: "",
+    transmition_types_title: "",
+    fuel_types: "",
+    fuel_types_title: "",
+    number_of_doors: "",
+    exterior_color: "",
+    interior_color: "",
+    seller_type: "",
+    seller_type_title: "",
+    vehicle_status: "",
+    vehicle_status_title: "",
+    suspension_size: "",
+    suspension_type: "",
+    suspension_type_title: "",
+    chassis_reinforcement: "",
+    chassis_reinforcement_text: "",
+    audio_upgrade: "",
+    audio_upgrade_text: "",
+    wheel_width: "",
+    wheel_diameter: "",
+    hp_output_rang: "",
+    hp_output_rang_title: "",
+    cosmetic_upgrade: "",
+    cosmetic_upgrade_text: "",
+    vehicle_use: "",
+    vehicle_use_title: "",
+    interior_upgrade: "",
+    interior_upgrade_text: "",
+    exterior_upgrade: "",
+    exterior_upgrade_text: "",
+    motor_upgrade: "",
+    motor_upgrade_text: "",
+    documentation_type: "",
+    documentation_type_title: "",
   });
+  
 
   // Step 1: Read query parameters
   useEffect(() => {
@@ -78,9 +193,48 @@ const Listings = () => {
       suspensionMods: params.get("suspensionMods")?.split(",") || [],
       bodyMods: params.get("bodyMods")?.split(",") || [],
       wheelsMods: params.get("wheelsMods")?.split(",") || [],
+      driver_type: params.get("driver_type") || "",
+      driver_title: params.get("driver_title") || "",
+      motor_size_cylinders: params.get("motor_size_cylinders") || "",
+      motor_size_title: params.get("motor_size_title") || "",
+      transmition_types: params.get("transmition_types") || "",
+      transmition_types_title: params.get("transmition_types_title") || "",
+      fuel_types: params.get("fuel_types") || "",
+      fuel_types_title: params.get("fuel_types_title") || "",
+      number_of_doors: params.get("number_of_doors") || "",
+      exterior_color: params.get("exterior_color") || "",
+      interior_color: params.get("interior_color") || "",
+      seller_type: params.get("seller_type") || "",
+      seller_type_title: params.get("seller_type_title") || "",
+      vehicle_status: params.get("vehicle_status") || "",
+      vehicle_status_title: params.get("vehicle_status_title") || "",
+      suspension_size: params.get("suspension_size") || "",
+      suspension_type: params.get("suspension_type") || "",
+      suspension_type_title: params.get("suspension_type_title") || "",
+      chassis_reinforcement: params.get("chassis_reinforcement") || "",
+      chassis_reinforcement_text: params.get("chassis_reinforcement_text") || "",
+      audio_upgrade: params.get("audio_upgrade") || "",
+      audio_upgrade_text: params.get("audio_upgrade_text") || "",
+      wheel_width: params.get("wheel_width") || "",
+      wheel_diameter: params.get("wheel_diameter") || "",
+      hp_output_rang: params.get("hp_output_rang") || "",
+      hp_output_rang_title: params.get("hp_output_rang_title") || "",
+      cosmetic_upgrade: params.get("cosmetic_upgrade") || "",
+      cosmetic_upgrade_text: params.get("cosmetic_upgrade_text") || "",
+      vehicle_use: params.get("vehicle_use") || "",
+      vehicle_use_title: params.get("vehicle_use_title") || "",
+      interior_upgrade: params.get("interior_upgrade") || "",
+      interior_upgrade_text: params.get("interior_upgrade_text") || "",
+      exterior_upgrade: params.get("exterior_upgrade") || "",
+      exterior_upgrade_text: params.get("exterior_upgrade_text") || "",
+      motor_upgrade: params.get("motor_upgrade") || "",
+      motor_upgrade_text: params.get("motor_upgrade_text") || "",
+      documentation_type: params.get("documentation_type") || "",
+      documentation_type_title: params.get("documentation_type_title") || "",
     };
     setFilters(queryFilters);
   }, [search]);
+  
 
   // Step 2: Update query params when filters change
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
@@ -105,6 +259,44 @@ const Listings = () => {
       suspensionMods: [],
       bodyMods: [],
       wheelsMods: [],
+      driver_type: "",
+      driver_title: "",
+      motor_size_cylinders: "",
+      motor_size_title: "",
+      transmition_types: "",
+      transmition_types_title: "",
+      fuel_types: "",
+      fuel_types_title: "",
+      number_of_doors: "",
+      exterior_color: "",
+      interior_color: "",
+      seller_type: "",
+      seller_type_title: "",
+      vehicle_status: "",
+      vehicle_status_title: "",
+      suspension_size: "",
+      suspension_type: "",
+      suspension_type_title: "",
+      chassis_reinforcement: "",
+      chassis_reinforcement_text: "",
+      audio_upgrade: "",
+      audio_upgrade_text: "",
+      wheel_width: "",
+      wheel_diameter: "",
+      hp_output_rang: "",
+      hp_output_rang_title: "",
+      cosmetic_upgrade: "",
+      cosmetic_upgrade_text: "",
+      vehicle_use: "",
+      vehicle_use_title: "",
+      interior_upgrade: "",
+      interior_upgrade_text: "",
+      exterior_upgrade: "",
+      exterior_upgrade_text: "",
+      motor_upgrade: "",
+      motor_upgrade_text: "",
+      documentation_type: "",
+      documentation_type_title: "",
     });
 
     // Reset the query params in the URL
@@ -173,6 +365,42 @@ const Listings = () => {
       modFilter(filters.bodyMods, listing.mods) &&
       modFilter(filters.wheelsMods, listing.mods)
     );
+
+    if(filters.driver_type){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.driver_type) == parseInt(filters.driver_type)
+      );
+    }
+
+    if(filters.motor_size_cylinders){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.motor_size_cylinders) == parseInt(filters.motor_size_cylinders)
+      );
+    }
+
+    if(filters.transmition_types){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.transmition_types) == parseInt(filters.transmition_types)
+      );
+    }
+
+    if(filters.fuel_types){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.fuel_types) == parseInt(filters.fuel_types)
+      );
+    }
+
+    if(filters.seller_type){
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.seller_type) == parseInt(filters.seller_type)
+      );
+    }
+
+    if(filters.vehicle_status){
+      filtered = filtered.filter(
+        (listing) => listing.vehicle_status.toString() == filters.vehicle_status.toString()
+      );
+    }
 
     return filtered;
   }, [filters, listings]);

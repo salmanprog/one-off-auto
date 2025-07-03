@@ -174,6 +174,44 @@ const ListingDetail = () => {
           vehicle_owner_phone: data.vehicle_owner_phone,
           mods: ['Turbocharger Upgrade', ' الرياضيةSuspension Kit', 'Custom Exhaust'],
           description: data.vehicle_descripition ? data.vehicle_descripition : 'No description provided.',
+          driver_type: data.driver_type,
+          driver_title: data.driver_type_obj.title,
+          motor_size_cylinders: data.motor_size_cylinders,
+          motor_size_title: data.motor_size_cylinders_obj.title,
+          transmition_types: data.transmition_types,
+          transmition_types_title: data.transmition_types_obj.title,
+          fuel_types: data.fuel_types,
+          fuel_types_title: data.fuel_types_obj.title,
+          number_of_doors: data.number_of_doors,
+          exterior_color: data.exterior_color,
+          interior_color: data.interior_color,
+          seller_type: data.seller_type,
+          seller_type_title: data.seller_type_obj.title,
+          vehicle_status: data.vehicle_status,
+          vehicle_status_title: data.vehicle_status_obj.title,
+          suspension_size: data.suspension_size,
+          suspension_type: data.suspension_type,
+          suspension_type_title: data.suspension_type_obj.title,
+          chassis_reinforcement: data.chassis_reinforcement,
+          chassis_reinforcement_text: data.chassis_reinforcement_text,
+          audio_upgrade: data.audio_upgrade,
+          audio_upgrade_text: data.audio_upgrade_text,
+          wheel_width: data.wheel_width,
+          wheel_diameter: data.wheel_diameter,
+          hp_output_rang: data.hp_output_rang,
+          hp_output_rang_title: data.hp_output_rang_obj.title,
+          cosmetic_upgrade: data.cosmetic_upgrade,
+          cosmetic_upgrade_text: data.cosmetic_upgrade_text,
+          vehicle_use: data.vehicle_use,
+          vehicle_use_title: data.vehicle_use_obj.title,
+          interior_upgrade: data.interior_upgrade,
+          interior_upgrade_text: data.interior_upgrade_text,
+          exterior_upgrade: data.exterior_upgrade,
+          exterior_upgrade_text: data.exterior_upgrade_text,
+          motor_upgrade: data.motor_upgrade,
+          motor_upgrade_text: data.motor_upgrade_text,
+          documentation_type: data.documentation_type,
+          documentation_type_title: data.documentation_type_obj.title,
           additionalImages: data.media?.map((m: { file_url: string }) => m.file_url) || [],
         }
       : dummyListing;
@@ -358,6 +396,59 @@ const ListingDetail = () => {
             <p className="text-gray-700 text-lg"><strong>Stock Parts:</strong> {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</p>
             <p className="text-gray-700 text-lg"><strong>Location:</strong> {listing.location}</p>
             <p className="text-gray-700 text-lg"><strong>Mileage:</strong> {listing.mileage?.toLocaleString()}</p>
+
+            <p className="text-gray-700 text-lg"><strong>Drive Type:</strong> {listing.driver_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Motor Size (Cylinders):</strong> {listing.motor_size_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Transmission Type:</strong> {listing.transmition_types_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Fuel Type:</strong> {listing.fuel_types_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Number of Doors:</strong> {listing.number_of_doors}</p>
+            <p className="text-gray-700 text-lg"><strong>Exterior Color:</strong> {listing.exterior_color}</p>
+            <p className="text-gray-700 text-lg"><strong>Interior Color:</strong> {listing.interior_color}</p>
+            <p className="text-gray-700 text-lg"><strong>Seller Type:</strong> {listing.seller_type_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Status:</strong> {listing.vehicle_status_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Suspension Size:</strong> {listing.suspension_size} inch</p>
+            <p className="text-gray-700 text-lg"><strong>Suspension Type:</strong> {listing.suspension_type_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Chassis Reinforcement:</strong> {listing.chassis_reinforcement === '1' ? 'Yes' : 'No'}</p>
+            {listing.chassis_reinforcement === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Chassis Reinforcement Detail:</strong> {listing.chassis_reinforcement_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Audio Upgrades:</strong> {listing.audio_upgrade === '1' ? 'Yes' : 'No'}</p>
+            {listing.audio_upgrade === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Audio Upgrades Detail:</strong> {listing.audio_upgrade_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Wheel Width:</strong> {listing.wheel_width} inch</p>
+            <p className="text-gray-700 text-lg"><strong>Wheel Diameter:</strong> {listing.wheel_diameter}</p>
+            <p className="text-gray-700 text-lg"><strong>HP Output Range:</strong> {listing.hp_output_rang_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Exterior Cosmetic Upgrades:</strong> {listing.cosmetic_upgrade === '1' ? 'Yes' : 'No'}</p>
+            {listing.cosmetic_upgrade === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Exterior Cosmetic Upgrades Detail:</strong> {listing.cosmetic_upgrade_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Vehicle Use:</strong> {listing.vehicle_use_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Interior Upgrades:</strong> {listing.interior_upgrade === '1' ? 'Yes' : 'No'}</p>
+            {listing.interior_upgrade === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Interior Upgrades Detail:</strong> {listing.interior_upgrade_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Exterior (body) Upgrades:</strong> {listing.exterior_upgrade === '1' ? 'Yes' : 'No'}</p>
+            {listing.exterior_upgrade === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Exterior (body) Upgrades Detail:</strong> {listing.exterior_upgrade_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Motor Upgrades:</strong> {listing.motor_upgrade === '1' ? 'Yes' : 'No'}</p>
+            {listing.motor_upgrade === '1' && (
+              <p className="text-gray-700 text-lg">
+                <strong>Motor Upgrades Detail:</strong> {listing.motor_upgrade_text}
+              </p>
+            )}
+            <p className="text-gray-700 text-lg"><strong>Documentation Type:</strong> {listing.documentation_type_title}</p>
           </CardContent>
         </Card>
         {/* Modifications Section */}

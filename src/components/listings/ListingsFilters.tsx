@@ -7,7 +7,7 @@ interface FilterState {
   searchTerm: string;
   make: string;
   model: string;
-  year: string; // Changed to single year
+  year: string;
   priceMin: string;
   priceMax: string;
   mileage: string;
@@ -15,6 +15,13 @@ interface FilterState {
   suspensionMods: string[];
   bodyMods: string[];
   wheelsMods: string[];
+
+  driver_type: string;
+  motor_size_cylinders: string;
+  transmition_types: string;
+  fuel_types: string;
+  seller_type: string;
+  vehicle_status: string;
 }
 
 interface ListingsFiltersProps {
@@ -33,6 +40,16 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [standardFiltersOpen, setStandardFiltersOpen] = useState(true);
   const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list");
+  const { data:vehicle_driver_type } = useFetch("vehicle_driver_type");
+  const { data:vehicle_motor_size } = useFetch("vehicle_motor_size");
+  const { data:vehicle_transmission_type } = useFetch("vehicle_transmission_type");
+  const { data:vehicle_fuel_type } = useFetch("vehicle_fuel_type");
+  const { data:vehicle_seller_type } = useFetch("vehicle_seller_type");
+  const { data:vehicle_statues } = useFetch("vehicle_statues");
+  const { data:vehicle_suspension_type } = useFetch("vehicle_suspension_type");
+  const { data:vehicle_hp_output } = useFetch("vehicle_hp_output");
+  const { data:vehicle_uses } = useFetch("vehicle_uses");
+  const { data:vehicle_documentation_type } = useFetch("vehicle_documentation_type");
 
   if (loading) return <div>Loading makes...</div>;
   if (error) return <div>Error loading makes: {error.message}</div>;
@@ -89,6 +106,48 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
         (listing) => parseInt(listing.price.replace(/[^0-9]/g, "")) <= priceMax // Remove non-numeric characters from listing price
       );
     }
+
+    // Drive Type
+  if (filters.driver_type) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.driver_type === filters.driver_type
+    );
+  }
+
+  // Motor Size
+  if (filters.motor_size_cylinders) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.motor_size_cylinders === filters.motor_size_cylinders
+    );
+  }
+
+  // Transmission Type
+  if (filters.transmition_types) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.transmition_types === filters.transmition_types
+    );
+  }
+
+  // Fuel Type
+  if (filters.fuel_types) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.fuel_types === filters.fuel_types
+    );
+  }
+
+  // Seller Type
+  if (filters.seller_type) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.seller_type === filters.seller_type
+    );
+  }
+
+  // Vehicle Status
+  if (filters.vehicle_status) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.vehicle_status === filters.vehicle_status
+    );
+  }
   
     return filteredListings;
   };
@@ -208,8 +267,103 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                   />
                 </div>
               </div>
+            
+            {/* Drive Type Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Drive Type</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.driver_type}
+                  onChange={(e) => onFilterChange({ driver_type: e.target.value })}
+                >
+                  <option value="">Select Drive Type</option>
+                  {vehicle_driver_type &&
+                    vehicle_driver_type.map((driver_type: { id: string; title: string }) => (
+                      <option key={driver_type.id} value={driver_type.id}>
+                        {driver_type.title}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              {/* Motor Size Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Motor Size</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.motor_size_cylinders}
+                  onChange={(e) => onFilterChange({ motor_size_cylinders: e.target.value })}
+                >
+                  <option value="">Select Motor Size</option>
+                  {vehicle_motor_size &&
+                    vehicle_motor_size.map((item: { id: string; title: string }) => (
+                      <option key={item.id} value={item.id}>{item.title}</option>
+                    ))}
+                </select>
+              </div>
 
-             
+              {/* Transmission Type Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Transmission Type</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.transmition_types}
+                  onChange={(e) => onFilterChange({ transmition_types: e.target.value })}
+                >
+                  <option value="">Select Transmission Type</option>
+                  {vehicle_transmission_type &&
+                    vehicle_transmission_type.map((item: { id: string; title: string }) => (
+                      <option key={item.id} value={item.id}>{item.title}</option>
+                    ))}
+                </select>
+              </div>
+
+              {/* Fuel Type Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Fuel Type</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.fuel_types}
+                  onChange={(e) => onFilterChange({ fuel_types: e.target.value })}
+                >
+                  <option value="">Select Fuel Type</option>
+                  {vehicle_fuel_type &&
+                    vehicle_fuel_type.map((item: { id: string; title: string }) => (
+                      <option key={item.id} value={item.id}>{item.title}</option>
+                    ))}
+                </select>
+              </div>
+
+              {/* Seller Type Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Seller Type</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.seller_type}
+                  onChange={(e) => onFilterChange({ seller_type: e.target.value })}
+                >
+                  <option value="">Select Seller Type</option>
+                  {vehicle_seller_type &&
+                    vehicle_seller_type.map((item: { id: string; title: string }) => (
+                      <option key={item.id} value={item.id}>{item.title}</option>
+                    ))}
+                </select>
+              </div>
+
+              {/* Vehicle Status Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Vehicle Status</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.vehicle_status}
+                  onChange={(e) => onFilterChange({ vehicle_status: e.target.value })}
+                >
+                  <option value="">Select Vehicle Status</option>
+                  {vehicle_statues &&
+                    vehicle_statues.map((item: { id: string; title: string }) => (
+                      <option key={item.id} value={item.id}>{item.title}</option>
+                    ))}
+                </select>
+              </div>
             </div>
           )}
         </div>

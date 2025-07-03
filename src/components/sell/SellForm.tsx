@@ -31,7 +31,12 @@ const SellForm = () => {
     formState: { errors },
     watch,
   } = useForm();
-
+  const chassisReinforcement = watch("chassis_reinforcement");
+  const audioUpgrade = watch("audio_upgrade");
+  const cosmeticUpgrade = watch("cosmetic_upgrade");
+  const interiorUpgrade = watch("interior_upgrade");
+  const exteriorUpgrade = watch("exterior_upgrade");
+  const motorUpgrade = watch("motor_upgrade");
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
@@ -44,10 +49,34 @@ const SellForm = () => {
   };
 
   const nextStep = async () => {
-    // Validate current step fields before proceeding
-    const valid = await trigger([
-      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year", "vehicle_mileage", "vehicle_price", "vehicle_primarily_used", "vehicle_title", "vehicle_descripition", "vehicle_modification", "driver_type", "motor_size_cylinders", "transmition_types", "fuel_types", "seller_type", "vehicle_status", "suspension_type", "hp_output_rang", "vehicle_use", "number_of_doors"
-    ]);
+    const requiredFields = [
+      "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year",
+      "vehicle_mileage", "vehicle_price", "vehicle_primarily_used", "vehicle_title",
+      "vehicle_descripition", "vehicle_modification", "driver_type",
+      "motor_size_cylinders", "transmition_types", "fuel_types", "seller_type",
+      "vehicle_status", "suspension_type", "hp_output_rang", "vehicle_use", "number_of_doors"
+    ];
+  
+    if (watch("chassis_reinforcement") === "1") {
+      requiredFields.push("chassis_reinforcement_text");
+    }
+    if (watch("audio_upgrade") === "1") {
+      requiredFields.push("audio_upgrade_text");
+    }
+    if (watch("cosmetic_upgrade") === "1") {
+      requiredFields.push("cosmetic_upgrade_text");
+    }
+    if (watch("interior_upgrade") === "1") {
+      requiredFields.push("interior_upgrade_text");
+    }
+    if (watch("exterior_upgrade") === "1") {
+      requiredFields.push("exterior_upgrade_text");
+    }
+    if (watch("motor_upgrade") === "1") {
+      requiredFields.push("motor_upgrade_text");
+    }
+  
+    const valid = await trigger(requiredFields);
     if (valid) {
       setStep(2);
       window.scrollTo(0, 0);
@@ -212,18 +241,26 @@ const SellForm = () => {
               </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Vehicle Suspension Size</label>
-                  <input
-                    name="suspension_size"
-                    id="suspension_size"
-                    type="text"
-                    autoComplete="suspension_size"
-                    {...register("suspension_size", { required: true })}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                  />
-                  {errors.suspension_size && <p className="text-red-500 text-sm">Vehicle Suspension size Required</p>}
-                </div>
+              <div>
+              <label className="block text-sm font-medium mb-1">Suspension Size (inches)</label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="range"
+                  min={-8}
+                  max={24}
+                  step={0.5}
+                  {...register("suspension_size", { required: true })}
+                  className="w-full"
+                  id="suspension_size"
+                />
+                <span className="min-w-[50px] text-center">
+                  {watch("suspension_size") || "0"}
+                </span>
+              </div>
+              {errors.suspension_size && (
+                <p className="text-red-500 text-sm">Suspension size is required</p>
+              )}
+            </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Vehicle Suspension Type</label>
                   <select
@@ -267,6 +304,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {chassisReinforcement === "1" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Reinforcement Details</label>
+                      <input
+                        name="chassis_reinforcement_text"
+                        id="chassis_reinforcement_text"
+                        type="text"
+                        placeholder="Describe the reinforcement done"
+                        {...register("chassis_reinforcement_text", { required: true })}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                      {errors.chassis_reinforcement_text && (
+                        <p className="text-red-500 text-sm">Details Required</p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Audio Upgrades</label>
@@ -291,6 +344,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {audioUpgrade === "1" && (
+                    <div className="mt-2">
+                      <label className="block text-sm font-medium mb-1">Audio Upgrade Details</label>
+                      <input
+                        name="audio_upgrade_text"
+                        id="audio_upgrade_text"
+                        type="text"
+                        placeholder="Describe the audio upgrades"
+                        {...register("audio_upgrade_text", { required: true })}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                      {errors.audio_upgrade_text && (
+                        <p className="text-red-500 text-sm">Audio upgrade details required</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>     
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -358,6 +427,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {cosmeticUpgrade === "1" && (
+                    <div className="mt-2">
+                      <label className="block text-sm font-medium mb-1">Cosmetic Upgrade Details</label>
+                      <input
+                        name="cosmetic_upgrade_text"
+                        id="cosmetic_upgrade_text"
+                        type="text"
+                        placeholder="Describe cosmetic upgrades (paint, body kits, etc.)"
+                        {...register("cosmetic_upgrade_text", { required: true })}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                      {errors.cosmetic_upgrade_text && (
+                        <p className="text-red-500 text-sm">Details required for cosmetic upgrades</p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Interior Upgrades</label>
@@ -382,6 +467,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {interiorUpgrade === "1" && (
+                    <div className="mt-2">
+                      <label className="block text-sm font-medium mb-1">Interior Upgrade Details</label>
+                      <input
+                        name="interior_upgrade_text"
+                        id="interior_upgrade_text"
+                        type="text"
+                        placeholder="Describe interior upgrades (seats, dashboard, etc.)"
+                        {...register("interior_upgrade_text", { required: true })}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                      {errors.interior_upgrade_text && (
+                        <p className="text-red-500 text-sm">Interior upgrade details required</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>    
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -408,6 +509,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {exteriorUpgrade === "1" && (
+                    <div className="mt-2">
+                      <label className="block text-sm font-medium mb-1">Exterior Upgrade Details</label>
+                      <input
+                        name="exterior_upgrade_text"
+                        id="exterior_upgrade_text"
+                        type="text"
+                        placeholder="Describe body kit, wrap, spoiler, etc."
+                        {...register("exterior_upgrade_text", { required: true })}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                      {errors.exterior_upgrade_text && (
+                        <p className="text-red-500 text-sm">Exterior upgrade details required</p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Motor Upgrades</label>
@@ -432,6 +549,22 @@ const SellForm = () => {
                       No
                     </label>
                   </div>
+                  {motorUpgrade === "1" && (
+                      <div className="mt-2">
+                        <label className="block text-sm font-medium mb-1">Motor Upgrade Details</label>
+                        <input
+                          name="motor_upgrade_text"
+                          id="motor_upgrade_text"
+                          type="text"
+                          placeholder="Describe engine swaps, turbo kits, etc."
+                          {...register("motor_upgrade_text", { required: true })}
+                          className="w-full p-3 border border-gray-300 rounded-md"
+                        />
+                        {errors.motor_upgrade_text && (
+                          <p className="text-red-500 text-sm">Motor upgrade details required</p>
+                        )}
+                      </div>
+                    )}
                 </div>
               </div>   
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
