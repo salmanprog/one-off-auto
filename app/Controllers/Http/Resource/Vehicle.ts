@@ -98,6 +98,7 @@ class Vehicle
           interior_upgrade: record.interior_upgrade,
           interior_upgrade_text: record.interior_upgrade_text,
           exterior_upgrade: record.exterior_upgrade,
+          exterior_upgrade_text: record.exterior_upgrade_text,
           motor_upgrade: record.motor_upgrade,
           motor_upgrade_text: record.motor_upgrade_text,
           documentation_type: record.documentation_type,
