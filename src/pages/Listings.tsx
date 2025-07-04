@@ -402,6 +402,51 @@ const Listings = () => {
       );
     }
 
+    if (filters.suspension_size) {
+      const suspensionSize = parseFloat(filters.suspension_size);
+      filtered = filtered.filter((listing) => {
+        const listingSuspension = parseFloat(listing.suspension_size); // Ensure listing.suspension_size is a number or string
+        return !isNaN(listingSuspension) && listingSuspension >= suspensionSize; // Check if valid number and apply filter
+      });
+    }
+
+    if (filters.suspension_type) {
+      filtered = filtered.filter(
+        (listing) => listing.suspension_type == filters.suspension_type
+      );
+    }
+
+    // Wheel Width Filter
+    if (filters.wheel_width) {
+      const wheelWidth = parseFloat(filters.wheel_width);
+      filtered = filtered.filter((listing) => {
+        const listingWheelWidth = parseFloat(listing.wheel_width);
+        return !isNaN(listingWheelWidth) && listingWheelWidth >= wheelWidth;
+      });
+    }
+
+    // Wheel Diameter Filter
+    if (filters.wheel_diameter) {
+      const wheelDiameter = parseFloat(filters.wheel_diameter);
+      filtered = filtered.filter((listing) => {
+        const listingWheelDiameter = parseFloat(listing.wheel_diameter);
+        return !isNaN(listingWheelDiameter) && listingWheelDiameter >= wheelDiameter;
+      });
+    }
+
+    // HP Output Range Filter (Dropdown)
+    if (filters.hp_output_rang) {
+      filtered = filtered.filter(
+        (listing) => listing.hp_output_rang == filters.hp_output_rang
+      );
+    }
+
+    // Vehicle Use Filter
+    if (filters.vehicle_use) {
+      filtered = filtered.filter(
+        (listing) => listing.vehicle_use == filters.vehicle_use
+      );
+    }
     return filtered;
   }, [filters, listings]);
 

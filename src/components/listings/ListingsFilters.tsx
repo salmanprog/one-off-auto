@@ -22,6 +22,12 @@ interface FilterState {
   fuel_types: string;
   seller_type: string;
   vehicle_status: string;
+  suspension_size: string;
+  suspension_type: string;
+  wheel_width: string;
+  wheel_diameter: string;
+  hp_output_rang: string;
+  vehicle_use: string;
 }
 
 interface ListingsFiltersProps {
@@ -39,6 +45,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
 }) => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [standardFiltersOpen, setStandardFiltersOpen] = useState(true);
+  const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false);
   const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list");
   const { data:vehicle_driver_type } = useFetch("vehicle_driver_type");
   const { data:vehicle_motor_size } = useFetch("vehicle_motor_size");
@@ -148,6 +155,14 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
       (listing) => listing.vehicle_status === filters.vehicle_status
     );
   }
+
+  if (filters.suspension_size) {
+    const suspensionSize = parseFloat(filters.suspension_size);
+    filteredListings = filteredListings.filter((listing) => {
+      const listingSuspension = parseFloat(listing.suspension_size);
+      return !isNaN(listingSuspension) && listingSuspension >= suspensionSize;
+    });
+  }
   
     return filteredListings;
   };
@@ -188,7 +203,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
             className="flex items-center justify-between cursor-pointer"
             onClick={() => setStandardFiltersOpen(!standardFiltersOpen)}
           >
-            <h3 className="text-lg font-bold mb-2">Vehicle Details</h3>
+            <h3 className="text-lg font-bold mb-2">Basic Search</h3>
             {standardFiltersOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </div>
 
@@ -367,7 +382,106 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
             </div>
           )}
         </div>
+        <div className="flex items-center justify-between cursor-pointer">
+          <h3 className="text-lg font-bold mb-2">Advanced Search</h3>
+          {advancedFiltersOpen ? (
+            <ChevronUp size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
+          ) : (
+            <ChevronDown size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
+          )}
+        </div> 
+        {advancedFiltersOpen && (
+          <div className="space-y-4 mt-3">
+            {/* Suspension Size Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} inches)</label>
+              <input
+                type="range"
+                min={-8}
+                max={24}
+                step={0.5}
+                value={filters.suspension_size}
+                onChange={(e) => onFilterChange({ suspension_size: e.target.value })}
+                className="w-full"
+              />
+            </div>
 
+            {/* Suspension Type Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Suspension Type</label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={filters.suspension_type}
+                onChange={(e) => onFilterChange({ suspension_type: e.target.value })}
+              >
+                <option value="">Select Suspension Type</option>
+                {vehicle_suspension_type &&
+                  vehicle_suspension_type.map((item: { id: string; title: string }) => (
+                    <option key={item.id} value={item.id}>{item.title}</option>
+                  ))}
+              </select>
+            </div>
+            {/* Wheel Width Range Slider */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Wheel Width ({filters.wheel_width} inches)</label>
+              <input
+                type="range"
+                min={1}
+                max={30}
+                step={0.5}
+                value={filters.wheel_width}
+                onChange={(e) => onFilterChange({ wheel_width: e.target.value })}
+                className="w-full"
+              />
+            </div>
+
+            {/* Wheel Diameter Range Slider */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Wheel Diameter ({filters.wheel_diameter} inches)</label>
+              <input
+                type="range"
+                min={10}
+                max={24}
+                step={0.5}
+                value={filters.wheel_diameter}
+                onChange={(e) => onFilterChange({ wheel_diameter: e.target.value })}
+                className="w-full"
+              />
+            </div>
+            {/* HP Output Range Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1">HP Output Range</label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={filters.hp_output_rang}
+                onChange={(e) => onFilterChange({ hp_output_rang: e.target.value })}
+              >
+                <option value="">Select HP Output Range</option>
+                {vehicle_hp_output &&
+                  vehicle_hp_output.map((item: { id: string; title: string }) => (
+                    <option key={item.id} value={item.id}>{item.title}</option>
+                  ))}
+              </select>
+            </div>
+
+            {/* Vehicle Use Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Vehicle Use</label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={filters.vehicle_use}
+                onChange={(e) => onFilterChange({ vehicle_use: e.target.value })}
+              >
+                <option value="">Select Vehicle Use</option>
+                {vehicle_uses &&
+                  vehicle_uses.map((item: { id: string; title: string }) => (
+                    <option key={item.id} value={item.id}>{item.title}</option>
+                  ))}
+              </select>
+            </div>
+          </div>
+          
+        )}
         {/* Filter Actions */}
         <div className="flex flex-col gap-2 mt-4">
           <button
