@@ -13,6 +13,9 @@ import VehicleSuspensionTypeRes from 'App/Controllers/Http/Resource/VehicleSuspe
 import VehicleHpOutRangeRes from 'App/Controllers/Http/Resource/VehicleHpOutRange';
 import VehicleUsesRes from 'App/Controllers/Http/Resource/VehicleUses';
 import VehicleDocumentationRes from 'App/Controllers/Http/Resource/VehicleDocumentation';
+import VehicleMakeRes from 'App/Controllers/Http/Resource/VehicleMake';
+import VehicleModelRes from 'App/Controllers/Http/Resource/VehicleModel';
+import VehicleYearRes from 'App/Controllers/Http/Resource/VehicleYear';
 
 class Vehicle
 {
@@ -56,8 +59,11 @@ class Vehicle
           slug: record.slug,
           image_url: !_.isEmpty(record.media) ?  await storageUrl(record.media[0].file_url) : baseUrl('/images/dummy_car.jpg'),
           vehicle_make: record.vehicle_make,
+          vehicle_make_obj: await VehicleMakeRes.initResponse(record.VehicleMake,request),
           vehicle_model: record.vehicle_model,
+          vehicle_model_obj: await VehicleModelRes.initResponse(record.VehicleModel,request),
           vehicle_year: record.vehicle_year,
+          vehicle_year_obj: await VehicleYearRes.initResponse(record.VehicleYear,request),
           vehicle_mileage: record.vehicle_mileage,
           vehicle_price: record.vehicle_price,
           vehicle_primarily_used: record.vehicle_primarily_used,

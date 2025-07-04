@@ -36,6 +36,9 @@ class VehicleHook
         query.preload('VehicleHpOutRange')
         query.preload('VehicleUses')
         query.preload('VehicleDocumentation')
+        query.preload('VehicleMake')
+        query.preload('VehicleModel')
+        query.preload('VehicleYear')
         query.whereIn('status',['0','1','2']).orderBy('id','desc')
     }
 

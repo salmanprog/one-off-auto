@@ -35,7 +35,10 @@ Route
     Route.resource('subscribe/user', 'Api/UserSubscriberController').except(['update','destroy']);
     // Vehicle Make
     Route.resource('user/user-vehicle-make', 'Api/VehicleMakeController').except(['create','update','destroy']);
-
+    // Vehicle Model
+    Route.resource('user/user-vehicle-model', 'Api/VehicleModelController').except(['create','update','destroy']);
+    // Vehicle Year
+    Route.resource('user/user-vehicle-year', 'Api/VehicleYearController').except(['create','update','destroy']);
 
     // Vehicle Driver Type
     Route.resource('user/vehicle-driver-type', 'Api/VehicleDriverTypeController').except(['create','update','destroy']);
@@ -57,7 +60,6 @@ Route
     Route.resource('user/vehicle-uses', 'Api/VehicleUsesController').except(['create','update','destroy']);
     // Vehicle Documentation
     Route.resource('user/vehicle-documentation-type', 'Api/VehicleDocumentationController').except(['create','update','destroy']);
-
     // Named as api.users.index, api.users.store
     Route.resource('user', 'Api/UsersController')
       .except(['destroy'])
@@ -93,6 +95,9 @@ Route
 
     // Vehicle Model
     Route.resource('vehicle-model', 'Api/VehicleModelController');
+
+    // Vehicle Year
+    Route.resource('vehicle-year', 'Api/VehicleYearController');
     
     //Notifications
     Route.post('notification/test-notification','Api/NotificationController.sendTestNotification').as('test-notification');

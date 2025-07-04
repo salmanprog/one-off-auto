@@ -9,9 +9,9 @@ export default class extends BaseSchema {
       table.integer('vehicle_category_id').unsigned().references('id').inTable('vehicle_categories').onDelete('CASCADE').onUpdate('NO ACTION');
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE').onUpdate('NO ACTION');
       table.string('slug',100).notNullable().unique()
-      table.string('vehicle_make',255).notNullable()
-      table.string('vehicle_model',255).notNullable()
-      table.string('vehicle_year',255).notNullable()
+      table.integer('vehicle_make').unsigned().references('id').inTable('vehicle_makes').onDelete('CASCADE').onUpdate('NO ACTION');
+      table.integer('vehicle_model').unsigned().references('id').inTable('vehicle_models').onDelete('CASCADE').onUpdate('NO ACTION');
+      table.integer('vehicle_year').unsigned().references('id').inTable('vehicle_years').onDelete('CASCADE').onUpdate('NO ACTION');
       table.string('vehicle_mileage',255).notNullable()
       table.string('vehicle_price',255).notNullable()
       table.string('vehicle_primarily_used',255).notNullable()
@@ -51,6 +51,16 @@ export default class extends BaseSchema {
       table.text('vehicle_owner_address').nullable()
       table.string('vehicle_owner_email',100).notNullable()
       table.string('vehicle_owner_phone',100).notNullable()
+      table.string('street_number').nullable();
+      table.string('route').nullable();
+      table.string('locality').nullable();
+      table.string('administrative_area_level_2').nullable();
+      table.string('administrative_area_level_1').nullable();
+      table.string('country').nullable();
+      table.string('postal_code').nullable();
+      table.string('formatted_address').nullable();
+      table.string('latitude').nullable();
+      table.string('longitude').nullable();
       table.enu('status',['0','1','2']).notNullable().defaultTo('0')
       table.timestamp('created_at', { useTz: true }).nullable()
       table.timestamp('updated_at', { useTz: true }).nullable()

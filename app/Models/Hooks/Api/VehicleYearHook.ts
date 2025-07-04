@@ -4,9 +4,9 @@ import _ from 'lodash';
 import FileUpload from 'App/Libraries/FileUpload/FileUpload'
 //import Hash from '@ioc:Adonis/Core/Hash'
 import {currentDateTime } from 'App/Helpers/Index'
-import VehicleModel from 'App/Models/VehicleModel';
+import VehicleYear from 'App/Models/VehicleYear';
 
-class VehicleModelHook
+class VehicleYearHook
 {
      /**
      * Hook for manipulate query of index result
@@ -16,10 +16,6 @@ class VehicleModelHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        let params = request.all();
-        if( !_.isEmpty(params.make_id) ){
-            query.where('make_id',params.make_id)
-        }
         query.orderBy('id','desc')
     }
 
@@ -34,7 +30,7 @@ class VehicleModelHook
             params.image_url  = await FileUpload.doUpload(request.file('image_url'),'user');
             //params.blurimage  = await FileUpload.createBlurHash(params.image_url);
         }
-        let slug      = await VehicleModel.generateSlug(params.title);
+        let slug      = await VehicleYear.generateSlug(params.title);
         params.slug       = slug
         params.created_at = currentDateTime();
 
@@ -99,4 +95,4 @@ class VehicleModelHook
 
     }
 }
-module.exports = VehicleModelHook;
+module.exports = VehicleYearHook;

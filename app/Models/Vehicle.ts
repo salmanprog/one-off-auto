@@ -15,6 +15,9 @@ import VehicleSuspensionType from './VehicleSuspensionType'
 import VehicleHpOutRange from './VehicleHpOutRange'
 import VehicleUses from './VehicleUses'
 import VehicleDocumentation from './VehicleDocumentation'
+import VehicleMake from './VehicleMake'
+import VehicleModel from './VehicleModel'
+import VehicleYear from './VehicleYear'
 import Media from './Media'
 import moment from 'moment';
 
@@ -35,13 +38,13 @@ export default class Vehicle extends RestModel
     public slug: string
 
     @column()
-    public vehicle_make: string
+    public vehicle_make: number
 
     @column()
-    public vehicle_model: string
+    public vehicle_model: number
 
     @column()
-    public vehicle_year: string
+    public vehicle_year: number
 
     @column()
     public vehicle_mileage: string
@@ -161,6 +164,36 @@ export default class Vehicle extends RestModel
     public vehicle_owner_phone: string
 
     @column()
+    public street_number: string
+
+    @column()
+    public route: string
+
+    @column()
+    public locality: string
+
+    @column()
+    public administrative_area_level_2: string
+
+    @column()
+    public administrative_area_level_1: string
+
+    @column()
+    public country: string
+
+    @column()
+    public postal_code: string
+
+    @column()
+    public formatted_address: string
+
+    @column()
+    public latitude: string
+
+    @column()
+    public longitude: string
+
+    @column()
     public status: number
 
     @column.dateTime({ autoCreate: true })
@@ -250,10 +283,28 @@ export default class Vehicle extends RestModel
     })
     public VehicleDocumentation: BelongsTo<typeof VehicleDocumentation>
 
+    @belongsTo(() => VehicleMake, {
+        foreignKey: 'vehicle_make',
+        localKey: 'id'
+    })
+    public VehicleMake: BelongsTo<typeof VehicleMake>
+
+    @belongsTo(() => VehicleModel, {
+        foreignKey: 'vehicle_model',
+        localKey: 'id'
+    })
+    public VehicleModel: BelongsTo<typeof VehicleModel>
+
+    @belongsTo(() => VehicleYear, {
+        foreignKey: 'vehicle_year',
+        localKey: 'id'
+    })
+    public VehicleYear: BelongsTo<typeof VehicleYear>
+
     public static fillable()
     {
         return [
-          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_primarily_used','vehicle_stock_parts','vehicle_title','vehicle_descripition','vehicle_modification','driver_type','motor_size_cylinders','transmition_types','fuel_types','number_of_doors','exterior_color','interior_color','seller_type','vehicle_status','suspension_size','suspension_type','chassis_reinforcement','chassis_reinforcement_text','audio_upgrade','audio_upgrade_text','wheel_width','wheel_diameter','hp_output_rang','cosmetic_upgrade','cosmetic_upgrade_text','vehicle_use','interior_upgrade','interior_upgrade_text','exterior_upgrade','exterior_upgrade_text','motor_upgrade','motor_upgrade_text','documentation_type','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','status','created_at','updated_at','deleted_at'
+          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_primarily_used','vehicle_stock_parts','vehicle_title','vehicle_descripition','vehicle_modification','driver_type','motor_size_cylinders','transmition_types','fuel_types','number_of_doors','exterior_color','interior_color','seller_type','vehicle_status','suspension_size','suspension_type','chassis_reinforcement','chassis_reinforcement_text','audio_upgrade','audio_upgrade_text','wheel_width','wheel_diameter','hp_output_rang','cosmetic_upgrade','cosmetic_upgrade_text','vehicle_use','interior_upgrade','interior_upgrade_text','exterior_upgrade','exterior_upgrade_text','motor_upgrade','motor_upgrade_text','documentation_type','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','street_number','route','locality','administrative_area_level_2','administrative_area_level_1','country','postal_code','formatted_address','latitude','longitude','status','created_at','updated_at','deleted_at'
         ]
     }
 
@@ -267,20 +318,20 @@ export default class Vehicle extends RestModel
     public static async getVehicleLists(limit:number)
     {
         let show_limit = !_.isEmpty(limit) ? limit : 3;
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').whereIn('status',['1','2']).orderBy('id','desc').limit(show_limit)
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1','2']).orderBy('id','desc').limit(show_limit)
         return record;
     }
 
     public static async getRelatedVehicleLists(slug:string,limit:number)
     {
         let show_limit = !_.isEmpty(limit) ? limit : 9;
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').whereIn('status',['1','2']).where('slug','<>',slug).orderBy('id','desc').limit(show_limit)
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1','2']).where('slug','<>',slug).orderBy('id','desc').limit(show_limit)
         return record;
     }
 
     public static async getVehicleBySlug(slug: string)
     {
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').where('slug',slug).first();
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').where('slug',slug).first();
         return record;
     }
 }

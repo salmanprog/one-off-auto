@@ -34,7 +34,36 @@ export default class extends BaseSeeder {
         description: 'Ford',
         created_at: new Date(),
       },
-      
+      {
+        title: 'Toyota',
+        slug: 'toyota',
+        description: 'Toyota',
+        created_at: new Date(),
+      },
+      {
+        title: 'Honda',
+        slug: 'honda',
+        description: 'Honda',
+        created_at: new Date(),
+      },
+      {
+        title: 'Volkswagen',
+        slug: 'volkswagen',
+        description: 'Volkswagen',
+        created_at: new Date(),
+      },
+      {
+        title: 'Hyundai',
+        slug: 'hyundai',
+        description: 'Hyundai',
+        created_at: new Date(),
+      },
+      {
+        title: 'Mercedes-Benz',
+        slug: 'mercedes-benz',
+        description: 'Mercedes-Benz',
+        created_at: new Date(),
+      }
     ])
   }
 }
