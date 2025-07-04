@@ -317,14 +317,16 @@ const Listings = () => {
     }
 
     if (filters.make) {
-      filtered = filtered.filter((listing) =>
-        listing.vehicle_make.toLowerCase().includes(filters.make.toLowerCase())
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.vehicle_make) == parseInt(filters.make)
+        //listing.vehicle_make.includes(filters.make)
       );
     }
 
     if (filters.model) {
-      filtered = filtered.filter((listing) =>
-        listing.model.toLowerCase().includes(filters.model.toLowerCase())
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.model) == parseInt(filters.model)
+        //listing.model.includes(filters.model)
       );
     }
     

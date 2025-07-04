@@ -16,7 +16,10 @@ const Hero = () => {
   const [modelValue, setModelValue] = useState("");
   const [yearValue, setYearValue] = useState("");
   const [titleValue, setTitleValue] = useState("");  // Added state for title search
-  const { data, loading, error } = useFetch("get_vehicle_make_list");
+  const { data, loading, error } = useFetch("get_vehicle_make_list", "mount", '?limit=5000');
+  const { data: vehicleModel } = useFetch("get_vehicle_model_list", "mount", '?limit=5000');
+  const { data: vehicleYear } = useFetch("get_vehicle_year_list", "mount", '?limit=5000');
+
   const navigate = useNavigate();
 
   // Function to handle search values and redirect
@@ -61,24 +64,28 @@ const Hero = () => {
                 </Select>
               </div>
               <div>
-                <input
-                  type="text"
-                  name="modelValue"
-                  value={modelValue}
-                  onChange={(e) => setModelValue(e.target.value)}
-                  placeholder="Model"
-                  className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg"
-                />
+              <Select value={modelValue} onValueChange={setModelValue}>
+                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg">
+                    <SelectValue placeholder="Model" />
+                  </SelectTrigger>
+                  <SelectContent position="popper" className="bg-white">
+                    {vehicleModel && vehicleModel.map((model: { id: string; title: string }) => (
+                      <SelectItem key={model.id} value={model.id}>{model.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
-                <input
-                  type="text"
-                  name="yearValue"
-                  value={yearValue}
-                  onChange={(e) => setYearValue(e.target.value)}
-                  placeholder="Year"
-                  className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg"
-                />
+              <Select value={yearValue} onValueChange={setYearValue}>
+                  <SelectTrigger className="w-full bg-white/80 backdrop-blur-sm p-3 rounded-lg">
+                    <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                  <SelectContent position="popper" className="bg-white">
+                    {vehicleYear && vehicleYear.map((year: { id: string; title: string }) => (
+                      <SelectItem key={year.id} value={year.id}>{year.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

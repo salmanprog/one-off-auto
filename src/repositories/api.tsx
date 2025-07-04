@@ -47,6 +47,14 @@ const api = {
       url: 'user/user-vehicle-make',
       method: "GET",
     },
+    get_vehicle_model_list: {
+      url: 'user/user-vehicle-model',
+      method: "GET",
+    },
+    get_vehicle_year_list: {
+      url: 'user/user-vehicle-year',
+      method: "GET",
+    },
     user_vehicle_list: {
       url: 'user/vehicle',
       method: "GET",

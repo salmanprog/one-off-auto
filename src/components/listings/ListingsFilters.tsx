@@ -46,17 +46,19 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [standardFiltersOpen, setStandardFiltersOpen] = useState(true);
   const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false);
-  const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list");
-  const { data:vehicle_driver_type } = useFetch("vehicle_driver_type");
-  const { data:vehicle_motor_size } = useFetch("vehicle_motor_size");
-  const { data:vehicle_transmission_type } = useFetch("vehicle_transmission_type");
-  const { data:vehicle_fuel_type } = useFetch("vehicle_fuel_type");
-  const { data:vehicle_seller_type } = useFetch("vehicle_seller_type");
-  const { data:vehicle_statues } = useFetch("vehicle_statues");
-  const { data:vehicle_suspension_type } = useFetch("vehicle_suspension_type");
-  const { data:vehicle_hp_output } = useFetch("vehicle_hp_output");
-  const { data:vehicle_uses } = useFetch("vehicle_uses");
-  const { data:vehicle_documentation_type } = useFetch("vehicle_documentation_type");
+  const { data: vehicleMakes, loading, error } = useFetch("get_vehicle_make_list", "mount", '?limit=5000');
+  const { data: vehicleModel } = useFetch("get_vehicle_model_list", "mount", '?limit=5000');
+  const { data: vehicleYear } = useFetch("get_vehicle_year_list", "mount", '?limit=5000');
+  const { data:vehicle_driver_type } = useFetch("vehicle_driver_type", "mount", '?limit=5000');
+  const { data:vehicle_motor_size } = useFetch("vehicle_motor_size", "mount", '?limit=5000');
+  const { data:vehicle_transmission_type } = useFetch("vehicle_transmission_type", "mount", '?limit=5000');
+  const { data:vehicle_fuel_type } = useFetch("vehicle_fuel_type", "mount", '?limit=5000');
+  const { data:vehicle_seller_type } = useFetch("vehicle_seller_type", "mount", '?limit=5000');
+  const { data:vehicle_statues } = useFetch("vehicle_statues", "mount", '?limit=5000');
+  const { data:vehicle_suspension_type } = useFetch("vehicle_suspension_type", "mount", '?limit=5000');
+  const { data:vehicle_hp_output } = useFetch("vehicle_hp_output", "mount", '?limit=5000');
+  const { data:vehicle_uses } = useFetch("vehicle_uses", "mount", '?limit=5000');
+  const { data:vehicle_documentation_type } = useFetch("vehicle_documentation_type", "mount", '?limit=5000');
 
   if (loading) return <div>Loading makes...</div>;
   if (error) return <div>Error loading makes: {error.message}</div>;
@@ -78,15 +80,15 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   
     // Make Filter
     if (filters.make) {
-      filteredListings = filteredListings.filter((listing) =>
-        listing.vehicle_make.toLowerCase().includes(filters.make.toLowerCase())
+      filteredListings = filteredListings.filter(
+        (listing) => parseInt(listing.vehicle_make) == parseInt(filters.make)
       );
     }
   
     // Model Filter
     if (filters.model) {
-      filteredListings = filteredListings.filter((listing) =>
-        listing.model.toLowerCase().includes(filters.model.toLowerCase())
+      filteredListings = filteredListings.filter(
+        (listing) => parseInt(listing.model) == parseInt(filters.model)
       );
     }
   
@@ -230,25 +232,37 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               {/* Model Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Model</label>
-                <input
-                  type="text"
-                  placeholder="Enter model"
+                <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.model}
                   onChange={(e) => onFilterChange({ model: e.target.value })}
-                />
+                >
+                  <option value="">Select Model</option>
+                  {vehicleModel &&
+                    vehicleModel.map((model: { id: string; title: string }) => (
+                      <option key={model.id} value={model.id}>
+                        {model.title}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               {/* Year Filter (Single input) */}
               <div>
                 <label className="block text-sm font-medium mb-1">Year</label>
-                <input
-                  type="text"
-                  placeholder="Enter year"
+                <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.year}
                   onChange={(e) => onFilterChange({ year: e.target.value })}
-                />
+                >
+                  <option value="">Select Year</option>
+                  {vehicleYear &&
+                    vehicleYear.map((year: { id: string; title: string }) => (
+                      <option key={year.id} value={year.id}>
+                        {year.title}
+                      </option>
+                    ))}
+                </select>
               </div>
 
               {/* Price Range Filter */}

@@ -159,8 +159,11 @@ const ListingDetail = () => {
           title: data.vehicle_title,
           price: data.vehicle_price,
           vehicle_make: data.vehicle_make,
+          vehicle_make_title: data.vehicle_make_obj.title,
           vehicle_model: data.vehicle_model,
+          vehicle_model_title: data.vehicle_model_obj.title,
           vehicle_year: data.vehicle_year,
+          vehicle_year_title: data.vehicle_year_obj.title,
           vehicle_primarily_used: data.vehicle_primarily_used,
           vehicle_stock_parts: data.vehicle_stock_parts,
           location: data.vehicle_owner_address,
@@ -389,9 +392,9 @@ const ListingDetail = () => {
             <CardTitle>Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <p className="text-gray-700 text-lg"><strong>Vehicle Make:</strong> {listing.vehicle_make}</p>
-            <p className="text-gray-700 text-lg"><strong>Vehicle Model:</strong> {listing.vehicle_model}</p>
-            <p className="text-gray-700 text-lg"><strong>Vehicle Year:</strong> {listing.vehicle_year}</p>
+            <p className="text-gray-700 text-lg"><strong>Vehicle Make:</strong> {listing.vehicle_make_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Vehicle Model:</strong> {listing.vehicle_model_title}</p>
+            <p className="text-gray-700 text-lg"><strong>Vehicle Year:</strong> {listing.vehicle_year_title}</p>
             <p className="text-gray-700 text-lg"><strong>Primarily Used:</strong> {listing.vehicle_primarily_used}</p>
             <p className="text-gray-700 text-lg"><strong>Stock Parts:</strong> {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</p>
             <p className="text-gray-700 text-lg"><strong>Location:</strong> {listing.location}</p>
