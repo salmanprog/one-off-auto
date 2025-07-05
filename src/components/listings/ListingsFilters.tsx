@@ -28,6 +28,7 @@ interface FilterState {
   wheel_diameter: string;
   hp_output_rang: string;
   vehicle_use: string;
+  nearbyRadius: string;
 }
 
 interface ListingsFiltersProps {
@@ -166,11 +167,51 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
     });
   }
   
+  if (filters.nearbyMe && navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+        
+        filteredListings = filteredListings.filter((listing) => {
+          console.error("listing:", listing);
+          console.error("userLat:", userLat+' userLon.............................'+userLon);
+          console.error("listing_userLat:", listing.latitude+' listing_userLon.............................'+listing.longitude);
+          const distance = calculateDistance(
+            userLat,
+            userLon,
+            parseFloat(listing.latitude), // Your listing's latitude
+            parseFloat(listing.longitude) // Your listing's longitude
+          );
+          console.error("Location distance:", distance);
+          return distance <= 50; // within 50 km
+        });
+      },
+      (err) => {
+        console.error("Location Error:", err.message);
+      }
+    );
+  }
     return filteredListings;
   };
 
   // Apply filters to the listings data when the filter state changes
   const filteredListings = applyFilters();
+
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const toRad = (value: number) => (value * Math.PI) / 180;
+    const R = 6371; // Radius of Earth in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
@@ -406,6 +447,21 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
         </div> 
         {advancedFiltersOpen && (
           <div className="space-y-4 mt-3">
+            {/* Nearby Me Filter */}
+            <div>
+            <label className="block text-sm font-medium mb-1">
+              Search Nearby Location ({filters.nearbyRadius || 0} km)
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="200"
+              step="1"
+              value={filters.nearbyRadius || ""}
+              onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
+              className="w-full"
+            />
+          </div>
             {/* Suspension Size Filter */}
             <div>
               <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} inches)</label>

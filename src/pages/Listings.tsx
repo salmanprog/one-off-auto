@@ -55,7 +55,8 @@ interface FilterState {
   motor_upgrade: string;
   motor_upgrade_text: string;
   documentation_type: string;
-  documentation_type_title: string;
+  documentation_type_title: string; 
+  nearbyRadius: string;
 }
 
 const Listings = () => {
@@ -65,7 +66,49 @@ const Listings = () => {
   const itemsPerPage = 9; // Adjust as needed
 
   const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?limit=5000');
-  
+  const [finalListings, setFinalListings] = useState([]);
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const toRad = (value) => (value * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+const filterNearbyListings = async (listings, radiusKm) => {
+  return new Promise((resolve) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+
+          const filtered = listings.filter((listing) => {
+            const distance = calculateDistance(
+              userLat,
+              userLon,
+              parseFloat(listing.latitude),
+              parseFloat(listing.longitude)
+            );
+            return distance <= radiusKm;
+          });
+
+          resolve(filtered);
+        },
+        () => {
+          resolve(listings); // fallback
+        }
+      );
+    } else {
+      resolve(listings);
+    }
+  });
+};
   const listings = useMemo(() => {
     if (!data) return [];
     const vehicles = Array.isArray(data) ? data : [data];
@@ -119,6 +162,8 @@ const Listings = () => {
       motor_upgrade: item.motor_upgrade,
       motor_upgrade_text: item.motor_upgrade_text,
       documentation_type: item.documentation_type,
+      latitude: item.latitude,
+      longitude: item.longitude,
       documentation_type_title: item.documentation_type_obj.title,
       image: item.image_url, // Optional chaining + fallback
       mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
@@ -175,6 +220,7 @@ const Listings = () => {
     motor_upgrade_text: "",
     documentation_type: "",
     documentation_type_title: "",
+    nearbyRadius: "",
   });
   
 
@@ -231,6 +277,7 @@ const Listings = () => {
       motor_upgrade_text: params.get("motor_upgrade_text") || "",
       documentation_type: params.get("documentation_type") || "",
       documentation_type_title: params.get("documentation_type_title") || "",
+      nearbyRadius: params.get("nearbyRadius") || "",
     };
     setFilters(queryFilters);
   }, [search]);
@@ -297,6 +344,7 @@ const Listings = () => {
       motor_upgrade_text: "",
       documentation_type: "",
       documentation_type_title: "",
+      nearbyRadius: "",
     });
 
     // Reset the query params in the URL
@@ -452,6 +500,17 @@ const Listings = () => {
     return filtered;
   }, [filters, listings]);
 
+  useEffect(() => {
+    const applyNearbyFilter = async () => {
+      let result = filteredAndSortedListings;
+      if (filters.nearbyRadius && Number(filters.nearbyRadius) > 0) {
+        result = await filterNearbyListings(result, Number(filters.nearbyRadius));
+      }
+      setFinalListings(result);
+    };
+    applyNearbyFilter();
+  }, [filteredAndSortedListings, filters.nearbyRadius]);
+  
   const paginatedListings = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredAndSortedListings.slice(startIndex, startIndex + itemsPerPage);
@@ -502,7 +561,7 @@ const Listings = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {paginatedListings.map((listing) => (
+                {finalListings.map((listing) => (
                   <ListingCard key={listing.slug} listing={listing} />
                 ))}
               </div>
