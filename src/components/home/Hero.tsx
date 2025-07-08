@@ -89,20 +89,20 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex flex-col items-center">
               <input
                 type="text"
                 name="titleValue"
-                value={titleValue}  // Make sure to bind the value
-                onChange={(e) => setTitleValue(e.target.value)}  // Update the titleValue state on change
+                value={titleValue}
+                onChange={(e) => setTitleValue(e.target.value)}
                 placeholder="Search by title"
-                className="w-full rounded-l-lg p-3 focus:outline-none text-gray-800 bg-white/80 backdrop-blur-sm"
+                className="w-full rounded-lg p-3 focus:outline-none text-gray-800 bg-white/80 backdrop-blur-sm mb-4"
               />
               <button
                 onClick={handleSearch}
-                className="bg-oneoffautos-red hover:bg-red-700 transition-all duration-300 text-white px-4 py-3 rounded-r-lg flex items-center justify-center hover:shadow-md"
+                className="bg-oneoffautos-red hover:bg-red-700 transition-all duration-300 text-white px-6 py-3 rounded-lg hover:shadow-md"
               >
-                <Search size={20} />
+                Search
               </button>
             </div>
           </div>

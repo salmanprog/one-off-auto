@@ -73,9 +73,9 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
       const searchLower = filters.searchTerm.toLowerCase();
       filteredListings = filteredListings.filter(
         (listing) =>
-          listing.title.toLowerCase().includes(searchLower) ||
-          listing.model.toLowerCase().includes(searchLower) ||
-          listing.mods.some((mod) => mod.toLowerCase().includes(searchLower))
+          listing.title.toLowerCase().includes(searchLower) 
+          //listing.model.toLowerCase().includes(searchLower) ||
+          //listing.mods.some((mod) => mod.toLowerCase().includes(searchLower))
       );
     }
   
@@ -174,9 +174,6 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
         const userLon = position.coords.longitude;
         
         filteredListings = filteredListings.filter((listing) => {
-          console.error("listing:", listing);
-          console.error("userLat:", userLat+' userLon.............................'+userLon);
-          console.error("listing_userLat:", listing.latitude+' listing_userLon.............................'+listing.longitude);
           const distance = calculateDistance(
             userLat,
             userLon,
@@ -252,6 +249,21 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
 
           {standardFiltersOpen && (
             <div className="space-y-4 mt-3">
+              {/* Nearby Me Filter */}
+            <div>
+            <label className="block text-sm font-medium mb-1">
+              Search Nearby Location ({filters.nearbyRadius || 0} miles)
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="200"
+              step="1"
+              value={filters.nearbyRadius || ""}
+              onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
+              className="w-full"
+            />
+          </div>
               {/* Make Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Make</label>
@@ -447,27 +459,13 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
         </div> 
         {advancedFiltersOpen && (
           <div className="space-y-4 mt-3">
-            {/* Nearby Me Filter */}
-            <div>
-            <label className="block text-sm font-medium mb-1">
-              Search Nearby Location ({filters.nearbyRadius || 0} km)
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="200"
-              step="1"
-              value={filters.nearbyRadius || ""}
-              onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
-              className="w-full"
-            />
-          </div>
+            
             {/* Suspension Size Filter */}
             <div>
               <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} inches)</label>
               <input
                 type="range"
-                min={-8}
+                min={0}
                 max={24}
                 step={0.5}
                 value={filters.suspension_size}
@@ -511,7 +509,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               <input
                 type="range"
                 min={10}
-                max={24}
+                max={30}
                 step={0.5}
                 value={filters.wheel_diameter}
                 onChange={(e) => onFilterChange({ wheel_diameter: e.target.value })}
