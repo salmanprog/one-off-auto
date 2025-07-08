@@ -4,23 +4,93 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useFetch } from "../../hooks/request";
-import ViewListingDialog from "./ViewListingDialog"; // Import ViewListingDialog
 import EditListingDialog from "./EditListingDialog"; // Import EditListingDialog
 import ChangeListingStatusDialog from "./ChangeListingStatusDialog"; // Import ChangeListingStatusDialog
 import { updateListingStatus } from "@/lib/api"; // Assuming this function is imported from api
+import { useNavigate } from 'react-router-dom';
+import ViewListingDialog from './ViewListingDialog';
+
+function mapListingForDialog(listing: any) {
+  if (!listing) return null;
+  return {
+    ...listing,
+    title: listing.vehicle_title || listing.listingTitle || listing.title,
+    price: listing.vehicle_price || listing.price,
+    vehicle_make: listing.vehicle_make,
+    vehicle_make_title: listing.vehicle_make_obj?.title || listing.vehicle_make || listing.make,
+    vehicle_model: listing.vehicle_model,
+    vehicle_model_title: listing.vehicle_model_obj?.title || listing.vehicle_model || listing.model,
+    vehicle_year: listing.vehicle_year,
+    vehicle_year_title: listing.vehicle_year_obj?.title || listing.vehicle_year || listing.year,
+    vehicle_primarily_used: listing.vehicle_primarily_used,
+    vehicle_stock_parts: listing.vehicle_stock_parts,
+    location: listing.vehicle_owner_address || listing.location,
+    mileage: listing.vehicle_mileage || listing.mileage,
+    image: listing.image_url || listing.image || listing.images?.[0] || '/placeholder.svg',
+    user_id: listing.user_id,
+    vehicle_modification: listing.vehicle_modification || listing.modifications || [],
+    vehicle_owner_name: listing.vehicle_owner_name || listing.seller || listing.owner,
+    vehicle_owner_address: listing.vehicle_owner_address,
+    vehicle_owner_email: listing.vehicle_owner_email || listing.owner_email,
+    vehicle_owner_phone: listing.vehicle_owner_phone || listing.owner_phone,
+    seller_avatar: listing.seller_avatar || listing.owner_avatar,
+    mods: listing.mods || [],
+    description: listing.vehicle_descripition || listing.description || '',
+    driver_type: listing.driver_type,
+    driver_title: listing.driver_type_obj?.title || listing.driver_type,
+    motor_size_cylinders: listing.motor_size_cylinders,
+    motor_size_title: listing.motor_size_cylinders_obj?.title || listing.motor_size_cylinders,
+    transmition_types: listing.transmition_types,
+    transmition_types_title: listing.transmition_types_obj?.title || listing.transmition_types,
+    fuel_types: listing.fuel_types,
+    fuel_types_title: listing.fuel_types_obj?.title || listing.fuel_types,
+    number_of_doors: listing.number_of_doors,
+    exterior_color: listing.exterior_color,
+    interior_color: listing.interior_color,
+    seller_type: listing.seller_type,
+    seller_type_title: listing.seller_type_obj?.title || listing.seller_type,
+    vehicle_status: listing.vehicle_status,
+    vehicle_status_title: listing.vehicle_status_obj?.title || listing.status_text || listing.status,
+    suspension_size: listing.suspension_size,
+    suspension_type: listing.suspension_type,
+    suspension_type_title: listing.suspension_type_obj?.title || listing.suspension_type,
+    chassis_reinforcement: listing.chassis_reinforcement,
+    chassis_reinforcement_text: listing.chassis_reinforcement_text,
+    audio_upgrade: listing.audio_upgrade,
+    audio_upgrade_text: listing.audio_upgrade_text,
+    wheel_width: listing.wheel_width,
+    wheel_diameter: listing.wheel_diameter,
+    hp_output_rang: listing.hp_output_rang,
+    hp_output_rang_title: listing.hp_output_rang_obj?.title || listing.hp_output_rang,
+    cosmetic_upgrade: listing.cosmetic_upgrade,
+    cosmetic_upgrade_text: listing.cosmetic_upgrade_text,
+    vehicle_use: listing.vehicle_use,
+    vehicle_use_title: listing.vehicle_use_obj?.title || listing.vehicle_use,
+    interior_upgrade: listing.interior_upgrade,
+    interior_upgrade_text: listing.interior_upgrade_text,
+    exterior_upgrade: listing.exterior_upgrade,
+    exterior_upgrade_text: listing.exterior_upgrade_text,
+    motor_upgrade: listing.motor_upgrade,
+    motor_upgrade_text: listing.motor_upgrade_text,
+    documentation_type: listing.documentation_type,
+    documentation_type_title: listing.documentation_type_obj?.title || listing.documentation_type,
+    additionalImages: listing.media?.map((m: { file_url: string }) => m.file_url) || listing.images || [],
+  };
+}
 
 const AdminListingManagement: React.FC = () => {
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false); // State for View Dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State for Edit Dialog
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false); // State for Status Dialog
-  const [selectedListingId, setSelectedListingId] = useState<number | null>(null); // State to hold the selected listing ID
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedListingId, setSelectedListingId] = useState<number | null>(null); // State to hold the selected listing ID (for edit/status only)
   const [selectedListingStatus, setSelectedListingStatus] = useState<string | null>(null); // State to hold the selected listing status
   const [searchTerm, setSearchTerm] = useState(""); // Search input state
   const [statusFilter, setStatusFilter] = useState("all"); // Filter for listing status
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const listingsPerPage = 4; // Number of listings per page
+  const navigate = useNavigate();
 
   const { data } = useFetch("get_vehicle_list");
   const { postData } = useFetch("update_vehicle", "submit");
@@ -68,15 +138,10 @@ const AdminListingManagement: React.FC = () => {
   const currentListings = filteredListings.slice(indexOfFirstListing, indexOfLastListing);
   const totalPages = Math.ceil(filteredListings.length / listingsPerPage);
 
-  // Handle view dialog
+  // Replace handleView to navigate to ListingDetail page
   const handleView = (listingId: number) => {
     setSelectedListingId(listingId);
-    setIsViewDialogOpen(true); // Open View Dialog
-  };
-
-  const handleCloseViewDialog = () => {
-    setIsViewDialogOpen(false);
-    setSelectedListingId(null); // Clear selected listing ID on close
+    setIsViewDialogOpen(true);
   };
 
   const handleCloseEditDialog = () => {
@@ -90,12 +155,17 @@ const AdminListingManagement: React.FC = () => {
     setSelectedListingStatus(null); // Clear selected listing status on close
   };
 
+  const handleCloseViewDialog = () => {
+    setIsViewDialogOpen(false);
+    setSelectedListingId(null);
+  };
+
   const handleSaveStatus = (listingId: number, newStatus: string) => {
     console.log('listingId.............',listingId+' newStatus.............'+newStatus)
     try {
       const fd = new FormData();
       fd.append('status',newStatus);
-      const callback = (receivedData: any) => {
+      const callback = (receivedData: unknown) => {
         window.location.reload();
       };
       postData(fd, callback, listingId);
@@ -204,16 +274,11 @@ const AdminListingManagement: React.FC = () => {
       </div>
 
       {/* Render Dialogs */}
-      <ViewListingDialog
-        isOpen={isViewDialogOpen}
-        onClose={handleCloseViewDialog}
-        listing={listings.find(listing => listing.id === selectedListingId) || null}
-      />
-
       <EditListingDialog
         isOpen={isEditDialogOpen}
         onClose={handleCloseEditDialog}
-        listingId={selectedListingId}
+        listing={listings.find((listing) => listing.id === selectedListingId) || null}
+        onSave={() => {}}
       />
 
       <ChangeListingStatusDialog
@@ -222,6 +287,12 @@ const AdminListingManagement: React.FC = () => {
         listingId={selectedListingId}
         currentStatus={selectedListingStatus}
         onSave={handleSaveStatus}
+      />
+
+      <ViewListingDialog
+        isOpen={isViewDialogOpen}
+        onClose={handleCloseViewDialog}
+        listing={mapListingForDialog(listings.find(listing => listing.id === selectedListingId) || null)}
       />
     </div>
   );

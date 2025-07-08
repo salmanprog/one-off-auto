@@ -12,6 +12,7 @@ import UserInquiries from '../dashboards/UserInquiries';
 import UserNotifications from '../dashboards/UserNotifications';
 import ApplicationSettings from '../dashboards/ApplicationSettings';
 import UserMessages from '../dashboards/UserMessages'; // Import the new UserMessages component
+import FormManagement from '../dashboards/FormManagement';
 
 const DashboardLayout: React.FC = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const DashboardLayout: React.FC = () => {
         { path: '/admin-dashboard/contactlistings', label: 'Contact-us Listing' },
         { path: '/admin-dashboard/subscriberslistings', label: 'Subscriber Listing' },
         { path: '/admin-dashboard/application-setting', label: 'Application Setting' },
+        { path: '/admin-dashboard/form-management', label: 'Form Management' },
       ]
     : isUserDashboard
     ? [
@@ -57,6 +59,8 @@ const DashboardLayout: React.FC = () => {
           return <AdminSubscriberListing />;
           case '/admin-dashboard/application-setting':
           return <ApplicationSettings />;
+        case '/admin-dashboard/form-management':
+          return <FormManagement />;
         default:
           return <div>Admin Dashboard Section Not Found</div>; // Or a 404 component
       }

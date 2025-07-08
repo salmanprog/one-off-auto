@@ -21,36 +21,39 @@ import VerifyUser from "./pages/VerifyUser";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ScrollToTop from "./components/scrolltotop/ScrollToTop";
+import { OptionsProvider } from './context/OptionsContext';
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-      <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/listings" element={<Listings />} />
-          <Route path="/sell-your-ride" element={<AuthRoute><SellYourRide /></AuthRoute>} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
-          <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/listings/:listingId" element={<ListingDetail />} />
-          <Route path="/user/verify/:code" element={<VerifyUser />} />
-          <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
-          <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <OptionsProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+        <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/listings" element={<Listings />} />
+            <Route path="/sell-your-ride" element={<AuthRoute><SellYourRide /></AuthRoute>} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
+            <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/listings/:listingId" element={<ListingDetail />} />
+            <Route path="/user/verify/:code" element={<VerifyUser />} />
+            <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
+            <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </OptionsProvider>
 );
 
 export default App;
