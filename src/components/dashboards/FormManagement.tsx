@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useOptions } from '../../context/OptionsContext';
 
 const FIELDS = [
-  { key: 'vehicle_category_id', label: 'Vehicle Type' },
+  //{ key: 'vehicle_category_id', label: 'Vehicle Type' },
   { key: 'vehicle_make', label: 'Make' },
   { key: 'vehicle_model', label: 'Model', parent: 'vehicle_make' },
   { key: 'vehicle_year', label: 'Year' },
-  { key: 'exterior_color', label: 'Exterior Color' },
-  { key: 'interior_color', label: 'Interior Color' },
+  //{ key: 'exterior_color', label: 'Exterior Color' },
+  //{ key: 'interior_color', label: 'Interior Color' },
   { key: 'suspension_type', label: 'Suspension Type' },
   { key: 'driver_type', label: 'Driver Type' },
   { key: 'motor_size_cylinders', label: 'Motor Size (Cylinders)' },
@@ -141,7 +141,7 @@ const FormManagement: React.FC = () => {
                             verticalAlign: 'middle',
                           }} />
                         )}
-                        {opt.value}
+                        {opt.title}
                       </span>
                     )}
                   </td>

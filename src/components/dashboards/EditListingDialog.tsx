@@ -160,11 +160,11 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
     const newErrors: { [key: string]: string } = {};
 
     if (!formData.vehicle_title.trim()) newErrors.vehicle_title = "Title is required.";
-    if (!formData.vehicle_make.trim()) newErrors.vehicle_make = "Make is required.";
-    if (!formData.vehicle_model.trim()) newErrors.vehicle_model = "Model is required.";
-    if (!formData.vehicle_year.trim()) newErrors.vehicle_year = "Year is required.";
-    if (!formData.vehicle_price.trim()) newErrors.vehicle_price = "Price is required.";
-    if (!formData.vehicle_mileage.trim()) newErrors.vehicle_mileage = "Mileage is required.";
+    if (!formData.vehicle_make) newErrors.vehicle_make = "Make is required.";
+    if (!formData.vehicle_model) newErrors.vehicle_model = "Model is required.";
+    if (!formData.vehicle_year) newErrors.vehicle_year = "Year is required.";
+    if (!formData.vehicle_price) newErrors.vehicle_price = "Price is required.";
+    if (!formData.vehicle_mileage) newErrors.vehicle_mileage = "Mileage is required.";
     if (!formData.vehicle_descripition.trim()) newErrors.vehicle_descripition = "Description is required.";
 
     setErrors(newErrors);
@@ -186,6 +186,46 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
       fd.append("vehicle_mileage", formData.vehicle_mileage);
       fd.append("vehicle_descripition", formData.vehicle_descripition);
       fd.append("status", formData.status);
+      fd.append("vehicle_category_id",formData.vehicle_category_id);
+      fd.append("exterior_color",formData.exterior_color);
+      fd.append("interior_color",formData.interior_color);
+      fd.append("suspension_size",formData.suspension_size);
+      fd.append("suspension_type",formData.suspension_type);
+      fd.append("wheel_width",formData.wheel_width);
+      fd.append("wheel_diameter",formData.wheel_diameter);
+      fd.append("chassis_reinforcement",formData.chassis_reinforcement);
+      fd.append("chassis_reinforcement_text",formData.chassis_reinforcement_text);
+      fd.append("audio_upgrade",formData.audio_upgrade);
+      fd.append("audio_upgrade_text",formData.audio_upgrade_text);
+      fd.append("cosmetic_upgrade",formData.cosmetic_upgrade);
+      fd.append("cosmetic_upgrade_text",formData.cosmetic_upgrade_text);
+      fd.append("interior_upgrade",formData.interior_upgrade);
+      fd.append("interior_upgrade_text",formData.interior_upgrade_text);
+      fd.append("exterior_upgrade",formData.exterior_upgrade);
+      fd.append("exterior_upgrade_text",formData.exterior_upgrade_text);
+      fd.append("motor_upgrade",formData.motor_upgrade);
+      fd.append("motor_upgrade_text",formData.motor_upgrade_text);
+      fd.append("driver_type",formData.driver_type);
+      fd.append("motor_size_cylinders",formData.motor_size_cylinders);
+      fd.append("transmition_types",formData.transmition_types);
+      fd.append("fuel_types",formData.fuel_types);
+      fd.append("seller_type",formData.seller_type);
+      fd.append("vehicle_status",formData.vehicle_status);
+      fd.append("vehicle_primarily_used",formData.vehicle_primarily_used);
+      fd.append("hp_output_rang",formData.hp_output_rang);
+      fd.append("vehicle_use",formData.vehicle_use);
+      fd.append("number_of_doors",formData.number_of_doors);
+      fd.append("vehicle_stock_parts",formData.vehicle_stock_parts);
+      fd.append("documentation_type",formData.documentation_type);
+      fd.append("vehicle_modification",formData.vehicle_modification);
+      fd.append("vehicle_owner_name",formData.vehicle_owner_name);
+      fd.append("vehicle_owner_address",formData.vehicle_owner_address);
+      fd.append("vehicle_owner_email",formData.vehicle_owner_email);
+      fd.append("vehicle_owner_phone",formData.vehicle_owner_phone);
+      fd.append("latitude",formData.latitude);
+      fd.append("longitude",formData.longitude);
+      fd.append("country",formData.country);
+      fd.append("postal_code",formData.postal_code);
 
       if (deletedImageIds.length > 0) {
         fd.append("deleted_image_ids", JSON.stringify(deletedImageIds));
@@ -213,7 +253,7 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
   };
 
   if (!listing) return null;
-
+  console.log('listing...........................',listing)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">

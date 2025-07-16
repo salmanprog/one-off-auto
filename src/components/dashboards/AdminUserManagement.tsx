@@ -146,7 +146,7 @@ const AdminUserManagement: React.FC = () => {
                   <TableCell>{user.status}</TableCell>
                   <TableCell>{user.created_at}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(user.id)}>View</Button>
+                    <Button variant="ghost"   size="sm" className="mr-2" onClick={() => handleView(user.id)}>View</Button>
                     {user.status === 'Active' ? (
                       <Button variant="ghost" size="sm" onClick={() => handleDeactivateClick(user.slug)}>Deactivate</Button>
                     ) : (

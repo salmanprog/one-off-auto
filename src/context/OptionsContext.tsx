@@ -1,6 +1,38 @@
 import React, { createContext, useContext, useState } from 'react';
-
+import { useFetch } from "../hooks/request";
 // Initial mock data (same as FormManagement)
+const useVehicleOptions = () => {
+  const { data: vehicle_make } = useFetch("get_vehicle_make_list", "mount", '?limit=5000');
+  const { data: vehicle_model } = useFetch("get_vehicle_model_list", "mount", '?limit=5000');
+  const { data: vehicle_year } = useFetch("get_vehicle_year_list", "mount", '?limit=5000');
+  const { data: driver_type } = useFetch("vehicle_driver_type", "mount", '?limit=5000');
+  const { data: motor_size_cylinders } = useFetch("vehicle_motor_size", "mount", '?limit=5000');
+  const { data: transmition_types } = useFetch("vehicle_transmission_type", "mount", '?limit=5000');
+  const { data: fuel_types } = useFetch("vehicle_fuel_type", "mount", '?limit=5000');
+  const { data: seller_type } = useFetch("vehicle_seller_type", "mount", '?limit=5000');
+  const { data: vehicle_status } = useFetch("vehicle_statues", "mount", '?limit=5000');
+  const { data: suspension_type } = useFetch("vehicle_suspension_type", "mount", '?limit=5000');
+  const { data: hp_output_rang } = useFetch("vehicle_hp_output", "mount", '?limit=5000');
+  const { data: vehicle_use } = useFetch("vehicle_uses", "mount", '?limit=5000');
+  const { data: documentation_type } = useFetch("vehicle_documentation_type", "mount", '?limit=5000');
+
+  return {
+    vehicle_make,
+    vehicle_model,
+    vehicle_year,
+    driver_type,
+    motor_size_cylinders,
+    transmition_types,
+    fuel_types,
+    seller_type,
+    vehicle_status,
+    suspension_type,
+    hp_output_rang,
+    vehicle_use,
+    documentation_type,
+  };
+};
+
 const initialOptions = {
   vehicle_category_id: [
     { id: 1, value: 'Sedan' },
@@ -84,7 +116,9 @@ let nextId = 1000;
 const OptionsContext = createContext<any>(null);
 
 export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [options, setOptions] = useState(initialOptions);
+  const vehicleOptions = useVehicleOptions();
+console.log('check_log',vehicleOptions.vehicle_make);
+  const [options, setOptions] = useState(vehicleOptions);
 
   // CRUD methods
   const addOption = (field: string, value: string, parentId?: number) => {
@@ -97,6 +131,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({ child
         ]
       }));
     } else {
+      console.log('field................',field+' value............. '+value+' parentid........'+parentId)
       setOptions(prev => ({
         ...prev,
         [field]: [
