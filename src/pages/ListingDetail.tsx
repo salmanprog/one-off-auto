@@ -72,7 +72,7 @@ interface DetailedListing {
   documentation_type_title?: string;
 }
 
-// Placeholder data - replace with actual data fetching logic
+// Placeholder data - replace with actual data fetching logics
 
 
 // Placeholder for related listings - replace with actual fetching logic
