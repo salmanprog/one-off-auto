@@ -20,6 +20,7 @@ import Helper from "../../helpers";
    const isAuthenticated = !!localStorage.getItem("session");
    const authUser = Helper.getStorageData("session");
    let dashboardUrl = '';
+   let loginName = '';
    let user_group = 0;
    useEffect(() => {
     if (socket && isAuthenticated) {
@@ -48,6 +49,7 @@ import Helper from "../../helpers";
     const { data } = useFetch("get_user_detail");
     const { data:chat_messages } = useFetch("chat_unread_messages");
     dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+    loginName = data?.info.name
     user_group = data?.user_group_id
     useEffect(() => {
       if (chat_messages?.total_messages !== undefined) {
@@ -136,8 +138,9 @@ import Helper from "../../helpers";
             <div className="hidden md:flex items-center space-x-3 ml-4">
               {isAuthenticated ? (
                 <>
+                   
                   <Link to={`/${dashboardUrl}`} className="btn-secondary">
-                    Dashboard
+                  Welcome, {`${loginName}`}
                   </Link>
                   <button
                     onClick={handleLogout}

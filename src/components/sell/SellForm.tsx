@@ -48,6 +48,8 @@
       setImages(images.filter((_, index) => index !== indexToRemove));
     };
 
+    
+
     const nextStep = async () => {
       const requiredFields = [
         "vehicle_category_id", "vehicle_make", "vehicle_model", "vehicle_year",
@@ -302,6 +304,7 @@
                     min={-8}
                     max={24}
                     step={0.5}
+                    defaultValue={-8}
                     {...register("suspension_size", { required: true })}
                     className="w-full"
                     id="suspension_size"
@@ -424,6 +427,7 @@
                       min="5"
                       max="20"
                       step="1"
+                      defaultValue={5}
                       {...register("wheel_width", { required: true })}
                       className="w-full"
                       id="wheel_width"
@@ -442,6 +446,7 @@
                       min="12"
                       max="30"
                       step="1"
+                      defaultValue={12}
                       {...register("wheel_diameter", { required: true })}
                       className="w-full"
                       id="wheel_diameter"

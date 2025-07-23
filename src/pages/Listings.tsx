@@ -41,7 +41,11 @@ interface FilterState {
   audio_upgrade: string;
   audio_upgrade_text: string;
   wheel_width: string;
+  wheelwidthMin:string;
+  wheelwidthMax:string;
   wheel_diameter: string;
+  wheelDiameterMin:string;
+  wheelDiameterMax:string;
   hp_output_rang: string;
   hp_output_rang_title: string;
   cosmetic_upgrade: string;
@@ -205,7 +209,11 @@ const filterNearbyListings = async (listings, radiusKm) => {
     audio_upgrade: "",
     audio_upgrade_text: "",
     wheel_width: "",
+    wheelwidthMin: "",
+    wheelwidthMax:"",
     wheel_diameter: "",
+    wheelDiameterMin:"",
+    wheelDiameterMax:"",
     hp_output_rang: "",
     hp_output_rang_title: "",
     cosmetic_upgrade: "",
@@ -262,7 +270,11 @@ const filterNearbyListings = async (listings, radiusKm) => {
       audio_upgrade: params.get("audio_upgrade") || "",
       audio_upgrade_text: params.get("audio_upgrade_text") || "",
       wheel_width: params.get("wheel_width") || "",
+      wheelwidthMin: params.get("wheelwidthMin") || "",
+      wheelwidthMax: params.get("wheelwidthMax") || "",
       wheel_diameter: params.get("wheel_diameter") || "",
+      wheelDiameterMin:params.get("wheelDiameterMin") || "",
+      wheelDiameterMax:params.get("wheelDiameterMax") || "",
       hp_output_rang: params.get("hp_output_rang") || "",
       hp_output_rang_title: params.get("hp_output_rang_title") || "",
       cosmetic_upgrade: params.get("cosmetic_upgrade") || "",
@@ -329,7 +341,11 @@ const filterNearbyListings = async (listings, radiusKm) => {
       audio_upgrade: "",
       audio_upgrade_text: "",
       wheel_width: "",
+      wheelwidthMin:"",
+      wheelwidthMax:"",
       wheel_diameter: "",
+      wheelDiameterMin:"",
+      wheelDiameterMax:"",
       hp_output_rang: "",
       hp_output_rang_title: "",
       cosmetic_upgrade: "",
@@ -400,6 +416,37 @@ const filterNearbyListings = async (listings, radiusKm) => {
         (listing) => listing.mileage <= parseInt(filters.mileage)
       );
     }
+    
+    if (filters.chassis_reinforcement) {
+      filtered = filtered.filter(
+        (listing) => listing.audio_upgrade == filters.chassis_reinforcement
+      );
+    }
+    if (filters.audio_upgrade) {
+      filtered = filtered.filter(
+        (listing) => listing.audio_upgrade == filters.audio_upgrade
+      );
+    }
+    if (filters.cosmetic_upgrade) {
+      filtered = filtered.filter(
+        (listing) => listing.cosmetic_upgrade == filters.cosmetic_upgrade
+      );
+    }
+    if (filters.interior_upgrade) {
+      filtered = filtered.filter(
+        (listing) => listing.interior_upgrade == filters.interior_upgrade
+      );
+    }
+    if (filters.exterior_upgrade) {
+      filtered = filtered.filter(
+        (listing) => listing.exterior_upgrade == filters.exterior_upgrade
+      );
+    }
+    if (filters.motor_upgrade) {
+      filtered = filtered.filter(
+        (listing) => listing.motor_upgrade == filters.motor_upgrade
+      );
+    }
 
     // Mods
     const modFilter = (modType: string[], category: string[]) =>
@@ -466,23 +513,54 @@ const filterNearbyListings = async (listings, radiusKm) => {
       );
     }
 
-    // Wheel Width Filter
-    if (filters.wheel_width) {
-      const wheelWidth = parseFloat(filters.wheel_width);
+    // Wheel Width Filter wheelwidthMin
+    if (filters.wheelwidthMin) {
+      const wheelwidthMin = parseFloat(filters.wheelwidthMin);
       filtered = filtered.filter((listing) => {
         const listingWheelWidth = parseFloat(listing.wheel_width);
-        return !isNaN(listingWheelWidth) && listingWheelWidth >= wheelWidth;
+        return !isNaN(listingWheelWidth) && listingWheelWidth >= wheelwidthMin;
       });
     }
 
-    // Wheel Diameter Filter
-    if (filters.wheel_diameter) {
-      const wheelDiameter = parseFloat(filters.wheel_diameter);
+    if (filters.wheelwidthMax) {
+      const wheelwidthMax = parseFloat(filters.wheelwidthMax);
       filtered = filtered.filter((listing) => {
-        const listingWheelDiameter = parseFloat(listing.wheel_diameter);
-        return !isNaN(listingWheelDiameter) && listingWheelDiameter >= wheelDiameter;
+        const listingWheelWidth = parseFloat(listing.wheel_width);
+        return !isNaN(listingWheelWidth) && listingWheelWidth <= wheelwidthMax;
       });
     }
+
+    // if (filters.wheel_width) {
+    //   const wheelWidth = parseFloat(filters.wheel_width);
+    //   filtered = filtered.filter((listing) => {
+    //     const listingWheelWidth = parseFloat(listing.wheel_width);
+    //     return !isNaN(listingWheelWidth) && listingWheelWidth >= wheelWidth;
+    //   });
+    // }
+
+    // Wheel Diameter Filter
+    if (filters.wheelDiameterMin) {
+      const wheelDiameterMin = parseFloat(filters.wheelDiameterMin);
+      filtered = filtered.filter((listing) => {
+        const listingWheelWidth = parseFloat(listing.wheel_diameter);
+        return !isNaN(listingWheelWidth) && listingWheelWidth >= wheelDiameterMin;
+      });
+    }
+
+    if (filters.wheelDiameterMax) {
+      const wheelDiameterMax = parseFloat(filters.wheelDiameterMax);
+      filtered = filtered.filter((listing) => {
+        const listingWheelWidth = parseFloat(listing.wheel_diameter);
+        return !isNaN(listingWheelWidth) && listingWheelWidth <= wheelDiameterMax;
+      });
+    }
+    // if (filters.wheel_diameter) {
+    //   const wheelDiameter = parseFloat(filters.wheel_diameter);
+    //   filtered = filtered.filter((listing) => {
+    //     const listingWheelDiameter = parseFloat(listing.wheel_diameter);
+    //     return !isNaN(listingWheelDiameter) && listingWheelDiameter >= wheelDiameter;
+    //   });
+    // }
 
     // HP Output Range Filter (Dropdown)
     if (filters.hp_output_rang) {
@@ -495,6 +573,20 @@ const filterNearbyListings = async (listings, radiusKm) => {
     if (filters.vehicle_use) {
       filtered = filtered.filter(
         (listing) => listing.vehicle_use == filters.vehicle_use
+      );
+    }
+
+    // Vehicle exterior_color
+    if (filters.exterior_color) {
+      filtered = filtered.filter(
+        (listing) => listing.exterior_color == filters.exterior_color
+      );
+    }
+
+    // Vehicle interior_color
+    if (filters.interior_color) {
+      filtered = filtered.filter(
+        (listing) => listing.interior_color == filters.interior_color
       );
     }
     return filtered;

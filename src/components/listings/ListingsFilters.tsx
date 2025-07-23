@@ -15,7 +15,8 @@ interface FilterState {
   suspensionMods: string[];
   bodyMods: string[];
   wheelsMods: string[];
-
+  exterior_color:string;
+  interior_color:string;
   driver_type: string;
   motor_size_cylinders: string;
   transmition_types: string;
@@ -25,10 +26,20 @@ interface FilterState {
   suspension_size: string;
   suspension_type: string;
   wheel_width: string;
+  wheelwidthMin:string;
+  wheelwidthMax:string;
+  wheelDiameterMin:string;
+  wheelDiameterMax:string;
   wheel_diameter: string;
   hp_output_rang: string;
   vehicle_use: string;
   nearbyRadius: string;
+  chassis_reinforcement:string;
+  audio_upgrade:string;
+  cosmetic_upgrade:string;
+  interior_upgrade:string;
+  exterior_upgrade:string;
+  motor_upgrade:string;
 }
 
 interface ListingsFiltersProps {
@@ -67,7 +78,6 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
   // Function to apply filters to the listings data
   const applyFilters = () => {
     let filteredListings = [...listings]; // Start with all listings
-  
     // Search Term Filter
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
@@ -159,6 +169,20 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
     );
   }
 
+  // Vehicle exterior_color
+  if (filters.exterior_color) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.exterior_color === filters.exterior_color
+    );
+  }
+
+  // Vehicle interior_color
+  if (filters.interior_color) {
+    filteredListings = filteredListings.filter(
+      (listing) => listing.interior_color === filters.interior_color
+    );
+  }
+
   if (filters.suspension_size) {
     const suspensionSize = parseFloat(filters.suspension_size);
     filteredListings = filteredListings.filter((listing) => {
@@ -166,6 +190,21 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
       return !isNaN(listingSuspension) && listingSuspension >= suspensionSize;
     });
   }
+
+  if (filters.wheelwidthMin) {
+    const wheelwidthMin = parseInt(filters.wheelwidthMin, 10); // Convert to number
+    filteredListings = filteredListings.filter(
+      (listing) => parseInt(listing.price.replace(/[^0-9]/g, "")) >= wheelwidthMin // Remove non-numeric characters from listing price
+    );
+  }
+  if (filters.wheelwidthMax) {
+    const wheelwidthMax = parseInt(filters.wheelwidthMax, 10); // Convert to number
+    filteredListings = filteredListings.filter(
+      (listing) => parseInt(listing.price.replace(/[^0-9]/g, "")) <= wheelwidthMax // Remove non-numeric characters from listing price
+    );
+  }
+
+  
   
   if (filters.nearbyMe && navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -259,7 +298,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               min="0"
               max="200"
               step="1"
-              value={filters.nearbyRadius || ""}
+              value={filters.nearbyRadius || 0}
               onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
               className="w-full"
             />
@@ -349,6 +388,31 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                   />
                 </div>
               </div>
+
+              {/* Color Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Color</label>
+                <div className="flex items-center space-x-2">
+                  <span>Exterior</span>
+                    <input
+                      name="exterior_color"
+                      id="exterior_color"
+                      type="color"
+                      className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                      value={filters.exterior_color}
+                      onChange={(e) => onFilterChange({ exterior_color: e.target.value })}
+                    />
+                  <span>Interior</span>
+                    <input
+                        name="interior_color"
+                        id="interior_color"
+                        type="color"
+                        className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                        value={filters.interior_color}
+                        onChange={(e) => onFilterChange({ interior_color: e.target.value })}
+                      />
+                </div>
+              </div>
             
             {/* Drive Type Filter */}
               <div>
@@ -433,7 +497,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
 
               {/* Vehicle Status Filter */}
               <div>
-                <label className="block text-sm font-medium mb-1">Vehicle Status</label>
+                <label className="block text-sm font-medium mb-1">Vehicle Title Status</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.vehicle_status}
@@ -446,6 +510,172 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                     ))}
                 </select>
               </div>
+
+              {/* Mileage Filter (Single input) */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Mileage</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={filters.mileage}
+                  onChange={(e) => onFilterChange({ mileage: e.target.value })}
+                >
+                  <option value="">Select Mileage</option>
+                  <option value="">Any</option>
+                  <option value="15000">15,000 or less</option>
+                  <option value="30000">30,000 or less</option>
+                  <option value="50000">50,000 or less</option>
+                  <option value="75000">75,000 or less</option>
+                  <option value="100000">100,000 or less</option>
+                  <option value="100001">100,001 or more</option>
+                </select>
+              </div>
+            {/* Chassis Reinforcement Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Chassis Reinforcement</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="chassis_reinforcement"
+                      id="chassis_reinforcement"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ chassis_reinforcement: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="chassis_reinforcement"
+                        id="chassis_reinforcement"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ chassis_reinforcement: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>        
+            {/* Audio Upgrades Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Audio Upgrades</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="audio_upgrade"
+                      id="audio_upgrade"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ audio_upgrade: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="audio_upgrade"
+                        id="audio_upgrade"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ audio_upgrade: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>
+            {/* Exterior Cosmetic Upgrades Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Exterior Cosmetic Upgrades</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="cosmetic_upgrade"
+                      id="cosmetic_upgrade"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ cosmetic_upgrade: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="cosmetic_upgrade"
+                        id="cosmetic_upgrade"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ cosmetic_upgrade: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>  
+            {/* Interior Upgrades Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Interior Upgrades</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="interior_upgrade"
+                      id="interior_upgrade"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ interior_upgrade: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="interior_upgrade"
+                        id="interior_upgrade"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ interior_upgrade: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>        
+            {/* Exterior (body) Upgrades Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Exterior (body) Upgrades</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="exterior_upgrade"
+                      id="exterior_upgrade"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ exterior_upgrade: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="exterior_upgrade"
+                        id="exterior_upgrade"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ exterior_upgrade: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>        
+            {/* Motor Upgrades Filter */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Motor Upgrades</label>
+                <div className="flex items-center space-x-2">
+                    <input
+                      name="motor_upgrade"
+                      id="motor_upgrade"
+                      type="radio"
+                      className="mr-2"
+                      value="1"
+                      onChange={(e) => onFilterChange({ motor_upgrade: e.target.value })}
+                    />
+                  <span>Yes</span>
+                    <input
+                        name="motor_upgrade"
+                        id="motor_upgrade"
+                        type="radio"
+                        className="mr-2"
+                        value="0"
+                        onChange={(e) => onFilterChange({ motor_upgrade: e.target.value })}
+                      />
+                      <span>No</span>
+                </div>
+              </div>        
+
+
+
             </div>
           )}
         </div>
@@ -462,13 +692,13 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
             
             {/* Suspension Size Filter */}
             <div>
-              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} inches)</label>
+              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} Stock)</label>
               <input
                 type="range"
                 min={0}
                 max={24}
                 step={0.5}
-                value={filters.suspension_size}
+                value={filters.suspension_size || 0}
                 onChange={(e) => onFilterChange({ suspension_size: e.target.value })}
                 className="w-full"
               />
@@ -490,7 +720,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               </select>
             </div>
             {/* Wheel Width Range Slider */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium mb-1">Wheel Width ({filters.wheel_width} inches)</label>
               <input
                 type="range"
@@ -501,10 +731,72 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 onChange={(e) => onFilterChange({ wheel_width: e.target.value })}
                 className="w-full"
               />
-            </div>
+            </div> */}
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Wheel Width</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelwidthMin}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelwidthMin: e.target.value });
+                      }
+                    }}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelwidthMax}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelwidthMax: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
 
             {/* Wheel Diameter Range Slider */}
             <div>
+                <label className="block text-sm font-medium mb-1">Wheel Diameter</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelDiameterMin}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelDiameterMin: e.target.value });
+                      }
+                    }}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelDiameterMax}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelDiameterMax: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            {/* <div>
               <label className="block text-sm font-medium mb-1">Wheel Diameter ({filters.wheel_diameter} inches)</label>
               <input
                 type="range"
@@ -515,7 +807,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 onChange={(e) => onFilterChange({ wheel_diameter: e.target.value })}
                 className="w-full"
               />
-            </div>
+            </div> */}
             {/* HP Output Range Dropdown */}
             <div>
               <label className="block text-sm font-medium mb-1">HP Output Range</label>
