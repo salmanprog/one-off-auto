@@ -39,6 +39,11 @@ export default class extends BaseSeeder {
         slug: 'drop-kit',
         created_at: new Date(),
       },
+      {
+        title: 'Lift Kit',
+        slug: 'lift-kit',
+        created_at: new Date(),
+      },
     ])
   }
 }
