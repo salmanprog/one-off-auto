@@ -1,7 +1,7 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, CircleDollarSign, CheckCircle2 } from "lucide-react";
+import { MapPin, CircleDollarSign, CheckCircle2, Heart } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 interface Listing {
@@ -20,10 +20,15 @@ interface ListingCardProps {
 
 const ListingCard = ({ listing }: ListingCardProps) => {
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(false);
   const handleClick = () => {
     navigate(`/listings/${listing.slug}`);
     // This will trigger a page reload after navigating
     window.location.reload();
+  };
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsFavorite((prev) => !prev);
   };
   return (
     <div onClick={handleClick} className="block">
@@ -37,6 +42,15 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           <div className="absolute top-0 right-0 bg-oneoffautos-red text-white px-3 py-1 m-3 rounded-md font-semibold">
             <span>${listing.price.toLocaleString()}</span>
           </div>
+          <button
+            onClick={toggleFavorite}
+            className="absolute top-2 left-2 bg-white p-1 rounded-full shadow hover:scale-105 transition"
+          >
+            <Heart
+              size={20}
+              className={isFavorite ? "text-red-500 fill-red-500" : "text-gray-400"}
+            />
+          </button>
         </div>
 
         <div className="p-4">

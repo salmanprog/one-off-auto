@@ -31,6 +31,7 @@ interface DetailedListing {
   vehicle_year?: string | number;
   vehicle_primarily_used?: string;
   vehicle_stock_parts?: string;
+  vehicle_stock_parts_text?: string;
   user_id?: string;
   vehicle_modification?: string[];
   vehicle_owner_name?: string;
@@ -231,6 +232,7 @@ const ListingDetail = () => {
           vehicle_year_title: data.vehicle_year_obj.title,
           vehicle_primarily_used: data.vehicle_primarily_used,
           vehicle_stock_parts: data.vehicle_stock_parts,
+          vehicle_stock_parts_text: data.vehicle_stock_parts_text,
           location: data.vehicle_owner_address,
           mileage: data.vehicle_mileage,
           image: data.image_url,
@@ -677,6 +679,7 @@ const ListingDetail = () => {
                         vehicle_year: String(relatedListing.vehicle_year ?? ''),
                         vehicle_primarily_used: String(relatedListing.vehicle_primarily_used ?? ''),
                         vehicle_stock_parts: String(relatedListing.vehicle_stock_parts ?? ''),
+                        //vehicle_stock_parts_text: String(relatedListing.vehicle_stock_parts_text ?? ''),
                         location: String(relatedListing.vehicle_owner_address ?? ''),
                         mileage: Number(relatedListing.vehicle_mileage ?? 0),
                         vehicle_modification: relatedListing.vehicle_modification as string[] ?? [],

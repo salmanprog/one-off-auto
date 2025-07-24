@@ -206,9 +206,9 @@ const UserListings: React.FC = () => {
                    <TableCell className="font-medium">{listing.id}</TableCell>
                    <TableCell>{listing.vehicle_title}</TableCell>
                    <TableCell>{listing.vehicle_category.title}</TableCell>
-                   <TableCell>{listing.vehicle_make}</TableCell>
-                   <TableCell>{listing.vehicle_model}</TableCell>
-                   <TableCell>{listing.vehicle_year}</TableCell>
+                   <TableCell>{listing.vehicle_make_obj.title}</TableCell>
+                   <TableCell>{listing.vehicle_model_obj.title}</TableCell>
+                   <TableCell>{listing.vehicle_year_obj.title}</TableCell>
                    <TableCell>{listing.vehicle_price}</TableCell>
                    <TableCell>{listing.status_text}</TableCell>
                    <TableCell>{listing.created_at}</TableCell>

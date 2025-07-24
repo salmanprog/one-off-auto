@@ -11,6 +11,8 @@ interface FilterState {
   make: string;
   model: string;
   year: string;
+  yearMin: string;
+  yearMax: string;
   priceMin: string;
   priceMax: string;
   mileage: string;
@@ -61,6 +63,7 @@ interface FilterState {
   documentation_type: string;
   documentation_type_title: string; 
   nearbyRadius: string;
+  postal_code: string;
 }
 
 const Listings = () => {
@@ -124,6 +127,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
       vehicle_make: item.vehicle_make,
       model: item.vehicle_model,
       year: item.vehicle_year,
+      year_title: item.vehicle_year_obj.title,
       vehicle_primarily_used: item.vehicle_primarily_used,
       vehicle_stock_parts: item.vehicle_stock_parts,
       location: item.vehicle_owner_address,
@@ -168,6 +172,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
       documentation_type: item.documentation_type,
       latitude: item.latitude,
       longitude: item.longitude,
+      postal_code: item.postal_code,
       documentation_type_title: item.documentation_type_obj.title,
       image: item.image_url, // Optional chaining + fallback
       mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
@@ -179,6 +184,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
     make: "",
     model: "",
     year: "",
+    yearMin: "",
+    yearMax: "",
     priceMin: "",
     priceMax: "",
     mileage: "",
@@ -229,6 +236,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
     documentation_type: "",
     documentation_type_title: "",
     nearbyRadius: "",
+    postal_code: "",
   });
   
 
@@ -240,6 +248,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
       make: params.get("make") || "",
       model: params.get("model") || "",
       year: params.get("year") || "",
+      yearMin:params.get("yearMin") || "",
+      yearMax:params.get("yearMax") || "",
       priceMin: params.get("priceMin") || "",
       priceMax: params.get("priceMax") || "",
       mileage: params.get("mileage") || "",
@@ -290,6 +300,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
       documentation_type: params.get("documentation_type") || "",
       documentation_type_title: params.get("documentation_type_title") || "",
       nearbyRadius: params.get("nearbyRadius") || "",
+      postal_code: params.get("postal_code") || "",
     };
     setFilters(queryFilters);
   }, [search]);
@@ -311,6 +322,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
       make: "",
       model: "",
       year: "",
+      yearMin: "",
+      yearMax: "",
       priceMin: "",
       priceMax: "",
       mileage: "",
@@ -361,6 +374,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
       documentation_type: "",
       documentation_type_title: "",
       nearbyRadius: "",
+      postal_code: "",
     });
 
     // Reset the query params in the URL
@@ -399,7 +413,16 @@ const filterNearbyListings = async (listings, radiusKm) => {
         (listing) => parseInt(listing.year) == parseInt(filters.year)
       );
     }
-
+    if (filters.yearMin) {
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.year_title) >= parseInt(filters.yearMin)
+      );
+    }
+    if (filters.yearMax) {
+      filtered = filtered.filter(
+        (listing) => parseInt(listing.year_title) <= parseInt(filters.yearMax)
+      );
+    }
     if (filters.priceMin) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.price) >= parseInt(filters.priceMin)
@@ -587,6 +610,13 @@ const filterNearbyListings = async (listings, radiusKm) => {
     if (filters.interior_color) {
       filtered = filtered.filter(
         (listing) => listing.interior_color == filters.interior_color
+      );
+    }
+
+    // Vehicle postal_code
+    if (filters.postal_code) {
+      filtered = filtered.filter(
+        (listing) => listing.postal_code == filters.postal_code
       );
     }
     return filtered;

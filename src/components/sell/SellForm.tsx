@@ -37,6 +37,7 @@
     const interiorUpgrade = watch("interior_upgrade");
     const exteriorUpgrade = watch("exterior_upgrade");
     const motorUpgrade = watch("motor_upgrade");
+    const vehicleStockUpgrade = watch("vehicle_stock_parts");
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
         const selectedFiles = Array.from(e.target.files);
@@ -268,11 +269,11 @@
                     <input
                       name="exterior_color"
                       id="exterior_color"
-                      type="color"
+                      type="text"
                       {...register("exterior_color", { required: true })}
-                      className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                      className="w-full p-3 border border-gray-300 rounded-md"
                     />
-                    <span className="text-sm">{watch("exterior_color") || "#000000"}</span>
+                    {/* <span className="text-sm">{watch("exterior_color") || "#000000"}</span> */}
                   </div>
                   {errors.exterior_color && (
                     <p className="text-red-500 text-sm">Exterior Color Required</p>
@@ -284,11 +285,11 @@
                     <input
                       name="interior_color"
                       id="interior_color"
-                      type="color"
+                      type="text"
                       {...register("interior_color", { required: true })}
-                      className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                      className="w-full p-3 border border-gray-300 rounded-md"
                     />
-                    <span className="text-sm">{watch("interior_color") || "#000000"}</span>
+                    {/* <span className="text-sm">{watch("interior_color") || "#000000"}</span> */}
                   </div>
                   {errors.interior_color && (
                     <p className="text-red-500 text-sm">Interior Color Required</p>
@@ -741,7 +742,7 @@
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
-                <div>
+                  {/* <div>
                     <label className="block text-sm font-medium mb-1">What the vehicle is primarily used for?</label>
                     <select
                       name="vehicle_primarily_used"
@@ -757,6 +758,24 @@
                     </select>
                     {errors.vehicle_primarily_used && 
                       <p className="text-red-500 text-sm">Vehicle Primarily Use Required</p>
+                    }
+                  </div> */}
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Documentation</label>
+                    <select
+                      name="documentation_type"
+                      id="documentation_type"
+                      {...register("documentation_type", { required: true })}
+                      className="w-full p-3 border border-gray-300 rounded-md"
+                    >
+                      <option value="">Select Documentation</option>
+                      {!_.isEmpty(vehicle_documentation_type) &&
+                        vehicle_documentation_type.map((item: any) => (
+                          <option key={item.id} value={item.id}>{item.title}</option>
+                        ))}
+                    </select>
+                    {errors.documentation_type && 
+                      <p className="text-red-500 text-sm">Vehicle Documentation Required</p>
                     }
                   </div>
                   <div>
@@ -826,7 +845,6 @@
                         <input
                           type="radio"
                           value="yes"
-                          defaultChecked
                           {...register("vehicle_stock_parts", { required: true })}
                           className="mr-2"
                         />
@@ -836,6 +854,7 @@
                         <input
                           type="radio"
                           value="no"
+                          defaultChecked
                           {...register("vehicle_stock_parts", { required: true })}
                           className="mr-2"
                         />
@@ -845,25 +864,24 @@
                     {errors.vehicle_stock_parts && (
                       <p className="text-red-500 text-sm">Please select Yes or No</p>
                     )}
+                    {vehicleStockUpgrade === "yes" && (
+                      <div className="mt-2">
+                        <label className="block text-sm font-medium mb-1">Note</label>
+                        <input
+                          name="vehicle_stock_parts_text"
+                          id="vehicle_stock_parts_text"
+                          type="text"
+                          placeholder="Add the Note "
+                          {...register("exterior_upgrade_text", { required: true })}
+                          className="w-full p-3 border border-gray-300 rounded-md"
+                        />
+                        {errors.vehicle_stock_parts_text && (
+                          <p className="text-red-500 text-sm">Details required</p>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Documentation</label>
-                    <select
-                      name="documentation_type"
-                      id="documentation_type"
-                      {...register("documentation_type", { required: true })}
-                      className="w-full p-3 border border-gray-300 rounded-md"
-                    >
-                      <option value="">Select Documentation</option>
-                      {!_.isEmpty(vehicle_documentation_type) &&
-                        vehicle_documentation_type.map((item: any) => (
-                          <option key={item.id} value={item.id}>{item.title}</option>
-                        ))}
-                    </select>
-                    {errors.documentation_type && 
-                      <p className="text-red-500 text-sm">Vehicle Documentation Required</p>
-                    }
-                  </div>
+                  
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Listing Title</label>

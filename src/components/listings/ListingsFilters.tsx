@@ -8,6 +8,8 @@ interface FilterState {
   make: string;
   model: string;
   year: string;
+  yearMin: string;
+  yearMax: string;
   priceMin: string;
   priceMax: string;
   mileage: string;
@@ -34,6 +36,7 @@ interface FilterState {
   hp_output_rang: string;
   vehicle_use: string;
   nearbyRadius: string;
+  postal_code: string;
   chassis_reinforcement:string;
   audio_upgrade:string;
   cosmetic_upgrade:string;
@@ -290,19 +293,34 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
             <div className="space-y-4 mt-3">
               {/* Nearby Me Filter */}
             <div>
-            <label className="block text-sm font-medium mb-1">
-              Search Nearby Location ({filters.nearbyRadius || 0} miles)
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="200"
-              step="1"
-              value={filters.nearbyRadius || 0}
-              onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
-              className="w-full"
-            />
-          </div>
+              <label className="block text-sm font-medium mb-1">
+                Search Nearby Location ({filters.nearbyRadius || 0} miles)
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="200"
+                step="1"
+                value={filters.nearbyRadius || 0}
+                onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
+                className="w-full"
+              />
+            </div>
+            {/* Zipcode Me Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                ZipCode
+              </label>
+              <input
+                    type="text"
+                    placeholder="Zipcode"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.postal_code}
+                    onChange={(e) => {
+                        onFilterChange({ postal_code: e.target.value });
+                    }}
+                  />
+            </div>
               {/* Make Filter */}
               <div>
                 <label className="block text-sm font-medium mb-1">Make</label>
@@ -342,11 +360,38 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               {/* Year Filter (Single input) */}
               <div>
                 <label className="block text-sm font-medium mb-1">Year</label>
-                <select
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.yearMin}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ yearMin: e.target.value });
+                      }
+                    }}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.yearMax}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ yearMax: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+                {/* <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.year}
                   onChange={(e) => onFilterChange({ year: e.target.value })}
-                >
+                  >
                   <option value="">Select Year</option>
                   {vehicleYear &&
                     vehicleYear.map((year: { id: string; title: string }) => (
@@ -354,7 +399,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                         {year.title}
                       </option>
                     ))}
-                </select>
+                </select> */}
               </div>
 
               {/* Price Range Filter */}
@@ -393,21 +438,22 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               <div>
                 <label className="block text-sm font-medium mb-1">Color</label>
                 <div className="flex items-center space-x-2">
-                  <span>Exterior</span>
                     <input
                       name="exterior_color"
                       id="exterior_color"
-                      type="color"
-                      className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                      type="text"
+                      placeholder="Exterior"
+                      className="w-full p-2 border border-gray-300 rounded-md"
                       value={filters.exterior_color}
                       onChange={(e) => onFilterChange({ exterior_color: e.target.value })}
                     />
-                  <span>Interior</span>
+                  <span>-</span>
                     <input
                         name="interior_color"
                         id="interior_color"
-                        type="color"
-                        className="w-16 h-10 border border-gray-300 rounded-md p-1"
+                        type="text"
+                        placeholder="Interior"
+                        className="w-full p-2 border border-gray-300 rounded-md"
                         value={filters.interior_color}
                         onChange={(e) => onFilterChange({ interior_color: e.target.value })}
                       />
