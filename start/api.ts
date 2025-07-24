@@ -90,6 +90,9 @@ Route
     // Vehicle
     Route.resource('vehicle', 'Api/VehicleController');
 
+    // Vehicle Favourite
+    Route.resource('vehicle_favourite', 'Api/VehicleFavouriteController').except(['update','destroy']);
+
     // Vehicle Make
     Route.resource('vehicle-make', 'Api/VehicleMakeController');
 

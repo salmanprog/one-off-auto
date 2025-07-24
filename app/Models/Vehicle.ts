@@ -59,6 +59,9 @@ export default class Vehicle extends RestModel
     public vehicle_stock_parts: string
 
     @column()
+    public vehicle_stock_parts_text: string
+
+    @column()
     public vehicle_title: string
 
     @column()
@@ -304,7 +307,7 @@ export default class Vehicle extends RestModel
     public static fillable()
     {
         return [
-          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_primarily_used','vehicle_stock_parts','vehicle_title','vehicle_descripition','vehicle_modification','driver_type','motor_size_cylinders','transmition_types','fuel_types','number_of_doors','exterior_color','interior_color','seller_type','vehicle_status','suspension_size','suspension_type','chassis_reinforcement','chassis_reinforcement_text','audio_upgrade','audio_upgrade_text','wheel_width','wheel_diameter','hp_output_rang','cosmetic_upgrade','cosmetic_upgrade_text','vehicle_use','interior_upgrade','interior_upgrade_text','exterior_upgrade','exterior_upgrade_text','motor_upgrade','motor_upgrade_text','documentation_type','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','street_number','route','locality','administrative_area_level_2','administrative_area_level_1','country','postal_code','formatted_address','latitude','longitude','status','created_at','updated_at','deleted_at'
+          'vehicle_category_id','user_id','slug','vehicle_make','vehicle_model','vehicle_year','vehicle_mileage','vehicle_price','vehicle_primarily_used','vehicle_stock_parts','vehicle_stock_parts_text','vehicle_title','vehicle_descripition','vehicle_modification','driver_type','motor_size_cylinders','transmition_types','fuel_types','number_of_doors','exterior_color','interior_color','seller_type','vehicle_status','suspension_size','suspension_type','chassis_reinforcement','chassis_reinforcement_text','audio_upgrade','audio_upgrade_text','wheel_width','wheel_diameter','hp_output_rang','cosmetic_upgrade','cosmetic_upgrade_text','vehicle_use','interior_upgrade','interior_upgrade_text','exterior_upgrade','exterior_upgrade_text','motor_upgrade','motor_upgrade_text','documentation_type','vehicle_owner_name','vehicle_owner_address','vehicle_owner_email','vehicle_owner_phone','street_number','route','locality','administrative_area_level_2','administrative_area_level_1','country','postal_code','formatted_address','latitude','longitude','status','created_at','updated_at','deleted_at'
         ]
     }
 

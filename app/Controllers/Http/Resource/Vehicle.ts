@@ -68,6 +68,7 @@ class Vehicle
           vehicle_price: record.vehicle_price,
           vehicle_primarily_used: record.vehicle_primarily_used,
           vehicle_stock_parts: record.vehicle_stock_parts,
+          vehicle_stock_parts_text: record.vehicle_stock_parts_text,
           vehicle_title: record.vehicle_title,
           vehicle_descripition: record.vehicle_descripition,
           vehicle_modification: record.vehicle_modification,
