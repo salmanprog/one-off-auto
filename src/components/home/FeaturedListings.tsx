@@ -7,7 +7,14 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 import Helper from "../../helpers";
 
 const FeaturedListings = () => {
-  const { data, loading, error } = useFetch("user_vehicle_list", "mount", "?limit=3");
+  const isAuthenticated = !!localStorage.getItem("session");
+  const authUser = Helper.getStorageData("session");
+  let user_id = 0
+  if (isAuthenticated) {
+    user_id = authUser.id
+  }
+
+  const { data, loading, error } = useFetch("user_vehicle_list", "mount", "?user_id="+user_id+"&limit=3");
 
   const listings = useMemo(() => {
     if (!data) return [];
