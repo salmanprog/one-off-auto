@@ -13,6 +13,7 @@ import UserNotifications from '../dashboards/UserNotifications';
 import ApplicationSettings from '../dashboards/ApplicationSettings';
 import UserMessages from '../dashboards/UserMessages'; // Import the new UserMessages component
 import FormManagement from '../dashboards/FormManagement';
+import UserFavouriteListings from '../dashboards/UserFavouriteListings'
 
 const DashboardLayout: React.FC = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const DashboardLayout: React.FC = () => {
         { path: '/', label: 'Home' },
         { path: '/user-dashboard', label: 'Account Settings' },
         { path: '/user-dashboard/listings', label: 'My Listings' },
+        { path: '/user-dashboard/favourite-listings', label: 'Favourite Listings' },
         //{ path: '/user-dashboard/notifications', label: 'Notifications' },
         { path: '/user-dashboard/messages', label: 'Messages' }, // Add link for Messages
       ]
@@ -70,6 +72,8 @@ const DashboardLayout: React.FC = () => {
            return <UserListings />;
         //  case '/user-dashboard/notifications':
         //    return <UserNotifications />;
+        case '/user-dashboard/favourite-listings':
+           return <UserFavouriteListings />;
          case '/user-dashboard':
            return <UserAccountSettings />;
          case '/user-dashboard/messages':

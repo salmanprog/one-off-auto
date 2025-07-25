@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, CircleDollarSign, CheckCircle2, Heart } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import HttpRequest from "../../repositories";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+import Helper from "../../helpers";
 
 interface Listing {
   id: string;
@@ -20,15 +23,35 @@ interface ListingCardProps {
 
 const ListingCard = ({ listing }: ListingCardProps) => {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isAuthenticated = !!localStorage.getItem("session");
+  const authUser = Helper.getStorageData("session");
+  let favrite = (listing.is_favourite == 0) ? false : true;
+  const [isFavorite, setIsFavorite] = useState(favrite);
   const handleClick = () => {
     navigate(`/listings/${listing.slug}`);
     // This will trigger a page reload after navigating
     window.location.reload();
   };
-  const toggleFavorite = (e: React.MouseEvent) => {
+  const toggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsFavorite((prev) => !prev);
+    if(isAuthenticated){
+      let update_favrite = (isFavorite == false) ? 1 : 0;
+      const payload = {
+        user_id: authUser.id.toString(),
+        vehicle_id: listing.id.toString(),
+        is_favourite: update_favrite.toString(),
+      };
+      await HttpRequest.makeRequest('POST', baseUrl+'vehicle_favourite', payload).then(
+        (response) => {
+          if (response.code == 200) {
+            setIsFavorite((prev) => !prev);
+          } else {
+            setIsFavorite((prev) => !prev);
+          }
+        }
+      );
+      
+    }
   };
   return (
     <div onClick={handleClick} className="block">

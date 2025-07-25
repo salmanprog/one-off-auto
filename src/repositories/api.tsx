@@ -167,6 +167,10 @@ const api = {
       url: 'user/vehicle-documentation-type',
       method: "GET",
     },
+    vehicle_favourite: {
+      url: 'vehicle_favourite',
+      method: "GET",
+    },
   };
   
   export default api;

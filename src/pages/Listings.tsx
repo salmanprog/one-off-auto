@@ -4,6 +4,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import ListingCard from "../components/listings/ListingCard";
 import ListingsFilters from "../components/listings/ListingsFilters";
 import { useFetch } from "../hooks/request";
+import Helper from "../helpers";
 
 // Define filter types
 interface FilterState {
@@ -71,8 +72,13 @@ const Listings = () => {
   const { search } = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Adjust as needed
-
-  const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?limit=5000');
+  const isAuthenticated = !!localStorage.getItem("session");
+  const authUser = Helper.getStorageData("session");
+  let user_id = 0
+  if (isAuthenticated) {
+    user_id = authUser.id
+  }
+  const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?user_id='+user_id+'&limit=5000');
   const [finalListings, setFinalListings] = useState([]);
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -173,6 +179,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
       latitude: item.latitude,
       longitude: item.longitude,
       postal_code: item.postal_code,
+      is_favourite: item.is_favourite,
       documentation_type_title: item.documentation_type_obj.title,
       image: item.image_url, // Optional chaining + fallback
       mods: ["Built Engine", "Garrett Turbo", "Coilovers", "Wide Body Kit"],
