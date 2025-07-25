@@ -2,6 +2,9 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import ListingCard from "../listings/ListingCard";
 import { useFetch } from "../../hooks/request";
+import HttpRequest from "../../repositories";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+import Helper from "../../helpers";
 
 const FeaturedListings = () => {
   const { data, loading, error } = useFetch("user_vehicle_list", "mount", "?limit=3");
@@ -21,6 +24,7 @@ const FeaturedListings = () => {
       vehicle_primarily_used: item.vehicle_primarily_used,
       vehicle_stock_parts: item.vehicle_stock_parts,
       image: item.image_url,
+      is_favourite: item.is_favourite,
       mods: item.mods || ["Built Engine", "Garrett Turbo", "Coilovers"], // Fallback if API has no mods
     }));
   }, [data]);
