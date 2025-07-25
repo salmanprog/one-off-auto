@@ -16,6 +16,7 @@ import VehicleDocumentationRes from 'App/Controllers/Http/Resource/VehicleDocume
 import VehicleMakeRes from 'App/Controllers/Http/Resource/VehicleMake';
 import VehicleModelRes from 'App/Controllers/Http/Resource/VehicleModel';
 import VehicleYearRes from 'App/Controllers/Http/Resource/VehicleYear';
+import VehicleFavourite from 'App/Models/VehicleFavourite';
 
 class Vehicle
 {
@@ -42,6 +43,8 @@ class Vehicle
   {
     const createdAt = record.created_at;
     const formattedDate = createdAt ? new Date(createdAt).toISOString().split("T")[0] : '';
+    const params = request.all();
+    let is_favourite = 0;
     let status_text = ''
     if(record.status == '0'){
       status_text = 'Pending'
@@ -50,6 +53,13 @@ class Vehicle
     }else{
       status_text = 'Sold'
     }
+    if(!_.isEmpty(params.user_id) && params.user_id > 0){
+        let get_favourite = await VehicleFavourite.query().where('user_id',params.user_id).where('vehicle_id',record.id).first();
+        if(!_.isEmpty(get_favourite)){
+          is_favourite = parseInt(get_favourite?.is_favourite)
+        }
+    }
+    
       return {
           id: record.id,
           vehicle_category_id: record.vehicle_category_id,
@@ -118,6 +128,7 @@ class Vehicle
           formatted_address: record.formatted_address,
           latitude: record.latitude,
           longitude: record.longitude,
+          is_favourite:is_favourite,
           media: await Media.initResponse(record.media,request),
           status_text: status_text,
           status: record.status,

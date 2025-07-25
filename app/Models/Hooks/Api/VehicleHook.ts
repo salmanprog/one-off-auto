@@ -22,7 +22,6 @@ class VehicleHook
         if(user.user_group_id == 3){
             query.where('user_id',user.id)
         }
-        //console.log('user............................',user.id)
         query.preload('vehicleCategory')
         query.preload('user')
         query.preload('media')

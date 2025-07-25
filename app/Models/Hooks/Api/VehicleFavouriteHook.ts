@@ -16,7 +16,7 @@ class VehicleFavouriteHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        query.preload('Vehicle').where('user_id',request.user().id).orderBy('id','desc')
+        query.preload('Vehicle').where('user_id',request.user().id).where('is_favourite','1').orderBy('id','desc')
     }
 
     /**
@@ -26,6 +26,7 @@ class VehicleFavouriteHook
      */
     public static async beforeCreateHook(request: object, params:object)
     {
+        let delete_previouse =  await VehicleFavourite.query().where('user_id',params.user_id).where('vehicle_id',params.vehicle_id).delete();
         if( !_.isEmpty(request.file('image_url')) ){
             params.image_url  = await FileUpload.doUpload(request.file('image_url'),'user');
             //params.blurimage  = await FileUpload.createBlurHash(params.image_url);
