@@ -153,6 +153,37 @@
       setStep(3);
     };
 
+    const colorOptions = [
+      { name: "Black", hex: "#000000" },
+      { name: "White", hex: "#FFFFFF" },
+      { name: "Beige", hex: "#F5F5DC" },
+      { name: "Gray", hex: "#808080" },
+      { name: "Silver", hex: "#C0C0C0" },
+      { name: "Brown", hex: "#8B4513" },
+      { name: "Red", hex: "#FF0000" },
+      { name: "Blue", hex: "#0000FF" },
+      { name: "Dark Blue", hex: "#00008B" },
+      { name: "Light Blue", hex: "#ADD8E6" },
+      { name: "Green", hex: "#008000" },
+      { name: "Dark Green", hex: "#006400" },
+      { name: "Olive", hex: "#808000" },
+      { name: "Yellow", hex: "#FFFF00" },
+      { name: "Gold", hex: "#FFD700" },
+      { name: "Orange", hex: "#FFA500" },
+      { name: "Burgundy", hex: "#800020" },
+      { name: "Maroon", hex: "#800000" },
+      { name: "Charcoal", hex: "#36454F" },
+      { name: "Champagne", hex: "#F7E7CE" },
+      { name: "Teal", hex: "#008080" },
+      { name: "Navy", hex: "#000080" },
+      { name: "Copper", hex: "#B87333" },
+      { name: "Turquoise", hex: "#40E0D0" },
+      { name: "Ivory", hex: "#FFFFF0" },
+      { name: "Pearl White", hex: "#F8F8FF" },
+      { name: "Steel Blue", hex: "#4682B4" },
+      { name: "Gunmetal", hex: "#2C3539" }
+    ];
+
     return (
       <div className="bg-white rounded-lg shadow-md p-6">
         {step !== 3 && (
@@ -266,13 +297,39 @@
                 <div>
                   <label className="block text-sm font-medium mb-1">Exterior Color</label>
                   <div className="flex items-center gap-4">
-                    <input
+                    {/* <input
                       name="exterior_color"
                       id="exterior_color"
                       type="text"
                       {...register("exterior_color", { required: true })}
                       className="w-full p-3 border border-gray-300 rounded-md"
-                    />
+                    /> */}
+                    <select
+                      id="exterior_color"
+                      {...register("exterior_color", { required: true })}
+                      className={`w-full p-3 border ${
+                        errors.exterior_color ? "border-red-500" : "border-gray-300"
+                      } rounded-md`}
+                    >
+                      <option value="">Select Exterior Color</option>
+                      {colorOptions.map((color) => (
+                        <option key={color.name} value={color.name}>
+                          {color.name}
+                        </option>
+                      ))}
+                    </select>
+                    {watch("exterior_color") && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <div
+                          className="w-5 h-5 rounded-full border"
+                          style={{
+                            backgroundColor:
+                              colorOptions.find((c) => c.name === watch("exterior_color"))?.hex,
+                          }}
+                        ></div>
+                        <span className="text-sm text-gray-700">{watch("exterior_color")}</span>
+                      </div>
+                    )}
                     {/* <span className="text-sm">{watch("exterior_color") || "#000000"}</span> */}
                   </div>
                   {errors.exterior_color && (
@@ -282,13 +339,39 @@
                 <div>
                   <label className="block text-sm font-medium mb-1">Interior Color</label>
                   <div className="flex items-center gap-4">
-                    <input
+                  <select
+                      id="interior_color"
+                      {...register("interior_color", { required: true })}
+                      className={`w-full p-3 border ${
+                        errors.interior_color ? "border-red-500" : "border-gray-300"
+                      } rounded-md`}
+                    >
+                      <option value="">Select Color</option>
+                      {colorOptions.map((color) => (
+                        <option key={color.name} value={color.name}>
+                          {color.name}
+                        </option>
+                      ))}
+                    </select>
+                    {watch("interior_color") && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <div
+                            className="w-5 h-5 rounded-full border"
+                            style={{
+                              backgroundColor:
+                                colorOptions.find((c) => c.name === watch("interior_color"))?.hex,
+                            }}
+                          ></div>
+                          <span className="text-sm text-gray-700">{watch("interior_color")}</span>
+                        </div>
+                      )}
+                    {/* <input
                       name="interior_color"
                       id="interior_color"
                       type="text"
                       {...register("interior_color", { required: true })}
                       className="w-full p-3 border border-gray-300 rounded-md"
-                    />
+                    /> */}
                     {/* <span className="text-sm">{watch("interior_color") || "#000000"}</span> */}
                   </div>
                   {errors.interior_color && (

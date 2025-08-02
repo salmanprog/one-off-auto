@@ -299,7 +299,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
               <input
                 type="range"
                 min="0"
-                max="200"
+                max="500"
                 step="1"
                 value={filters.nearbyRadius || 0}
                 onChange={(e) => onFilterChange({ nearbyRadius: e.target.value })}
@@ -738,13 +738,13 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
             
             {/* Suspension Size Filter */}
             <div>
-              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size} Stock)</label>
+              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size || 0} Stock)</label>
               <input
                 type="range"
-                min={0}
+                min={-8}
                 max={24}
                 step={0.5}
-                value={filters.suspension_size || 0}
+                value={filters.suspension_size  || 0}
                 onChange={(e) => onFilterChange({ suspension_size: e.target.value })}
                 className="w-full"
               />

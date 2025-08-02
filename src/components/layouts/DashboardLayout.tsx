@@ -39,7 +39,7 @@ const DashboardLayout: React.FC = () => {
         { path: '/', label: 'Home' },
         { path: '/user-dashboard', label: 'Account Settings' },
         { path: '/user-dashboard/listings', label: 'My Listings' },
-        { path: '/user-dashboard/favourite-listings', label: 'Favourite Listings' },
+        { path: '/user-dashboard/favourite-listings', label: 'Favorite Listings' },
         //{ path: '/user-dashboard/notifications', label: 'Notifications' },
         { path: '/user-dashboard/messages', label: 'Messages' }, // Add link for Messages
       ]

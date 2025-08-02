@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { register as validationRules } from "../config/form_validation_rules";
 import { useFetch } from "../hooks/request";
@@ -9,6 +9,7 @@ import MainLayout from "../components/layouts/MainLayout";
 const SignUp = () => {
   
   const {register,handleSubmit,formState: { errors }, watch,} = useForm();
+  const [isOpen, setIsOpen] = useState(false);
   const { loading, postData } = useFetch("create_users", "submit", undefined);
   const password = watch("password", "");
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ const SignUp = () => {
     fd.append('device_id', '1234567890');
     fd.append('device_token', '1234567890');
     const callback = (receivedData) => {
-      return navigate("/signin");
+      setIsOpen(true);
+      //return navigate("/signin");
     };
     postData(fd, callback, undefined);
   };
@@ -123,6 +125,46 @@ const SignUp = () => {
             </div>
         </div>
       </div>
+      {isOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg relative w-[90%] max-w-md text-center">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="absolute top-3 right-3 text-gray-600 hover:text-black"
+                  aria-label="Close"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l1.5-6h11l1.5 6M4 17h16M6 17v2a1 1 0 001 1h.01a1 1 0 001-1v-2m8 0v2a1 1 0 001 1h.01a1 1 0 001-1v-2M6 13h12" />
+                </svg>
+                <h2 className="text-xl font-semibold mb-2">Congratulations you have successfully created your account</h2>
+                <p className="text-gray-700">We’ve sent a verification link to your email. Please check your inbox and verify your account before logging in.</p>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/signin");
+                  }}
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-oneoffautos-blue hover:bg-oneoffautos-blue-darker focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oneoffautos-blue"
+                >
+                 Go to Login
+                </button>
+              </div>
+            </div>
+          )}
     </MainLayout>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useFetch } from "../hooks/request";
@@ -7,13 +7,39 @@ import Helper from "../helpers";
 import MainLayout from "../components/layouts/MainLayout";
 
 const SignIn = () => {
-  const {register,handleSubmit,formState: { errors }} = useForm();
+  const {register,handleSubmit,formState: { errors },setValue} = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      remember_me: '',
+    }
+  });
+  useEffect(() => {
+    const rememberedCredentials = localStorage.getItem("rememberedCredentials");
+      if (rememberedCredentials) {
+        setValue("email", JSON.parse(rememberedCredentials).email);
+        setValue("password", JSON.parse(rememberedCredentials).password);
+        setValue("remember_me", JSON.parse(rememberedCredentials).remember_me);
+      }
+    }, []);     
+      
   const { loading, postData } = useFetch("login", "submit", undefined);
   const navigate = useNavigate();
   const onSubmit = (values) => {
     const additionalParams = { device_type: "web", device_token: "1234567890" };
     const updatedValues = { ...values, ...additionalParams };
     const callback = (receivedData) => {
+      if(values.remember_me == 1){
+        localStorage.setItem("rememberedCredentials", JSON.stringify({
+          email: values.email,
+          password: values.password,
+          remember_me: values.remember_me,
+        }));
+        console.log('remember me is true');
+      }else{
+        localStorage.removeItem("rememberedCredentials");
+        console.log('remember me is false');
+      }
       Helper.setStorageData("session", receivedData.data);
       return navigate("/");
     };
@@ -82,6 +108,9 @@ const SignIn = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
+                  {...register("remember_me", {
+                    setValueAs: (v) => (v ? 1 : 0),
+                  })}
                   className="h-4 w-4 text-oneoffautos-blue focus:ring-oneoffautos-blue border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
