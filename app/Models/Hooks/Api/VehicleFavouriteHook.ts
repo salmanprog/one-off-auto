@@ -16,7 +16,9 @@ class VehicleFavouriteHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        query.preload('Vehicle').where('user_id',request.user().id).where('is_favourite','1').orderBy('id','desc')
+        query.preload('Vehicle',function(lis){
+            lis.preload('media')
+        }).where('user_id',request.user().id).where('is_favourite','1').orderBy('id','desc')
     }
 
     /**

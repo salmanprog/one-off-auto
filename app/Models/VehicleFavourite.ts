@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import RestModel from './RestModel'
 import moment from 'moment';
 import Vehicle from './Vehicle'
+import Media from './Media'
 
 export default class VehicleFavourite extends RestModel
 {
@@ -39,6 +40,12 @@ export default class VehicleFavourite extends RestModel
         localKey: 'id'
     })
     public Vehicle: BelongsTo<typeof Vehicle>
+
+    @hasMany(() => Media, {
+            foreignKey: 'module_id',
+            localKey: 'id'
+        })
+        public media: HasMany<typeof Media>
 
     public static fillable()
     {

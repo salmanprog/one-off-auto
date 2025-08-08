@@ -14,7 +14,7 @@ export default class extends BaseSchema {
       table.integer('vehicle_year').unsigned().references('id').inTable('vehicle_years').onDelete('CASCADE').onUpdate('NO ACTION');
       table.string('vehicle_mileage',255).notNullable()
       table.string('vehicle_price',255).notNullable()
-      table.string('vehicle_primarily_used',255).notNullable()
+      table.string('vehicle_primarily_used',255).nullable()
       table.string('vehicle_stock_parts',255).notNullable().defaultTo('no')
       table.text('vehicle_stock_parts_text').nullable()
       table.string('vehicle_title',255).notNullable()

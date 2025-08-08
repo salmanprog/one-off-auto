@@ -27,6 +27,7 @@ class VehicleFavourite
   {
       return {
           id: record.id,
+          image_url: !_.isEmpty(record.Vehicle.media) ?  await storageUrl(record.Vehicle.media[0].file_url) : baseUrl('/images/dummy_car.jpg'),
           vehicle: await VehicleRes.initResponse(record.Vehicle,request),
       }
   }
