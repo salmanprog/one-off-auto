@@ -575,7 +575,131 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                   <option value="100001">100,001 or more</option>
                 </select>
               </div>
-            {/* Chassis Reinforcement Filter */}
+           
+
+
+
+            </div>
+          )}
+        </div>
+        <div className="flex items-center justify-between cursor-pointer">
+          <h3 className="text-lg font-bold mb-2">Advanced Search</h3>
+          {advancedFiltersOpen ? (
+            <ChevronUp size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
+          ) : (
+            <ChevronDown size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
+          )}
+        </div> 
+        {advancedFiltersOpen && (
+          <div className="space-y-4 mt-3">
+            
+            {/* Suspension Size Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size ? `${filters.suspension_size}` : '0 Stock'}{filters.suspension_size == '0' ? ` Stock`:''})</label>
+              <input
+                type="range"
+                min={-8}
+                max={24}
+                step={0.5}
+                value={filters.suspension_size  || 0}
+                onChange={(e) => onFilterChange({ suspension_size: e.target.value })}
+                className="w-full"
+              />
+            </div>
+
+            {/* Suspension Type Dropdown */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Suspension Type</label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={filters.suspension_type}
+                onChange={(e) => onFilterChange({ suspension_type: e.target.value })}
+              >
+                <option value="">Select Suspension Type</option>
+                {vehicle_suspension_type &&
+                  vehicle_suspension_type.map((item: { id: string; title: string }) => (
+                    <option key={item.id} value={item.id}>{item.title}</option>
+                  ))}
+              </select>
+            </div>
+            {/* Wheel Width Range Slider */}
+            {/* <div>
+              <label className="block text-sm font-medium mb-1">Wheel Width ({filters.wheel_width} inches)</label>
+              <input
+                type="range"
+                min={1}
+                max={30}
+                step={0.5}
+                value={filters.wheel_width}
+                onChange={(e) => onFilterChange({ wheel_width: e.target.value })}
+                className="w-full"
+              />
+            </div> */}
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Wheel Width</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelwidthMin}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelwidthMin: e.target.value });
+                      }
+                    }}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelwidthMax}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelwidthMax: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+
+            {/* Wheel Diameter Range Slider */}
+            <div>
+                <label className="block text-sm font-medium mb-1">Wheel Diameter</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelDiameterMin}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelDiameterMin: e.target.value });
+                      }
+                    }}
+                  />
+                  <span>-</span>
+                  <input
+                    type="text"
+                    placeholder="Max"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={filters.wheelDiameterMax}
+                    onChange={(e) => {
+                      // Allow only numbers in the input
+                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
+                        onFilterChange({ wheelDiameterMax: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+               {/* Chassis Reinforcement Filter */}
             <div>
                 <label className="block text-sm font-medium mb-1">Chassis Reinforcement</label>
                 <div className="flex items-center space-x-2">
@@ -719,129 +843,6 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                       <span>No</span>
                 </div>
               </div>        
-
-
-
-            </div>
-          )}
-        </div>
-        <div className="flex items-center justify-between cursor-pointer">
-          <h3 className="text-lg font-bold mb-2">Advanced Search</h3>
-          {advancedFiltersOpen ? (
-            <ChevronUp size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
-          ) : (
-            <ChevronDown size={18} onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)} />
-          )}
-        </div> 
-        {advancedFiltersOpen && (
-          <div className="space-y-4 mt-3">
-            
-            {/* Suspension Size Filter */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Suspension Size ({filters.suspension_size || 0} Stock)</label>
-              <input
-                type="range"
-                min={-8}
-                max={24}
-                step={0.5}
-                value={filters.suspension_size  || 0}
-                onChange={(e) => onFilterChange({ suspension_size: e.target.value })}
-                className="w-full"
-              />
-            </div>
-
-            {/* Suspension Type Dropdown */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Suspension Type</label>
-              <select
-                className="w-full p-2 border border-gray-300 rounded-md"
-                value={filters.suspension_type}
-                onChange={(e) => onFilterChange({ suspension_type: e.target.value })}
-              >
-                <option value="">Select Suspension Type</option>
-                {vehicle_suspension_type &&
-                  vehicle_suspension_type.map((item: { id: string; title: string }) => (
-                    <option key={item.id} value={item.id}>{item.title}</option>
-                  ))}
-              </select>
-            </div>
-            {/* Wheel Width Range Slider */}
-            {/* <div>
-              <label className="block text-sm font-medium mb-1">Wheel Width ({filters.wheel_width} inches)</label>
-              <input
-                type="range"
-                min={1}
-                max={30}
-                step={0.5}
-                value={filters.wheel_width}
-                onChange={(e) => onFilterChange({ wheel_width: e.target.value })}
-                className="w-full"
-              />
-            </div> */}
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Wheel Width</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Min"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.wheelwidthMin}
-                    onChange={(e) => {
-                      // Allow only numbers in the input
-                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
-                        onFilterChange({ wheelwidthMin: e.target.value });
-                      }
-                    }}
-                  />
-                  <span>-</span>
-                  <input
-                    type="text"
-                    placeholder="Max"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.wheelwidthMax}
-                    onChange={(e) => {
-                      // Allow only numbers in the input
-                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
-                        onFilterChange({ wheelwidthMax: e.target.value });
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-
-            {/* Wheel Diameter Range Slider */}
-            <div>
-                <label className="block text-sm font-medium mb-1">Wheel Diameter</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Min"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.wheelDiameterMin}
-                    onChange={(e) => {
-                      // Allow only numbers in the input
-                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
-                        onFilterChange({ wheelDiameterMin: e.target.value });
-                      }
-                    }}
-                  />
-                  <span>-</span>
-                  <input
-                    type="text"
-                    placeholder="Max"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={filters.wheelDiameterMax}
-                    onChange={(e) => {
-                      // Allow only numbers in the input
-                      if (!e.target.value || /^[0-9]*$/.test(e.target.value)) {
-                        onFilterChange({ wheelDiameterMax: e.target.value });
-                      }
-                    }}
-                  />
-                </div>
-              </div>
             {/* <div>
               <label className="block text-sm font-medium mb-1">Wheel Diameter ({filters.wheel_diameter} inches)</label>
               <input

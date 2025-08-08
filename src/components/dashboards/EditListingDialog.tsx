@@ -253,7 +253,6 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
   };
 
   if (!listing) return null;
-  console.log('listing...........................',listing)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -1056,9 +1055,18 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
                 onChange={e => setFormData({ ...formData, status: e.target.value })}
                 className="w-full border rounded px-3 py-2"
               >
-                <option value="0">Pending</option>
+                {formData.status == '0' && (
+                  <option value="0">Pending</option>
+                )}
+                {formData.status == '1' && (
+                  <>
+                  <option value="1">Approved</option>
+                  <option value="2">Sold</option>
+                  </>
+                )}
+                {/* <option value="0">Pending</option>
                 <option value="1">Approved</option>
-                <option value="2">Sold</option>
+                <option value="2">Sold</option> */}
               </select>
             </div>
         </div>

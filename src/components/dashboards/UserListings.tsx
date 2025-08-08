@@ -187,7 +187,7 @@ const UserListings: React.FC = () => {
            <Table>
              <TableHeader>
                <TableRow>
-                 <TableHead>Listing ID</TableHead>
+                 <TableHead>Listing Image</TableHead>
                  <TableHead>Title</TableHead>
                  <TableHead>Vehicle Type</TableHead>
                  <TableHead>Make</TableHead>
@@ -203,7 +203,7 @@ const UserListings: React.FC = () => {
              <TableBody>
                {currentListings.map(listing => (
                  <TableRow key={listing.id}>
-                   <TableCell className="font-medium">{listing.id}</TableCell>
+                   <TableCell className="font-medium"><img src={listing.image_url} alt={listing.vehicle_title} className="w-25 h-16 object-cover rounded" /></TableCell>
                    <TableCell>{listing.vehicle_title}</TableCell>
                    <TableCell>{listing.vehicle_category.title}</TableCell>
                    <TableCell>{listing.vehicle_make_obj.title}</TableCell>

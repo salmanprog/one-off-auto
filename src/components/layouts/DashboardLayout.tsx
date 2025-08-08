@@ -32,7 +32,7 @@ const DashboardLayout: React.FC = () => {
         { path: '/admin-dashboard/contactlistings', label: 'Contact-us Listing' },
         { path: '/admin-dashboard/subscriberslistings', label: 'Subscriber Listing' },
         { path: '/admin-dashboard/application-setting', label: 'Application Setting' },
-        { path: '/admin-dashboard/form-management', label: 'Form Management' },
+        //{ path: '/admin-dashboard/form-management', label: 'Form Management' },
       ]
     : isUserDashboard
     ? [
@@ -41,7 +41,7 @@ const DashboardLayout: React.FC = () => {
         { path: '/user-dashboard/listings', label: 'My Listings' },
         { path: '/user-dashboard/favourite-listings', label: 'Favorite Listings' },
         //{ path: '/user-dashboard/notifications', label: 'Notifications' },
-        { path: '/user-dashboard/messages', label: 'Messages' }, // Add link for Messages
+        //{ path: '/user-dashboard/messages', label: 'Messages' }, // Add link for Messages
       ]
     : []; // Default empty if not in a dashboard context
 
@@ -61,8 +61,8 @@ const DashboardLayout: React.FC = () => {
           return <AdminSubscriberListing />;
           case '/admin-dashboard/application-setting':
           return <ApplicationSettings />;
-        case '/admin-dashboard/form-management':
-          return <FormManagement />;
+        // case '/admin-dashboard/form-management':
+        //   return <FormManagement />;
         default:
           return <div>Admin Dashboard Section Not Found</div>; // Or a 404 component
       }

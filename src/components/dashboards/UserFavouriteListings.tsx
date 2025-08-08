@@ -16,7 +16,6 @@ const UserFavouriteListings: React.FC = () => {
   const indexOfFirstListing = indexOfLastListing - listingsPerPage;
   const currentListings = listings.slice(indexOfFirstListing, indexOfLastListing);
   const totalPages = Math.ceil(listings.length / listingsPerPage);
-
   useEffect(() => {
     if (data) {
       setLoading(true);
@@ -36,7 +35,7 @@ const UserFavouriteListings: React.FC = () => {
            <Table>
              <TableHeader>
                <TableRow>
-                 <TableHead>Listing ID</TableHead>
+                 <TableHead>Listing Image</TableHead>
                  <TableHead>Title</TableHead>
                  <TableHead className="text-right">Actions</TableHead>
                </TableRow>
@@ -44,7 +43,7 @@ const UserFavouriteListings: React.FC = () => {
              <TableBody>
                {currentListings.map(listing => (
                  <TableRow key={listing.vehicle.id}>
-                   <TableCell className="font-medium">{listing.id}</TableCell>
+                   <TableCell className="font-medium"><img src={listing.image_url} alt={listing.vehicle.vehicle_title} className="w-25 h-16 object-cover rounded" /></TableCell>
                    <TableCell>{listing.vehicle.vehicle_title}</TableCell>
                    <TableCell className="text-right">
                      <Button variant="ghost" size="sm" onClick={() => navigate(`/listings/${listing.vehicle.slug}`)} className="mr-2">View</Button>
