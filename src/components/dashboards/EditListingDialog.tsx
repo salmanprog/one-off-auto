@@ -6,6 +6,7 @@ import { Listing } from "@/lib/api";
 import { XIcon } from "lucide-react";
 import { useFetch } from "../../hooks/request";
 import { useNavigate } from 'react-router-dom';
+import Autocomplete from "react-google-autocomplete";
 
 interface EditListingDialogProps {
   isOpen: boolean;
@@ -71,6 +72,13 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
   const { postData } = useFetch("update_vehicle", "submit");
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
+
+  const [vehicleowneraddress, setVehicleOwnerAddress] = useState();
+  const [formattedaddress, setFormattedAddress] = useState();
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
+  const [newcountry, setNewCountry] = useState();
+  const [newpostalcode, setNewPostalCode] = useState();
 
   // Fetch dropdown data as in SellForm
   const { data: vehicleCategories } = useFetch("get_vehicle_categories");
@@ -156,6 +164,33 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
     setFormData({ ...formData, [name]: value });
   };
 
+  const handlePlaceSelected = (place: any) => {
+      // Extract the necessary details
+      const address = place.formatted_address;
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+
+      let country = "";
+      let postalCode = "";
+
+      // Extracting country and postal_code from the address components
+      place.address_components.forEach((component: any) => {
+        if (component.types.includes("country")) {
+          country = component.long_name;
+        }
+        if (component.types.includes("postal_code")) {
+          postalCode = component.long_name;
+        }
+      });
+      //Store the full address and other details in the form fields
+      setVehicleOwnerAddress(address);
+      setFormattedAddress(address);
+      setLatitude(lat);
+      setLongitude(lng);
+      setNewCountry(country);   // Store country
+      setNewPostalCode(postalCode); // Store postal code
+  };
+
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -219,13 +254,14 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
       fd.append("documentation_type",formData.documentation_type);
       fd.append("vehicle_modification",formData.vehicle_modification);
       fd.append("vehicle_owner_name",formData.vehicle_owner_name);
-      fd.append("vehicle_owner_address",formData.vehicle_owner_address);
+      fd.append("vehicle_owner_address",vehicleowneraddress);
+      fd.append("formatted_address",formattedaddress);
+      fd.append("latitude",latitude);
+      fd.append("longitude",longitude);
+      fd.append("country",newcountry);
+      fd.append("postal_code",newpostalcode);
       fd.append("vehicle_owner_email",formData.vehicle_owner_email);
       fd.append("vehicle_owner_phone",formData.vehicle_owner_phone);
-      fd.append("latitude",formData.latitude);
-      fd.append("longitude",formData.longitude);
-      fd.append("country",formData.country);
-      fd.append("postal_code",formData.postal_code);
 
       if (deletedImageIds.length > 0) {
         fd.append("deleted_image_ids", JSON.stringify(deletedImageIds));
@@ -979,12 +1015,20 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Owner Address</label>
-              <Input
+              {/* <Input
                 name="vehicle_owner_address"
                 value={formData.vehicle_owner_address}
                 onChange={handleChange}
                 placeholder="Owner Address"
-              />
+              /> */}
+              <Autocomplete
+                                  className="w-full p-3 border border-gray-300 rounded-md"
+                                  apiKey="AIzaSyDtGUZeWBavRsRTTzKDgeuje_4iBu1vrWE"
+                                  onPlaceSelected={(place) => {
+                                    handlePlaceSelected(place)
+                                  }}
+                                  options={{ types: ['geocode'] }}
+                                />
               {errors.vehicle_owner_address && <p className="text-red-500 text-sm">{errors.vehicle_owner_address}</p>}
             </div>
             <div>
@@ -1008,43 +1052,6 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
                 type="tel"
               />
               {errors.vehicle_owner_phone && <p className="text-red-500 text-sm">{errors.vehicle_owner_phone}</p>}
-            </div>
-            {/* Advanced address fields (latitude, longitude, country, postal_code) */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Latitude</label>
-              <Input
-                name="latitude"
-                value={formData.latitude}
-                onChange={handleChange}
-                placeholder="Latitude"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Longitude</label>
-              <Input
-                name="longitude"
-                value={formData.longitude}
-                onChange={handleChange}
-                placeholder="Longitude"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Country</label>
-              <Input
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                placeholder="Country"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Postal Code</label>
-              <Input
-                name="postal_code"
-                value={formData.postal_code}
-                onChange={handleChange}
-                placeholder="Postal Code"
-              />
             </div>
             {/* Status */}
             <div>

@@ -209,21 +209,22 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
 
   
   
-  if (filters.nearbyMe && navigator.geolocation) {
+  if (filters.nearbyRadius && navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userLat = position.coords.latitude;
         const userLon = position.coords.longitude;
         
         filteredListings = filteredListings.filter((listing) => {
+          console.log("userLat:", userLat+' userLon: '+userLon);
           const distance = calculateDistance(
             userLat,
             userLon,
             parseFloat(listing.latitude), // Your listing's latitude
             parseFloat(listing.longitude) // Your listing's longitude
           );
-          console.error("Location distance:", distance);
-          return distance <= 50; // within 50 km
+          console.log("Location distance:", distance);
+          return distance <= 805; // within 50 km
         });
       },
       (err) => {
