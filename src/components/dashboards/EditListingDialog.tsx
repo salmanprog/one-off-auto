@@ -1024,6 +1024,7 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
               <Autocomplete
                                   className="w-full p-3 border border-gray-300 rounded-md"
                                   apiKey="AIzaSyDtGUZeWBavRsRTTzKDgeuje_4iBu1vrWE"
+                                  value={formData.vehicle_owner_address}
                                   onPlaceSelected={(place) => {
                                     handlePlaceSelected(place)
                                   }}
