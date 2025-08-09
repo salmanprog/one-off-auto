@@ -123,6 +123,7 @@ class Vehicle
           vehicle_owner_name: record.vehicle_owner_name,
           vehicle_owner_address: record.vehicle_owner_address,
           vehicle_owner_email: record.vehicle_owner_email,
+          vehicle_owner_phone: record.vehicle_owner_phone,
           country: record.country,
           postal_code: record.postal_code,
           formatted_address: record.formatted_address,
