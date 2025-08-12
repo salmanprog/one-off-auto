@@ -38,7 +38,7 @@ class VehicleHook
         query.preload('VehicleMake')
         query.preload('VehicleModel')
         query.preload('VehicleYear')
-        query.whereIn('status',['0','1','2']).orderBy('id','desc')
+        query.whereIn('status',['0','1','2','3']).orderBy('id','desc')
     }
 
     /**

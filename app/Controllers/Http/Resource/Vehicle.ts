@@ -50,6 +50,8 @@ class Vehicle
       status_text = 'Pending'
     }else if(record.status == '1'){
       status_text = 'Approved'
+    }else if(record.status == '3'){
+      status_text = 'Disapproved'
     }else{
       status_text = 'Sold'
     }

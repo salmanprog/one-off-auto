@@ -62,7 +62,7 @@ export default class extends BaseSchema {
       table.string('formatted_address').nullable();
       table.string('latitude').nullable();
       table.string('longitude').nullable();
-      table.enu('status',['0','1','2']).notNullable().defaultTo('0')
+      table.enu('status',['0','1','2','3']).notNullable().defaultTo('0')
       table.timestamp('created_at', { useTz: true }).nullable()
       table.timestamp('updated_at', { useTz: true }).nullable()
       table.timestamp('deleted_at', { useTz: true }).nullable()
