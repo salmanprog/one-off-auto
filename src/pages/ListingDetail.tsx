@@ -166,9 +166,11 @@ const ListingDetail = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const { loading, data, fetchApi } = useFetch("user_vehicle_list", "mount", listingId);
   const { postData } = useFetch("user_in_chatroom", "submit");
-  const { data: related_vehicle } = useFetch("get_related_vehicle", "mount", listingId);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isAuthenticated = !!localStorage.getItem("session");
   const authUser = Helper.getStorageData("session");
+  const user_id = (isAuthenticated) ? authUser.id : 0;
+  const { data: related_vehicle } = useFetch("get_related_vehicle", "mount", listingId+"?user_id="+user_id);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   // Fallback dummy listing
   const dummyListing: DetailedListing = {
@@ -681,6 +683,7 @@ const ListingDetail = () => {
                         vehicle_stock_parts: String(relatedListing.vehicle_stock_parts ?? ''),
                         //vehicle_stock_parts_text: String(relatedListing.vehicle_stock_parts_text ?? ''),
                         location: String(relatedListing.vehicle_owner_address ?? ''),
+                        is_favourite: Number(relatedListing.is_favourite ?? 0),
                         mileage: Number(relatedListing.vehicle_mileage ?? 0),
                         vehicle_modification: relatedListing.vehicle_modification as string[] ?? [],
                         image: String(relatedListing.image_url ?? '/default-image.jpg'),

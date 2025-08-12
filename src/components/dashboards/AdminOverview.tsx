@@ -138,7 +138,7 @@ const AdminOverview: React.FC = () => {
       </section>
 
       {/* Recent Activity Section */}
-      <section>
+      {/* <section>
         <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
         <div className="bg-white p-4 rounded shadow">
           {loadingActivity ? (
@@ -155,7 +155,7 @@ const AdminOverview: React.FC = () => {
             <p>No recent activity.</p>
           )}
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

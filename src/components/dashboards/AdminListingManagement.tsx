@@ -209,7 +209,7 @@ const AdminListingManagement: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Listing ID</TableHead>
+                <TableHead>Listing Image</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead>Vehicle Type</TableHead>
                 <TableHead>Make</TableHead>
@@ -223,12 +223,12 @@ const AdminListingManagement: React.FC = () => {
             <TableBody>
               {currentListings.map(listing => (
                 <TableRow key={listing.id}>
-                  <TableCell className="font-medium">{listing.id}</TableCell>
+                  <TableCell className="font-medium"><img src={listing.image_url} alt={listing.vehicle_title} className="w-25 h-16 object-cover rounded" /></TableCell>
                   <TableCell>{listing.vehicle_title}</TableCell>
                   <TableCell>{listing.vehicle_category.title}</TableCell>
-                  <TableCell>{listing.vehicle_make}</TableCell>
-                  <TableCell>{listing.vehicle_model}</TableCell>
-                  <TableCell>{listing.vehicle_year}</TableCell>
+                  <TableCell>{listing.vehicle_make_obj.title}</TableCell>
+                  <TableCell>{listing.vehicle_model_obj.title}</TableCell>
+                  <TableCell>{listing.vehicle_year_obj.title}</TableCell>
                   <TableCell>{listing.vehicle_price}</TableCell>
                   <TableCell>{listing.status_text}</TableCell>
                   <TableCell className="text-right">

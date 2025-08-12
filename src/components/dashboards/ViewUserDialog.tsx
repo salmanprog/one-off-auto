@@ -47,7 +47,7 @@ const ViewUserDialog: React.FC<ViewUserDialogProps> = ({ isOpen, onClose, userId
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
           <DialogDescription>
-            Viewing details for User ID: {userId}
+            Viewing details for User: {userId}
           </DialogDescription>
         </DialogHeader>
         {loading ? (

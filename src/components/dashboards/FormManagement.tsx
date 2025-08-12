@@ -33,6 +33,9 @@ const FormManagement: React.FC = () => {
 
   // Get options for the selected field
   let fieldOptions = options[selectedField] || [];
+  if (selectedField === 'vehicle_make' && selectedMakeId) {
+    console.log('selected_field........................',selectedField)
+  }
   if (selectedField === 'vehicle_model' && selectedMakeId) {
     fieldOptions = fieldOptions.filter((opt: any) => opt.makeId === selectedMakeId);
   }

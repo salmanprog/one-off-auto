@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 
 interface ViewListingDialogProps {
   isOpen: boolean;
@@ -171,90 +172,182 @@ const ViewListingDialog: React.FC<ViewListingDialogProps> = ({ isOpen, onClose, 
               <CardTitle>Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <p className="text-gray-700 text-lg"><strong>Vehicle Make:</strong> {fallback(listing.vehicle_make_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Vehicle Model:</strong> {fallback(listing.vehicle_model_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Vehicle Year:</strong> {fallback(listing.vehicle_year_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Primarily Used:</strong> {fallback(listing.vehicle_primarily_used)}</p>
-              <p className="text-gray-700 text-lg"><strong>Stock Parts:</strong> {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</p>
-              <p className="text-gray-700 text-lg"><strong>Location:</strong> {fallback(listing.location)}</p>
-              <p className="text-gray-700 text-lg"><strong>Mileage:</strong> {listing.mileage?.toLocaleString?.() || fallback(listing.mileage)}</p>
-              <p className="text-gray-700 text-lg"><strong>Drive Type:</strong> {fallback(listing.driver_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Motor Size (Cylinders):</strong> {fallback(listing.motor_size_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Transmission Type:</strong> {fallback(listing.transmition_types_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Fuel Type:</strong> {fallback(listing.fuel_types_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Number of Doors:</strong> {fallback(listing.number_of_doors)}</p>
-              <p className="text-gray-700 text-lg"><strong>Exterior Color:</strong> {fallback(listing.exterior_color)}{' '}
-                {listing.exterior_color && (
-                  <span style={{
-                    display: 'inline-block',
-                    width: 20,
-                    height: 20,
-                    backgroundColor: listing.exterior_color,
-                    border: '1px solid #ccc',
-                    marginLeft: 8,
-                    verticalAlign: 'middle',
-                  }} />
+            <Table>
+              <TableBody>
+                {/* Render details in pairs for 4-column layout */}
+                <TableRow>
+                  <TableHead>Vehicle Make</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.vehicle_make_title}</TableCell>
+                  <TableHead>Vehicle Model</TableHead>
+                  <TableCell>{listing.vehicle_model_title}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Vehicle Year</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.vehicle_year_title}</TableCell>
+                  <TableHead>Primarily Used</TableHead>
+                  <TableCell>{listing.vehicle_primarily_used}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Stock Parts</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}</TableCell>
+                  <TableHead>Location</TableHead>
+                  <TableCell>{listing.location}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Mileage</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.mileage?.toLocaleString()}</TableCell>
+                  <TableHead>Drive Type</TableHead>
+                  <TableCell>{listing.driver_title}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Motor Size (Cylinders)</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.motor_size_title}</TableCell>
+                  <TableHead>Transmission Type</TableHead>
+                  <TableCell>{listing.transmition_types_title}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Fuel Type</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.fuel_types_title}</TableCell>
+                  <TableHead>Number of Doors</TableHead>
+                  <TableCell>{listing.number_of_doors}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Exterior Color</TableHead>
+                  <TableCell className="border-r border-gray-300">
+                    {listing.exterior_color ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{
+                          display: 'inline-block',
+                          width: 24,
+                          height: 24,
+                          backgroundColor: listing.exterior_color,
+                          border: '1px solid #ccc',
+                          borderRadius: 4,
+                          marginRight: 8
+                        }} />
+                        <span>{listing.exterior_color}</span>
+                      </span>
+                    ) : 'N/A'}
+                  </TableCell>
+                  <TableHead>Interior Color</TableHead>
+                  <TableCell>
+                    {listing.interior_color ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{
+                          display: 'inline-block',
+                          width: 24,
+                          height: 24,
+                          backgroundColor: listing.interior_color,
+                          border: '1px solid #ccc',
+                          borderRadius: 4,
+                          marginRight: 8
+                        }} />
+                        <span>{listing.interior_color}</span>
+                      </span>
+                    ) : 'N/A'}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Seller Type</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.seller_type_title}</TableCell>
+                  <TableHead>Status</TableHead>
+                  <TableCell>{listing.vehicle_status_title}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Suspension Size</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.suspension_size} inch</TableCell>
+                  <TableHead>Suspension Type</TableHead>
+                  <TableCell>{listing.suspension_type_title}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Chassis Reinforcement</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.chassis_reinforcement === '1' ? 'Yes' : 'No'}</TableCell>
+                  <TableHead>Audio Upgrades</TableHead>
+                  <TableCell>{listing.audio_upgrade === '1' ? 'Yes' : 'No'}</TableCell>
+                </TableRow>
+                {listing.chassis_reinforcement === '1' && listing.audio_upgrade === '1' && (
+                  <TableRow>
+                    <TableHead>Chassis Reinforcement Detail</TableHead>
+                    <TableCell>{listing.chassis_reinforcement_text}</TableCell>
+                    <TableHead>Audio Upgrades Detail</TableHead>
+                    <TableCell>{listing.audio_upgrade_text}</TableCell>
+                  </TableRow>
                 )}
-              </p>
-              <p className="text-gray-700 text-lg"><strong>Interior Color:</strong> {fallback(listing.interior_color)}{' '}
-                {listing.interior_color && (
-                  <span style={{
-                    display: 'inline-block',
-                    width: 20,
-                    height: 20,
-                    backgroundColor: listing.interior_color,
-                    border: '1px solid #ccc',
-                    marginLeft: 8,
-                    verticalAlign: 'middle',
-                  }} />
+                {listing.chassis_reinforcement === '1' && listing.audio_upgrade !== '1' && (
+                  <TableRow>
+                    <TableHead>Chassis Reinforcement Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.chassis_reinforcement_text}</TableCell>
+                  </TableRow>
                 )}
-              </p>
-              <p className="text-gray-700 text-lg"><strong>Seller Type:</strong> {fallback(listing.seller_type_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Status:</strong> {fallback(listing.vehicle_status_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Suspension Size:</strong> {fallback(listing.suspension_size)} inch</p>
-              <p className="text-gray-700 text-lg"><strong>Suspension Type:</strong> {fallback(listing.suspension_type_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Chassis Reinforcement:</strong> {listing.chassis_reinforcement === '1' ? 'Yes' : 'No'}</p>
-              {listing.chassis_reinforcement === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Chassis Reinforcement Detail:</strong> {fallback(listing.chassis_reinforcement_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Audio Upgrades:</strong> {listing.audio_upgrade === '1' ? 'Yes' : 'No'}</p>
-              {listing.audio_upgrade === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Audio Upgrades Detail:</strong> {fallback(listing.audio_upgrade_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Wheel Width:</strong> {fallback(listing.wheel_width)} inch</p>
-              <p className="text-gray-700 text-lg"><strong>Wheel Diameter:</strong> {fallback(listing.wheel_diameter)}</p>
-              <p className="text-gray-700 text-lg"><strong>HP Output Range:</strong> {fallback(listing.hp_output_rang_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Exterior Cosmetic Upgrades:</strong> {listing.cosmetic_upgrade === '1' ? 'Yes' : 'No'}</p>
-              {listing.cosmetic_upgrade === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Exterior Cosmetic Upgrades Detail:</strong> {fallback(listing.cosmetic_upgrade_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Vehicle Use:</strong> {fallback(listing.vehicle_use_title)}</p>
-              <p className="text-gray-700 text-lg"><strong>Interior Upgrades:</strong> {listing.interior_upgrade === '1' ? 'Yes' : 'No'}</p>
-              {listing.interior_upgrade === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Interior Upgrades Detail:</strong> {fallback(listing.interior_upgrade_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Exterior (body) Upgrades:</strong> {listing.exterior_upgrade === '1' ? 'Yes' : 'No'}</p>
-              {listing.exterior_upgrade === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Exterior (body) Upgrades Detail:</strong> {fallback(listing.exterior_upgrade_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Motor Upgrades:</strong> {listing.motor_upgrade === '1' ? 'Yes' : 'No'}</p>
-              {listing.motor_upgrade === '1' && (
-                <p className="text-gray-700 text-lg">
-                  <strong>Motor Upgrades Detail:</strong> {fallback(listing.motor_upgrade_text)}
-                </p>
-              )}
-              <p className="text-gray-700 text-lg"><strong>Documentation Type:</strong> {fallback(listing.documentation_type_title)}</p>
-            </CardContent>
+                {listing.audio_upgrade === '1' && listing.chassis_reinforcement !== '1' && (
+                  <TableRow>
+                    <TableHead>Audio Upgrades Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.audio_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                <TableRow>
+                  <TableHead>Wheel Width</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.wheel_width} inch</TableCell>
+                  <TableHead>Wheel Diameter</TableHead>
+                  <TableCell>{listing.wheel_diameter}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>HP Output Range</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.hp_output_rang_title}</TableCell>
+                  <TableHead>Exterior Cosmetic Upgrades</TableHead>
+                  <TableCell>{listing.cosmetic_upgrade === '1' ? 'Yes' : 'No'}</TableCell>
+                </TableRow>
+                {listing.cosmetic_upgrade === '1' && (
+                  <TableRow>
+                    <TableHead>Exterior Cosmetic Upgrades Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.cosmetic_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                <TableRow>
+                  <TableHead>Vehicle Use</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.vehicle_use_title}</TableCell>
+                  <TableHead>Interior Upgrades</TableHead>
+                  <TableCell>{listing.interior_upgrade === '1' ? 'Yes' : 'No'}</TableCell>
+                </TableRow>
+                {listing.interior_upgrade === '1' && (
+                  <TableRow>
+                    <TableHead>Interior Upgrades Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.interior_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                <TableRow>
+                  <TableHead>Exterior (body) Upgrades</TableHead>
+                  <TableCell className="border-r border-gray-300">{listing.exterior_upgrade === '1' ? 'Yes' : 'No'}</TableCell>
+                  <TableHead>Motor Upgrades</TableHead>
+                  <TableCell>{listing.motor_upgrade === '1' ? 'Yes' : 'No'}</TableCell>
+                </TableRow>
+                {listing.exterior_upgrade === '1' && listing.motor_upgrade === '1' && (
+                  <TableRow>
+                    <TableHead>Exterior (body) Upgrades Detail</TableHead>
+                    <TableCell>{listing.exterior_upgrade_text}</TableCell>
+                    <TableHead>Motor Upgrades Detail</TableHead>
+                    <TableCell>{listing.motor_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                {listing.exterior_upgrade === '1' && listing.motor_upgrade !== '1' && (
+                  <TableRow>
+                    <TableHead>Exterior (body) Upgrades Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.exterior_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                {listing.motor_upgrade === '1' && listing.exterior_upgrade !== '1' && (
+                  <TableRow>
+                    <TableHead>Motor Upgrades Detail</TableHead>
+                    <TableCell colSpan={3}>{listing.motor_upgrade_text}</TableCell>
+                  </TableRow>
+                )}
+                <TableRow>
+                  <TableHead>Documentation Type</TableHead>
+                  <TableCell colSpan={3}>{listing.documentation_type_title}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardContent>
           </Card>
           {/* Modifications Section */}
           <Card className="mb-6">

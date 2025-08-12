@@ -25,6 +25,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("session");
   const authUser = Helper.getStorageData("session");
+  
   let favrite = (listing.is_favourite == 0) ? false : true;
   const [isFavorite, setIsFavorite] = useState(favrite);
   const handleClick = () => {

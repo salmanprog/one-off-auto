@@ -254,12 +254,14 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
       fd.append("documentation_type",formData.documentation_type);
       fd.append("vehicle_modification",formData.vehicle_modification);
       fd.append("vehicle_owner_name",formData.vehicle_owner_name);
-      fd.append("vehicle_owner_address",vehicleowneraddress);
-      fd.append("formatted_address",formattedaddress);
-      fd.append("latitude",latitude);
-      fd.append("longitude",longitude);
-      fd.append("country",newcountry);
-      fd.append("postal_code",newpostalcode);
+      if(vehicleowneraddress){
+        fd.append("vehicle_owner_address",vehicleowneraddress);
+        fd.append("formatted_address",formattedaddress);
+        fd.append("latitude",latitude);
+        fd.append("longitude",longitude);
+        fd.append("country",newcountry);
+        fd.append("postal_code",newpostalcode);  
+      }
       fd.append("vehicle_owner_email",formData.vehicle_owner_email);
       fd.append("vehicle_owner_phone",formData.vehicle_owner_phone);
 
@@ -1071,6 +1073,9 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
                   <option value="1">Approved</option>
                   <option value="2">Sold</option>
                   </>
+                )}
+                {formData.status == '2' && (
+                  <option value="2">Sold</option>
                 )}
                 {/* <option value="0">Pending</option>
                 <option value="1">Approved</option>
