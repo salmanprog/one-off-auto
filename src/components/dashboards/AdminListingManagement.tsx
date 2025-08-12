@@ -144,6 +144,12 @@ const AdminListingManagement: React.FC = () => {
     setIsViewDialogOpen(true);
   };
 
+  const handleEditStatus = (listingId: string,status: string) => {
+    setSelectedListingId(listingId);
+    setSelectedListingStatus(status);
+    setIsStatusDialogOpen(true);
+  };
+
   const handleCloseEditDialog = () => {
     setIsEditDialogOpen(false);
     setSelectedListingId(null); // Clear selected listing ID on close
@@ -161,7 +167,6 @@ const AdminListingManagement: React.FC = () => {
   };
 
   const handleSaveStatus = (listingId: number, newStatus: string) => {
-    console.log('listingId.............',listingId+' newStatus.............'+newStatus)
     try {
       const fd = new FormData();
       fd.append('status',newStatus);
@@ -175,7 +180,11 @@ const AdminListingManagement: React.FC = () => {
     }
     //setIsStatusDialogOpen(true);
   };
-
+  // useEffect(() => {
+  //   if (currentListings.length > 0) {
+  //     setSelectedListingStatus(currentListings[0].status);
+  //   }
+  // }, [currentListings]);
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Listing Management</h2>
@@ -232,8 +241,11 @@ const AdminListingManagement: React.FC = () => {
                   <TableCell>{listing.vehicle_price}</TableCell>
                   <TableCell>{listing.status_text}</TableCell>
                   <TableCell className="text-right">
+                    {listing.status_text !== "Sold" && (
+                         <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleEditStatus(listing.slug,listing.status)}>Change Status</Button>
+                    )}
                     <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>
-                    {listing.status_text !== "Sold" && listing.status_text !== "Approved" && (
+                    {/* {listing.status_text !== "Sold" && listing.status_text !== "Approved" && (
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -243,7 +255,7 @@ const AdminListingManagement: React.FC = () => {
                       >
                         Change Status
                       </Button>
-                    )}
+                    )} */}
                   </TableCell>
                 </TableRow>
               ))}

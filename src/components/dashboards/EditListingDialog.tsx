@@ -1077,6 +1077,9 @@ const EditListingDialog: React.FC<EditListingDialogProps> = ({ isOpen, onClose, 
                 {formData.status == '2' && (
                   <option value="2">Sold</option>
                 )}
+                {formData.status == '3' && (
+                  <option value="3">Disapproved</option>
+                )}
                 {/* <option value="0">Pending</option>
                 <option value="1">Approved</option>
                 <option value="2">Sold</option> */}
