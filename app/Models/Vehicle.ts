@@ -321,20 +321,20 @@ export default class Vehicle extends RestModel
     public static async getVehicleLists(limit:number)
     {
         let show_limit = !_.isEmpty(limit) ? limit : 3;
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1']).orderBy('id','desc').limit(show_limit)
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1']).whereNull('deleted_at').orderBy('id','desc').limit(show_limit)
         return record;
     }
 
     public static async getRelatedVehicleLists(slug:string,limit:number)
     {
         let show_limit = !_.isEmpty(limit) ? limit : 9;
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1']).where('slug','<>',slug).orderBy('id','desc').limit(show_limit)
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').whereIn('status',['1']).where('slug','<>',slug).whereNull('deleted_at').orderBy('id','desc').limit(show_limit)
         return record;
     }
 
     public static async getVehicleBySlug(slug: string)
     {
-        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').where('slug',slug).first();
+        let record = await this.query().preload('vehicleCategory').preload('user').preload('media').preload('VehicleDriverType').preload('VehicleMotorSize').preload('VehicleTransmissionType').preload('VehicleFuelType').preload('VehicleSellerType').preload('VehicleStatus').preload('VehicleSuspensionType').preload('VehicleHpOutRange').preload('VehicleUses').preload('VehicleDocumentation').preload('VehicleMake').preload('VehicleModel').preload('VehicleYear').where('slug',slug).whereNull('deleted_at').first();
         return record;
     }
 }
