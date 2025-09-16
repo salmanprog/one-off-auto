@@ -8,7 +8,9 @@ import EditListingDialog from "./EditListingDialog"; // Import EditListingDialog
 import ChangeListingStatusDialog from "./ChangeListingStatusDialog"; // Import ChangeListingStatusDialog
 import { updateListingStatus } from "@/lib/api"; // Assuming this function is imported from api
 import { useNavigate } from 'react-router-dom';
+import HttpRequest from "../../repositories";
 import ViewListingDialog from './ViewListingDialog';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function mapListingForDialog(listing: any) {
   if (!listing) return null;
@@ -180,6 +182,19 @@ const AdminListingManagement: React.FC = () => {
     }
     //setIsStatusDialogOpen(true);
   };
+
+  const handleDeleteVehicle = async (slug) => {
+    const selectedVehicleId = slug;
+    const response = await HttpRequest.makeRequest('DELETE', baseUrl+'vehicle/'+selectedVehicleId).then(
+      (response) => {
+        if (response.code !== 200) {
+          alert('Failed to delete vehicle');
+        } else {
+          window.location.reload();
+        }
+      }
+    );
+  };
   // useEffect(() => {
   //   if (currentListings.length > 0) {
   //     setSelectedListingStatus(currentListings[0].status);
@@ -242,9 +257,10 @@ const AdminListingManagement: React.FC = () => {
                   <TableCell>{listing.status_text}</TableCell>
                   <TableCell className="text-right">
                     {listing.status_text !== "Sold" && (
-                         <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleEditStatus(listing.slug,listing.status)}>Change Status</Button>
+                         <Button variant="primary" size="sm" className="mr-2" onClick={() => handleEditStatus(listing.slug,listing.status)}>Status</Button>
                     )}
-                    <Button variant="ghost" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>
+                    <Button variant="primary" size="sm" className="mr-2" onClick={() => handleView(listing.id)}>View</Button>
+                    <Button variant="destructive" size="sm" className="mr-2" onClick={() => handleDeleteVehicle(listing.slug)}>Delete</Button>
                     {/* {listing.status_text !== "Sold" && listing.status_text !== "Approved" && (
                       <Button 
                         variant="ghost" 
