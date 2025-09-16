@@ -434,14 +434,14 @@ export default class extends BaseSeeder {
       {
         identifier: 'application_setting',
         meta_key: 'fb_link',
-        value: '#',
+        value: 'https://www.facebook.com/profile.php?id=61575258932716',
         is_file: '0',
         created_at: new Date(),
       },
       {
         identifier: 'application_setting',
         meta_key: 'insta_link',
-        value: '#',
+        value: 'https://www.instagram.com/oneoffautos',
         is_file: '0',
         created_at: new Date(),
       },
