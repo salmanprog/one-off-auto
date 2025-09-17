@@ -328,7 +328,7 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.make}
-                  onChange={(e) => onFilterChange({ make: e.target.value })}
+                  onChange={(e) => onFilterChange({ make: e.target.value, model: "" })} // reset model
                 >
                   <option value="">Select Make</option>
                   {vehicleMakes &&
@@ -347,14 +347,20 @@ const ListingsFilters: React.FC<ListingsFiltersProps> = ({
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={filters.model}
                   onChange={(e) => onFilterChange({ model: e.target.value })}
+                  disabled={!filters.make}
                 >
                   <option value="">Select Model</option>
                   {vehicleModel &&
-                    vehicleModel.map((model: { id: string; title: string }) => (
-                      <option key={model.id} value={model.id}>
-                        {model.title}
-                      </option>
-                    ))}
+                    vehicleModel
+                      .filter(
+                        (model: { id: string; title: string; make_id: string | number }) =>
+                          String(model.make_id) === String(filters.make)
+                      )
+                      .map((model: { id: string; title: string }) => (
+                        <option key={model.id} value={model.id}>
+                          {model.title}
+                        </option>
+                      ))}
                 </select>
               </div>
 
