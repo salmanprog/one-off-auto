@@ -70,6 +70,7 @@ export default class extends BaseSeeder {
       { id: 64, title: 'VinFast', slug: 'vinfast', description: 'VinFast', created_at: new Date() },
       { id: 65, title: 'Volkswagen', slug: 'volkswagen', description: 'Volkswagen', created_at: new Date() },
       { id: 66, title: 'Volvo', slug: 'volvo', description: 'Volvo', created_at: new Date() },
+      { id: 67, title: 'BMW (Germany)', slug: 'bmw-germany', description: 'BMW (Germany)', created_at: new Date() },
     ])
   }
 }
