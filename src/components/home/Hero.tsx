@@ -30,7 +30,7 @@ useEffect(() => {
       return;
     }
 
-    const url = `${baseUrl}user/user-vehicle-model?make_id=${makeValue}`;
+    const url = `${baseUrl}user/user-vehicle-model?make_id=${makeValue}&limit=5000`;
     await HttpRequest.makeRequest('GET', url).then((response) => {
       if (response.code !== 200) {
         console.warn("Model API failed:", response);
