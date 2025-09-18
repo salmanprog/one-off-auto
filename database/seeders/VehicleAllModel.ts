@@ -1580,7 +1580,12 @@ export default class extends BaseSeeder {
           { title: 'Z3', slug: 'bmwge_z3', make_id: '67', year: '2020', description: 'Z3', created_at: new Date() },
           { title: 'Z4', slug: 'bmwge_z4', make_id: '67', year: '2021', description: 'Z4', created_at: new Date() },
           { title: 'Z8', slug: 'bmwge_z8', make_id: '67', year: '2022', description: 'Z8', created_at: new Date() },
-
+          { title: 'Elise', slug: 'lotus_elise', make_id: '68', year: '2022', description: 'Elise', created_at: new Date() },
+          { title: 'Esprit', slug: 'lotus_esprit', make_id: '68', year: '2023', description: 'Esprit', created_at: new Date() },
+          { title: 'Evora', slug: 'lotus_evora', make_id: '68', year: '2024', description: 'Evora', created_at: new Date() },
+          { title: 'Evora 400', slug: 'lotus_evora-400', make_id: '68', year: '2021', description: 'Evora 400', created_at: new Date() },
+          { title: 'Evora GT', slug: 'lotus_evora-gt', make_id: '68', year: '2020', description: 'Evora GT', created_at: new Date() },
+          { title: 'Exige', slug: 'lotus_exige', make_id: '68', year: '2022', description: 'Exige', created_at: new Date() },
     ])
   }
 }
