@@ -16,7 +16,7 @@ class VehicleMakeHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        query.orderBy('id','desc')
+        query.orderBy('title', 'asc')
     }
 
     /**
