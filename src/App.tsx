@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Buy from "./pages/Buy";
 import ForgotPassword from "./pages/ForgotPassword";
 import AuthRoute from "./components/authroute/Index";
 import GuestRoute from "./components/authroute/GuestRoute";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/sell-your-ride" element={<SellYourRide />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/buy" element={<AuthRoute><Buy /></AuthRoute>} />
             <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

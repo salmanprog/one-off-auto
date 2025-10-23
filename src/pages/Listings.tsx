@@ -699,6 +699,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
             </div>
 
             <div className="lg:col-span-3">
+              
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                   <p className="text-gray-600 mb-2 sm:mb-0">
@@ -750,6 +751,39 @@ const filterNearbyListings = async (listings, radiusKm) => {
                     Next
                   </button>
                 </div>
+              </div>
+              <div>
+                <h4 className="text-2xl md:text-3xl font-bold mb-4">List Your Car for Sale</h4>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  Want to sell your car or upgrade to a new vehicle? One Off Autos has you covered.
+                </p>
+                <p className="text-[16px] text-gray-700 mb-6">
+                  We’re a dedicated marketplace for modified cars. Our goal is to connect modified car enthusiasts. When you post your car for sale on our platform, you’re gaining access to buyers who value and appreciate the effort and upgrades put into modifying your vehicle.
+                </p>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  The process is simple. List your car for sale with detailed specifications, accentuate your modifications, and get in touch with verified customers.
+                </p>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  Sell your car on One Off Autos because our community knows the true value of the vehicles.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-2xl md:text-3xl font-bold mb-4">Sell Your Modified Car Today!</h4>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  One Off Autos is the platform for buying and selling modified cars. By selling with One Off Autos, you are reaching out to the right audience: gearheads, builders, and enthusiasts who understand what makes a vehicle unique.
+                </p>
+                <p className="text-[16px] text-gray-700 mb-6">
+                  Add pictures of your cars, describe all modifications, and provide an honest assessment of the work done —from engine swaps to suspension upgrades. 
+                </p>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  <a href="">Sign Up</a> now to list your car!
+                </p>
+              </div>
+              <div>
+                <h4 className="text-2xl md:text-3xl font-bold mb-4">Custom Cars and Trucks for Sale</h4>
+                <p className="text-[16px] text-gray-700 mb-4">
+                  Need inspiration to build your next project or dream? Check out our collection of customized cars and trucks on sale. All listed items are uniquely modified by former owners. Experience high-performance tunings, lifted off-roaders, and street-ready classics.
+                </p>
               </div>
             </div>
            
