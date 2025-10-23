@@ -27,11 +27,11 @@ const ValueProps = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-oneoffautos-blue">
       <div className="container-custom">
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Why Choose One Off Autos?</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Why Choose One Off Autos?</h2>
+          <p className="text-lg text-white max-w-2xl mx-auto">
             We're the premier marketplace for enthusiasts who want unique, modified vehicles that stand out from the crowd.
           </p>
         </div>

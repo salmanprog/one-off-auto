@@ -3,8 +3,28 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import SellForm from "../components/sell/SellForm";
 import { CheckCircle2 } from "lucide-react";
+import FAQs from "../components/faqs/";
 
 const SellYourRide = () => {
+  const faqs = [
+    {
+      question: "1. What’s the best place to sell a custom-modified car?",
+      answer: "One Off Autos is a dedicated platform for buying and selling custom-modified cars online. We specialize in modified builds and connect car enthusiasts. "
+    },
+    {
+      question: "2 Can I sell my modified car privately, or should I use a dealer?",
+      answer: "You can sell your modified car either privately or through a dealer. Selling privately may yield a higher return, but it requires more effort. On the other hand, using a trusted dealer or platform like One Off Autos streamlines the process, making it quicker and safer while effectively reaching your target audience."
+    },
+    {
+      question: "3 Where can I find buyers interested specifically in modified cars?",
+      answer: "One Off Autos connects you directly with enthusiasts who value custom builds. You can also reach buyers through car shows, social media communities, and automotive forums."
+    },
+    {
+      question: "4 How long does it usually take to sell a custom-modified car?",
+      answer: "Timing depends on the car's uniqueness, demand, and pricing. Well-priced and attractive cars often sell within a few weeks, while more unique builds might take longer to attract the right buyer."
+    },
+    
+  ];
   return (
     <MainLayout>
       <div className="bg-oneoffautos-lightgray py-12">
@@ -91,6 +111,9 @@ const SellYourRide = () => {
                 </div>
               </div>
             </div>
+            <FAQs 
+              faqs={faqs}
+            />
           </div>
         </div>
       </div>

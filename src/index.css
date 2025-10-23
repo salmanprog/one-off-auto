@@ -142,3 +142,21 @@
 .suggestion-item:hover {
   background-color: #f0f0f0;
 }
+
+.your-next-build-sec {
+  position: relative;
+}
+.your-next-build-sec::before {
+  position: relative;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.border-theme {
+  border: 3px solid #0a3d91;
+}

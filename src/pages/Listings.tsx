@@ -5,6 +5,7 @@ import ListingCard from "../components/listings/ListingCard";
 import ListingsFilters from "../components/listings/ListingsFilters";
 import { useFetch } from "../hooks/request";
 import Helper from "../helpers";
+import FAQs from "../components/faqs/";
 
 // Define filter types
 interface FilterState {
@@ -68,6 +69,24 @@ interface FilterState {
 }
 
 const Listings = () => {
+  const faqs = [
+    {
+      question: "1. What’s the best place to list your car for sale online?",
+      answer: "The best place to list your car for sale online, especially if it's a customized project, is One Off Autos. Our specialized platform targets enthusiasts who appreciate unique vehicles and offers a better chance of getting a decent price."
+    },
+    {
+      question: "2. How do I list my car for sale online quickly and safely?",
+      answer: "At One Off Autos, we only accept listings with high-quality photos and a detailed description of the modifications made to the car. To avoid scams, use our platform for secure communication and experience a swift buying and selling process. "
+    },
+    {
+      question: "3 Are there any fees for listing a car for sale online?",
+      answer: "Listing fees vary by platform. At One Off Autos, we currently don’t charge a fee for listing your modified car for sale online. We also believe in transparent pricing. Commissions details are mentioned before you post your listing. Our goal is to make the signup process easy for you, without hidden charges."
+    },
+    {
+      question: "4 How can I increase the chances of selling my car when I list it online?",
+      answer: "Research the market to set a competitive price, then post high-quality photos and be transparent about your car's condition and modifications. Emphasize what makes your vehicle unique, respond promptly to inquiries, and share your listing on social media for added visibility. Always use our platform for communication to avoid scams."
+    },
+  ];
   const navigate = useNavigate();
   const { search } = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -669,7 +688,6 @@ const filterNearbyListings = async (listings, radiusKm) => {
         <div className="container-custom py-8" id="#listings">
           <h1 className="text-3xl font-bold mb-2">Vehicle Listings</h1>
           <p className="text-gray-600 mb-6">Browse our curated selection of modified vehicles.</p>
-
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1">
               <ListingsFilters
@@ -693,6 +711,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
                 {finalListings  .map((listing) => (
                   <ListingCard key={listing.slug} listing={listing} />
                 ))}
+               
               </div>
 
               {/* Pagination */}
@@ -733,6 +752,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
                 </div>
               </div>
             </div>
+           
           </div>
         </div>
       </div>
