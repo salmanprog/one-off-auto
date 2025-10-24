@@ -3,8 +3,37 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import { Link } from "react-router-dom";
 import { Users, Shield, HeartHandshake, Trophy } from "lucide-react";
+import FAQs from "../components/faqs/";
+import MetaTags from "../components/common/MetaTags";
 
-const About = () => {
+const Buy = () => {
+  <MetaTags
+    title="adsasd"
+    description="Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars."
+  />
+  const faqs = [
+    {
+      question: "1. Where to buy modified cars that are performance-ready?",
+      answer: "If you need to find modified cars that are tuned, tested, and performance-ready, consider a marketplace dedicated to enthusiasts. Sites like One Off Autos screen listings and let you filter results by modification type, such as suspension setups, forced induction, and custom interiors. This level of customization makes it easy to find modified cars for sale. "
+    },
+    {
+      question: "2. Where is the best place to buy modified cars?",
+      answer: "The best place to buy modified cars depends on the type of modification you're looking for. Websites like One Off Autos excel if you’re looking for highly modified vehicles. If you're looking for something more custom or niche, forums like those dedicated to specific car brands or Facebook groups may offer unique options. It's important to check the seller's reputation and confirm the quality of the modifications."
+    },
+    {
+      question: "3 How do I verify the quality of a modified car before buying?",
+      answer: "Request detailed service and modification records, thoroughly inspect the car, and take it for a test drive. Whenever possible, get an independent mechanic or tuning expert to assess performance, safety, and reliability."
+    },
+    {
+      question: "4 How do I find modified cars that fit my budget?",
+      answer: "Use filters on One Off Autos to narrow your search by price, model, and modification type. Ascertain your maximum spend (including potential maintenance), and focus on models with widely available parts and support. "
+    },
+    {
+      question: "5 What should I check before buying a custom-modified car?",
+      answer: "Before buying a custom-modified car, always request documentation of all modifications, check the build quality, and confirm the car's safety and roadworthiness. On our platform, every modification is highlighted to help the seller get a fair value and help the buyer find their dream car."
+    },
+
+  ];
   return (
     <MainLayout>
       <div className="bg-oneoffautos-blue text-white py-16">
@@ -50,7 +79,8 @@ const About = () => {
               <p className="mb-8">
                 Begin your journey now and find out why One Off Autos is the place where drivers go to get more than just stock vehicles. Shop for modified cars online, the right way, with passion, precision, and guidance from people who understand.
               </p>
-              
+
+
             </div>
           </div>
 
@@ -121,8 +151,11 @@ const About = () => {
           </div>
         </div>
       </div>
+      <FAQs
+        faqs={faqs}
+      />
     </MainLayout>
   );
 };
 
-export default About;
+export default Buy;

@@ -6,6 +6,7 @@ import ListingsFilters from "../components/listings/ListingsFilters";
 import { useFetch } from "../hooks/request";
 import Helper from "../helpers";
 import FAQs from "../components/faqs/";
+import MetaTags from "../components/common/MetaTags";
 
 // Define filter types
 interface FilterState {
@@ -69,6 +70,10 @@ interface FilterState {
 }
 
 const Listings = () => {
+  <MetaTags 
+  title="List Your Car For Sale Online | One Off Autos"
+  description="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
+/>
   const faqs = [
     {
       question: "1. What’s the best place to list your car for sale online?",

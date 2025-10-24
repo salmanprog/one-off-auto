@@ -13,6 +13,7 @@ import ButtonExamples from "../components/examples/ButtonExamples";
 import { register } from "../config/form_validation_rules";
 import { useFetch } from "../hooks/request";
 import FAQs from "../components/faqs/";
+import MetaTags from "../components/common/MetaTags";
 
 const Index = () => {
   const faqs = [
@@ -39,19 +40,26 @@ const Index = () => {
     
   ];
   return (
-    <MainLayout>
-      <Hero />
-      <FeaturedListings />
-      <HowItWorks />
-      <AboutPreview />
-      <ValueProps />
-      <YourNextBuild />
-      <Testimonials />
-      <CallToAction />
-      <FAQs 
-        faqs={faqs}
+    <>
+      <MetaTags 
+        title="Modified Street Cars | One Off Autos"
+        description="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
+        canonical="https://oneoffautos.com"
       />
-    </MainLayout>
+      <MainLayout>
+        <Hero />
+        <FeaturedListings />
+        <HowItWorks />
+        <AboutPreview />
+        <ValueProps />
+        <YourNextBuild />
+        <Testimonials />
+        <CallToAction />
+        <FAQs 
+          faqs={faqs}
+        />
+      </MainLayout>
+    </>
   );
 };
 
