@@ -47,6 +47,7 @@ const ValueProps = () => {
             </div>
           ))}
         </div>
+        
       </div>
     </section>
   );

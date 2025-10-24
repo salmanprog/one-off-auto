@@ -63,8 +63,8 @@ useEffect(() => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="text-white">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight animate-fade-in">
-              <span className="text-oneoffautos-red">Modified</span> Cars <br />
-              For Passionate Drivers
+              <span className="text-oneoffautos-red">Modified  </span>  Street<br />
+              Cars For Sale
             </h1>
             <p className="text-xl opacity-90 mb-8 max-w-lg animate-fade-in" style={{ animationDelay: "0.2s" }}>
               The premier marketplace for enthusiasts buying and selling unique modified vehicles crafted for performance and style.

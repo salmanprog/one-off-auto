@@ -17,7 +17,7 @@ const HowItWorks = () => {
     {
       icon: <Upload className="h-12 w-12 text-oneoffautos-blue" />,
       title: "Sell Your Ride Easily",
-      description: "List your modified vehicle with detailed specs and reach buyers who truly appreciate the time, effort, and investment in your build."
+      description: "List your modified vehicle with detailed specifications and reach buyers who truly appreciate the time, effort, and investment you've put into your build."
     }
   ];
 
@@ -31,8 +31,7 @@ const HowItWorks = () => {
           </h2>
           <div className="h-1 w-20 bg-oneoffautos-red mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            One Off Autos makes buying and selling modified vehicles straightforward and rewarding.
-            Our platform is built by enthusiasts, for enthusiasts who understand the value of custom automotive builds.
+            One Off Autos makes buying and selling modified vehicles straightforward and rewarding. Our platform is built by enthusiasts, for enthusiasts who understand the value of custom automotive builds.
           </p>
         </div>
 

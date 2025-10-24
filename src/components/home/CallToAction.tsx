@@ -29,7 +29,7 @@ const CallToAction = () => {
           <div>
             <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Find Your Next Build?</h2>
             <p className="text-lg text-gray-700 mb-6">
-              Join thousands of enthusiasts buying and selling modified vehicles on the premier marketplace built for gearheads.
+              Join thousands of enthusiasts buying and selling modified custom cars on the premier marketplace built for gearheads.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-8">

@@ -19,7 +19,7 @@ const AboutPreview = () => {
           <div>
             <h2 className="text-2xl md:text-3xl font-bold mb-4">About One Off Autos</h2>
             <p className="text-lg text-gray-700 mb-4">
-              One Off Autos was created by enthusiasts, for enthusiasts. We provide a dedicated marketplace for buyers and sellers of modified vehicles that celebrates the craftsmanship, passion, and uniqueness of automotive builds.
+              One Off Autos was created by enthusiasts, for enthusiasts. We provide a dedicated marketplace for buyers and sellers of used modified cars for sale, celebrating the craftsmanship, passion, and uniqueness of automotive builds.
             </p>
             <p className="text-lg text-gray-700 mb-6">
               Unlike general car marketplaces, we understand modifications, appreciate their value, and give builders a platform to showcase their work to an audience that gets it.
