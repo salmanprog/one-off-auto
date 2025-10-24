@@ -7,6 +7,22 @@ import FAQs from "../components/faqs/";
 import { Helmet } from "react-helmet-async";
 
 const Buy = () => {
+  const schemaData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "Buy Modified Cars",
+    "image": "",
+    "description": "Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars.",
+    "brand": {
+      "@type": "Brand",
+      "name": "One Off Autos"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "256"
+    }
+  };
 
   const faqs = [
     {
@@ -39,6 +55,9 @@ const Buy = () => {
           name="description"
           content="Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars."
         />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
       </Helmet>
       <div className="bg-oneoffautos-blue text-white py-16">
         <div className="container-custom">

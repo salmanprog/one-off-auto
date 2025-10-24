@@ -37,18 +37,22 @@ const Index = () => {
       question: "5. What should I check before buying a custom-modified car?",
       answer: "Before buying a custom-modified car, always request documentation of all modifications, check the build quality, and confirm the car's safety and roadworthiness. At One Off Autos, our cars are verified, inspected, and ensured to comply with local regulations and insurance requirements before even being listed on our platform."
     },
-    
+
   ];
   return (
     <>
       <MainLayout>
-      <Helmet>
-        <title>Modified Street Cars | One Off Autos</title>
-        <meta
-          name="description"
-          content="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
-        />
-        </Helmet> 
+        <Helmet>
+          <title>Modified Street Cars | One Off Autos</title>
+          <meta
+            name="description"
+            content="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
+          />
+          <meta name="DC.title" content="Modified Street Cars" />
+          <meta name="geo.region" content="US" />
+          <meta name="geo.position" content="39.78373;-100.445882" />
+          <meta name="ICBM" content="39.78373, -100.445882" />
+        </Helmet>
         <Hero />
         <FeaturedListings />
         <HowItWorks />
@@ -57,7 +61,7 @@ const Index = () => {
         <YourNextBuild />
         <Testimonials />
         <CallToAction />
-        <FAQs 
+        <FAQs
           faqs={faqs}
         />
       </MainLayout>

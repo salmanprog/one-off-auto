@@ -70,6 +70,22 @@ interface FilterState {
 }
 
 const Listings = () => {
+  const schemaData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "List Your Car For Sale",
+    "image": "",
+    "description": "List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars.",
+    "brand": {
+      "@type": "Brand",
+      "name": "One Off Autos"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "348"
+    }
+  };
 
   const faqs = [
     {
@@ -692,6 +708,9 @@ const Listings = () => {
           name="description"
           content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
         />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
       </Helmet>
       <div className="bg-oneoffautos-lightgray">
         <div className="container-custom py-8" id="#listings">
@@ -799,8 +818,8 @@ const Listings = () => {
         </div>
       </div>
       <FAQs
-              faqs={faqs}
-            />
+        faqs={faqs}
+      />
     </MainLayout>
   );
 };

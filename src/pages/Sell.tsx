@@ -8,6 +8,22 @@ import FAQs from "../components/faqs/";
 import { Helmet } from "react-helmet-async";
 
 const Sell = () => {
+  const schemaData = {
+    "@context": "https://schema.org/", 
+    "@type": "Product", 
+    "name": "Sell Your Modified Cars",
+    "image": "",
+    "description": "List and sell your modified cars online. Reach passionate buyers, showcase your custom build, and join a growing community of car lovers.",
+    "brand": {
+      "@type": "Brand",
+      "name": "One Off Autos"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "341"
+    }
+  };
   const faqs = [
     {
       question: "1. What’s the best place to sell a custom-modified car?",
@@ -29,6 +45,16 @@ const Sell = () => {
   ];
   return (
     <MainLayout>
+      <Helmet>
+        <title>Sell Your Modified Cars Online | One Off Autos</title>
+        <meta
+          name="description"
+          content="List and sell your modified cars online. Reach passionate buyers, showcase your custom build, and join a growing community of car lovers."
+        />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
       <div className="bg-oneoffautos-blue text-white py-16">
         <div className="container-custom">
           <div className="max-w-3xl">
