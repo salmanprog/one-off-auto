@@ -6,7 +6,7 @@ import ListingsFilters from "../components/listings/ListingsFilters";
 import { useFetch } from "../hooks/request";
 import Helper from "../helpers";
 import FAQs from "../components/faqs/";
-import MetaTags from "../components/common/MetaTags";
+import { Helmet } from "react-helmet-async";
 
 // Define filter types
 interface FilterState {
@@ -46,11 +46,11 @@ interface FilterState {
   audio_upgrade: string;
   audio_upgrade_text: string;
   wheel_width: string;
-  wheelwidthMin:string;
-  wheelwidthMax:string;
+  wheelwidthMin: string;
+  wheelwidthMax: string;
   wheel_diameter: string;
-  wheelDiameterMin:string;
-  wheelDiameterMax:string;
+  wheelDiameterMin: string;
+  wheelDiameterMax: string;
   hp_output_rang: string;
   hp_output_rang_title: string;
   cosmetic_upgrade: string;
@@ -64,16 +64,13 @@ interface FilterState {
   motor_upgrade: string;
   motor_upgrade_text: string;
   documentation_type: string;
-  documentation_type_title: string; 
+  documentation_type_title: string;
   nearbyRadius: string;
   postal_code: string;
 }
 
 const Listings = () => {
-  <MetaTags 
-  title="List Your Car For Sale Online | One Off Autos"
-  description="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
-/>
+
   const faqs = [
     {
       question: "1. What’s the best place to list your car for sale online?",
@@ -102,50 +99,50 @@ const Listings = () => {
   if (isAuthenticated) {
     user_id = authUser.id
   }
-  const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?user_id='+user_id+'&limit=5000');
+  const { data, loading, error } = useFetch("user_vehicle_list", "mount", '?user_id=' + user_id + '&limit=5000');
   const [finalListings, setFinalListings] = useState([]);
 
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const toRad = (value) => (value * Math.PI) / 180;
-  const R = 6371;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-};
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
 
-const filterNearbyListings = async (listings, radiusKm) => {
-  return new Promise((resolve) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLon = position.coords.longitude;
+  const filterNearbyListings = async (listings, radiusKm) => {
+    return new Promise((resolve) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLat = position.coords.latitude;
+            const userLon = position.coords.longitude;
 
-          const filtered = listings.filter((listing) => {
-            const distance = calculateDistance(
-              userLat,
-              userLon,
-              parseFloat(listing.latitude),
-              parseFloat(listing.longitude)
-            );
-            return distance <= radiusKm;
-          });
+            const filtered = listings.filter((listing) => {
+              const distance = calculateDistance(
+                userLat,
+                userLon,
+                parseFloat(listing.latitude),
+                parseFloat(listing.longitude)
+              );
+              return distance <= radiusKm;
+            });
 
-          resolve(filtered);
-        },
-        () => {
-          resolve(listings); // fallback
-        }
-      );
-    } else {
-      resolve(listings);
-    }
-  });
-};
+            resolve(filtered);
+          },
+          () => {
+            resolve(listings); // fallback
+          }
+        );
+      } else {
+        resolve(listings);
+      }
+    });
+  };
   const listings = useMemo(() => {
     if (!data) return [];
     const vehicles = Array.isArray(data) ? data : [data];
@@ -248,10 +245,10 @@ const filterNearbyListings = async (listings, radiusKm) => {
     audio_upgrade_text: "",
     wheel_width: "",
     wheelwidthMin: "",
-    wheelwidthMax:"",
+    wheelwidthMax: "",
     wheel_diameter: "",
-    wheelDiameterMin:"",
-    wheelDiameterMax:"",
+    wheelDiameterMin: "",
+    wheelDiameterMax: "",
     hp_output_rang: "",
     hp_output_rang_title: "",
     cosmetic_upgrade: "",
@@ -269,7 +266,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
     nearbyRadius: "",
     postal_code: "",
   });
-  
+
 
   // Step 1: Read query parameters
   useEffect(() => {
@@ -279,8 +276,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
       make: params.get("make") || "",
       model: params.get("model") || "",
       year: params.get("year") || "",
-      yearMin:params.get("yearMin") || "",
-      yearMax:params.get("yearMax") || "",
+      yearMin: params.get("yearMin") || "",
+      yearMax: params.get("yearMax") || "",
       priceMin: params.get("priceMin") || "",
       priceMax: params.get("priceMax") || "",
       mileage: params.get("mileage") || "",
@@ -314,8 +311,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
       wheelwidthMin: params.get("wheelwidthMin") || "",
       wheelwidthMax: params.get("wheelwidthMax") || "",
       wheel_diameter: params.get("wheel_diameter") || "",
-      wheelDiameterMin:params.get("wheelDiameterMin") || "",
-      wheelDiameterMax:params.get("wheelDiameterMax") || "",
+      wheelDiameterMin: params.get("wheelDiameterMin") || "",
+      wheelDiameterMax: params.get("wheelDiameterMax") || "",
       hp_output_rang: params.get("hp_output_rang") || "",
       hp_output_rang_title: params.get("hp_output_rang_title") || "",
       cosmetic_upgrade: params.get("cosmetic_upgrade") || "",
@@ -335,7 +332,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
     };
     setFilters(queryFilters);
   }, [search]);
-  
+
 
   // Step 2: Update query params when filters change
   const handleFilterChange = (newFilters: Partial<FilterState>) => {
@@ -385,11 +382,11 @@ const filterNearbyListings = async (listings, radiusKm) => {
       audio_upgrade: "",
       audio_upgrade_text: "",
       wheel_width: "",
-      wheelwidthMin:"",
-      wheelwidthMax:"",
+      wheelwidthMin: "",
+      wheelwidthMax: "",
       wheel_diameter: "",
-      wheelDiameterMin:"",
-      wheelDiameterMax:"",
+      wheelDiameterMin: "",
+      wheelDiameterMax: "",
       hp_output_rang: "",
       hp_output_rang_title: "",
       cosmetic_upgrade: "",
@@ -438,8 +435,8 @@ const filterNearbyListings = async (listings, radiusKm) => {
         //listing.model.includes(filters.model)
       );
     }
-    
-    if(filters.year){
+
+    if (filters.year) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.year) == parseInt(filters.year)
       );
@@ -470,7 +467,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
         (listing) => listing.mileage <= parseInt(filters.mileage)
       );
     }
-    
+
     if (filters.chassis_reinforcement) {
       filtered = filtered.filter(
         (listing) => listing.audio_upgrade == filters.chassis_reinforcement
@@ -517,37 +514,37 @@ const filterNearbyListings = async (listings, radiusKm) => {
       modFilter(filters.wheelsMods, listing.mods)
     );
 
-    if(filters.driver_type){
+    if (filters.driver_type) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.driver_type) == parseInt(filters.driver_type)
       );
     }
 
-    if(filters.motor_size_cylinders){
+    if (filters.motor_size_cylinders) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.motor_size_cylinders) == parseInt(filters.motor_size_cylinders)
       );
     }
 
-    if(filters.transmition_types){
+    if (filters.transmition_types) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.transmition_types) == parseInt(filters.transmition_types)
       );
     }
 
-    if(filters.fuel_types){
+    if (filters.fuel_types) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.fuel_types) == parseInt(filters.fuel_types)
       );
     }
 
-    if(filters.seller_type){
+    if (filters.seller_type) {
       filtered = filtered.filter(
         (listing) => parseInt(listing.seller_type) == parseInt(filters.seller_type)
       );
     }
 
-    if(filters.vehicle_status){
+    if (filters.vehicle_status) {
       filtered = filtered.filter(
         (listing) => listing.vehicle_status.toString() == filters.vehicle_status.toString()
       );
@@ -663,7 +660,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
     };
     applyNearbyFilter();
   }, [filteredAndSortedListings, filters.nearbyRadius]);
-  
+
   const paginatedListings = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredAndSortedListings.slice(startIndex, startIndex + itemsPerPage);
@@ -689,6 +686,13 @@ const filterNearbyListings = async (listings, radiusKm) => {
 
   return (
     <MainLayout>
+      <Helmet>
+        <title>List Your Car For Sale Online | One Off Autos</title>
+        <meta
+          name="description"
+          content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
+        />
+      </Helmet>
       <div className="bg-oneoffautos-lightgray">
         <div className="container-custom py-8" id="#listings">
           <h1 className="text-3xl font-bold mb-2">Vehicle Listings</h1>
@@ -704,7 +708,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
             </div>
 
             <div className="lg:col-span-3">
-              
+
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                   <p className="text-gray-600 mb-2 sm:mb-0">
@@ -714,10 +718,10 @@ const filterNearbyListings = async (listings, radiusKm) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {finalListings  .map((listing) => (
+                {finalListings.map((listing) => (
                   <ListingCard key={listing.slug} listing={listing} />
                 ))}
-               
+
               </div>
 
               {/* Pagination */}
@@ -737,11 +741,10 @@ const filterNearbyListings = async (listings, radiusKm) => {
                       <button
                         key={pageNum}
                         onClick={() => goToPage(pageNum)}
-                        className={`px-4 py-2 border rounded-md ${
-                          currentPage === pageNum
-                            ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
-                            : "border-gray-300 text-oneoffautos-blue bg-white"
-                        }`}
+                        className={`px-4 py-2 border rounded-md ${currentPage === pageNum
+                          ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
+                          : "border-gray-300 text-oneoffautos-blue bg-white"
+                          }`}
                       >
                         {pageNum}
                       </button>
@@ -778,7 +781,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
                   One Off Autos is the platform for buying and selling modified cars. By selling with One Off Autos, you are reaching out to the right audience: gearheads, builders, and enthusiasts who understand what makes a vehicle unique.
                 </p>
                 <p className="text-[16px] text-gray-700 mb-6">
-                  Add pictures of your cars, describe all modifications, and provide an honest assessment of the work done —from engine swaps to suspension upgrades. 
+                  Add pictures of your cars, describe all modifications, and provide an honest assessment of the work done —from engine swaps to suspension upgrades.
                 </p>
                 <p className="text-[16px] text-gray-700 mb-4">
                   <a href="">Sign Up</a> now to list your car!
@@ -791,7 +794,7 @@ const filterNearbyListings = async (listings, radiusKm) => {
                 </p>
               </div>
             </div>
-           
+
           </div>
         </div>
       </div>

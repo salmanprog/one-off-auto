@@ -4,7 +4,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import SellForm from "../components/sell/SellForm";
 import { CheckCircle2 } from "lucide-react";
 import FAQs from "../components/faqs/";
-
+import { Helmet } from "react-helmet-async";
 const SellYourRide = () => {
   const faqs = [
     {
@@ -27,6 +27,13 @@ const SellYourRide = () => {
   ];
   return (
     <MainLayout>
+      <Helmet>
+        <title>Sell Your Modified Cars Online | One Off Autos</title>
+        <meta
+          name="description"
+          content="List and sell your modified cars online. Reach passionate buyers, showcase your custom build, and join a growing community of car lovers."
+        />
+      </Helmet>
       <div className="bg-oneoffautos-lightgray py-12">
         <div className="container-custom">
           <div className="max-w-5xl mx-auto">

@@ -28,14 +28,14 @@ import { OptionsProvider } from './context/OptionsContext';
 const queryClient = new QueryClient();
 
 const App = () => (
-  <HelmetProvider>
-    <OptionsProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-          <ScrollToTop />
+  <OptionsProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <HelmetProvider>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/listings" element={<Listings />} />
@@ -56,11 +56,11 @@ const App = () => (
               <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </OptionsProvider>
-  </HelmetProvider>
+          </HelmetProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </OptionsProvider>
 );
 
 export default App;

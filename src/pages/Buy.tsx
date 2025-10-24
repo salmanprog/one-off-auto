@@ -4,13 +4,10 @@ import MainLayout from "../components/layouts/MainLayout";
 import { Link } from "react-router-dom";
 import { Users, Shield, HeartHandshake, Trophy } from "lucide-react";
 import FAQs from "../components/faqs/";
-import MetaTags from "../components/common/MetaTags";
+import { Helmet } from "react-helmet-async";
 
 const Buy = () => {
-  <MetaTags
-    title="adsasd"
-    description="Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars."
-  />
+
   const faqs = [
     {
       question: "1. Where to buy modified cars that are performance-ready?",
@@ -36,6 +33,13 @@ const Buy = () => {
   ];
   return (
     <MainLayout>
+      <Helmet>
+        <title>Buy Modified Cars | One Off Autos</title>
+        <meta
+          name="description"
+          content="Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars."
+        />
+      </Helmet>
       <div className="bg-oneoffautos-blue text-white py-16">
         <div className="container-custom">
           <div className="max-w-3xl">

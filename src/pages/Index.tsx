@@ -13,7 +13,7 @@ import ButtonExamples from "../components/examples/ButtonExamples";
 import { register } from "../config/form_validation_rules";
 import { useFetch } from "../hooks/request";
 import FAQs from "../components/faqs/";
-import MetaTags from "../components/common/MetaTags";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   const faqs = [
@@ -41,12 +41,14 @@ const Index = () => {
   ];
   return (
     <>
-      <MetaTags 
-        title="Modified Street Cars | One Off Autos"
-        description="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
-        canonical="https://oneoffautos.com"
-      />
       <MainLayout>
+      <Helmet>
+        <title>Modified Street Cars | One Off Autos</title>
+        <meta
+          name="description"
+          content="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
+        />
+        </Helmet> 
         <Hero />
         <FeaturedListings />
         <HowItWorks />
