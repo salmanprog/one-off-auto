@@ -1,7 +1,9 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Facebook, Instagram, Youtube, X } from "lucide-react";
+import Helper from "../../helpers";
+import { useFetch } from "../../hooks/request";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -10,7 +12,23 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   if (!isOpen) return null;
-
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem("session");
+  const authUser = Helper.getStorageData("session");
+  let dashboardUrl = '';
+  let loginName = '';
+  let user_group = 0;
+  if(isAuthenticated){
+      const { data } = useFetch("get_user_detail");
+      const { data:chat_messages } = useFetch("chat_unread_messages");
+      dashboardUrl = data?.user_group_id === 2 ? 'admin-dashboard' : 'user-dashboard';
+      loginName = data?.info.name
+      user_group = data?.user_group_id
+   } 
+   const handleLogout = () => {
+    localStorage.removeItem("session");
+    navigate("/signin");
+  };
   return (
     <div className="fixed inset-0 z-50 bg-gradient-to-b from-white to-oneoffautos-lightgray md:hidden">
       <div className="container-custom py-4 flex flex-col h-full">
@@ -84,6 +102,21 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           </Link>
 
           {/* Authentication Buttons */}
+          {isAuthenticated ? (
+            <>
+                
+            <Link to={`/${dashboardUrl}`} className="btn-secondary">
+            Welcome, {`${loginName}`}
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-red-500 text-red-500 font-medium rounded-md hover:bg-red-500 hover:text-white transition-colors"
+            >
+              Logout
+            </button>
+              </>
+            ) : (
+              <>
           <Link
             to="/signin"
             onClick={onClose}
@@ -98,6 +131,8 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           >
             Sign Up
           </Link>
+           </>
+              )}
         </div>
 
         <div className="mt-auto mb-8">
