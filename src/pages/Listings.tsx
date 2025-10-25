@@ -798,6 +798,9 @@ const Listings = () => {
           </div>
         </div>
       </div>
+      <FAQs
+              faqs={faqs}
+            />
     </MainLayout>
   );
 };
