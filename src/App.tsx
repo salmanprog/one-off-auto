@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Buy from "./pages/Buy";
+import Sell from "./pages/Sell";
 import ForgotPassword from "./pages/ForgotPassword";
 import AuthRoute from "./components/authroute/Index";
 import GuestRoute from "./components/authroute/GuestRoute";
@@ -40,7 +41,8 @@ const App = () => (
             <Route path="/sell-your-ride" element={<AuthRoute><SellYourRide /></AuthRoute>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/buy" element={<AuthRoute><Buy /></AuthRoute>} />
+            <Route path="/buy" element={<Buy />} />
+            <Route path="/sell" element={<Sell />} />
             <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
