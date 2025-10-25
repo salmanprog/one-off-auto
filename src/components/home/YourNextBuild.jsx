@@ -34,9 +34,9 @@ const YourNextBuild = () => {
         
         <div className="flex justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg border-theme max-w-2xl z-[1]">
-            <h3 className="text-xl font-bold mb-4 text-oneoffautos-blue">
+            <h2 className="text-xl font-bold mb-4 text-oneoffautos-blue">
               {buildTypes[2].title}
-            </h3>
+            </h2>
             <p className="text-gray-600 leading-relaxed">
               {buildTypes[2].description}
             </p>
