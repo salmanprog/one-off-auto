@@ -22,9 +22,9 @@ const YourNextBuild = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
           {buildTypes.slice(0, 2).map((buildType, index) => (
             <div key={index} className="bg-white p-8 rounded-lg shadow-lg border-theme h-full z-[1]">
-              <h3 className="text-xl font-bold mb-4 text-oneoffautos-blue">
+              <h2 className="text-xl font-bold mb-4 text-oneoffautos-blue">
                 {buildType.title}
-              </h3>
+              </h2>
               <p className="text-gray-600 leading-relaxed">
                 {buildType.description}
               </p>
