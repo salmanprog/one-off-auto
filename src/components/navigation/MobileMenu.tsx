@@ -85,7 +85,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
           {/* Authentication Buttons */}
           <Link
-            to="/login"
+            to="/signin"
             onClick={onClose}
             className="w-full text-center flex justify-center items-center py-3 px-6 border border-oneoffautos-blue text-oneoffautos-blue rounded-md hover:bg-oneoffautos-blue hover:text-white transition-colors font-medium"
           >
