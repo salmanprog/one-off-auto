@@ -4,7 +4,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import { Link } from "react-router-dom";
 import { Users, Shield, HeartHandshake, Trophy } from "lucide-react";
 import { CheckCircle2 } from "lucide-react";
-import FAQs from "../components/faqs";
+import FAQs from "../components/faqs/Index";
 import { Helmet } from "react-helmet-async";
 
 const Sell = () => {

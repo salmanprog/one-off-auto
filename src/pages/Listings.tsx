@@ -5,7 +5,7 @@ import ListingCard from "../components/listings/ListingCard";
 import ListingsFilters from "../components/listings/ListingsFilters";
 import { useFetch } from "../hooks/request";
 import Helper from "../helpers";
-import FAQs from "../components/faqs";
+import FAQs from "../components/faqs/Index";
 import { Helmet } from "react-helmet-async";
 
 // Define filter types
