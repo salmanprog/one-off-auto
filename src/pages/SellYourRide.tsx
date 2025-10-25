@@ -3,7 +3,7 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import SellForm from "../components/sell/SellForm";
 import { CheckCircle2 } from "lucide-react";
-import FAQs from "../components/faqs/";
+import FAQs from "../components/faqs";
 
 const SellYourRide = () => {
   const faqs = [
