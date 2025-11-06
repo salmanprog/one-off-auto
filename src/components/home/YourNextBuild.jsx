@@ -17,7 +17,7 @@ const YourNextBuild = () => {
   ];
 
   return (
-    <section className="py-16 bg-transparent your-next-build-sec" style={{ backgroundImage: 'url(/your-next-build-bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section className="py-16 bg-transparent your-next-build-sec" style={{ backgroundImage: 'url(/your-next-build-bg.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
           {buildTypes.slice(0, 2).map((buildType, index) => (
