@@ -4,6 +4,14 @@ import { Helmet } from "react-helmet-async";
 const MetaTags = ({ 
   title = "One Off Autos - Premium Modified Cars Marketplace",
   description = "Buy and sell unique modified vehicles. JDM, Euro tuners, American muscle cars and custom builds on the premier marketplace for car enthusiasts.",
+  keywords = "modified cars, custom cars, JDM, tuner cars, muscle cars, car marketplace, modified vehicles, custom builds",
+  ogTitle,
+  ogDescription,
+  ogImage = "/logo.png",
+  ogType = "website",
+  canonical,
+  twitterCard = "summary_large_image",
+  twitterSite = "@oneoffautos"
 }) => {
   return (
     <Helmet>
@@ -33,8 +41,6 @@ const MetaTags = ({
       <meta name="twitter:image" content={ogImage} />
       
       {/* Additional Meta Tags */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
     </Helmet>
