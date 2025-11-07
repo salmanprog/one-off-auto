@@ -55,6 +55,7 @@ const Buy = () => {
           name="description"
           content="Buy or discover modified cars listed by owners. Explore custom builds, tuned rides, and connect with sellers passionate about performance cars."
         />
+        <link rel="canonical" href="https://www.oneoffautos.com/buy" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>
