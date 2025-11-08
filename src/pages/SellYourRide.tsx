@@ -3,7 +3,8 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import SellForm from "../components/sell/SellForm";
 import { CheckCircle2 } from "lucide-react";
-import FAQs from "../components/faqs/Index";
+import FAQs from "../components/FAQs/";
+import { Helmet } from "react-helmet-async";
 
 const SellYourRide = () => {
   const faqs = [
@@ -27,7 +28,14 @@ const SellYourRide = () => {
   ];
   return (
     <MainLayout>
-      
+       <Helmet>
+        <title>SellYourRide | One Off Autos</title>
+        <meta
+          name="description"
+          content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
+        />
+        <link rel="canonical" href="https://www.oneoffautos.com/sell-your-ride" />
+      </Helmet>
       <div className="bg-oneoffautos-lightgray py-12">
         <div className="container-custom">
           <div className="max-w-5xl mx-auto">

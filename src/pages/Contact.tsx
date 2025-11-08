@@ -3,10 +3,19 @@ import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
 import ContactForm from "../components/contact/ContactForm";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   return (
     <MainLayout>
+       <Helmet>
+        <title>Contact | One Off Autos</title>
+        <meta
+          name="description"
+          content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
+        />
+        <link rel="canonical" href="https://www.oneoffautos.com/contact" />
+      </Helmet>
       <div className="bg-oneoffautos-blue text-white py-16">
         <div className="container-custom">
           <div className="max-w-3xl">
