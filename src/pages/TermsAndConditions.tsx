@@ -1,8 +1,17 @@
 import React from "react";
 import MainLayout from "../components/layouts/MainLayout";
+import { Helmet } from "react-helmet-async";
 
 const TermsAndConditions = () => (
   <MainLayout>
+     <Helmet>
+        <title>TermsAndConditions | One Off Autos</title>
+        <meta
+          name="description"
+          content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
+        />
+        <link rel="canonical" href="https://www.oneoffautos.com/terms-and-conditions" />
+      </Helmet>
     <div className="bg-oneoffautos-blue text-white py-16">
       <div className="container-custom mx-auto">
         <h1 className="text-[36px] font-bold mb-6">Terms and Conditions</h1>
