@@ -12,7 +12,7 @@ import CallToAction from "../components/home/CallToAction";
 import ButtonExamples from "../components/examples/ButtonExamples";
 import { register } from "../config/form_validation_rules";
 import { useFetch } from "../hooks/request";
-import FAQs from "../components/faqs/";
+import FAQs from "../components/faqs/Index";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
