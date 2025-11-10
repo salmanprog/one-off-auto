@@ -70,7 +70,7 @@ import Helper from "../../helpers";
         <div className="flex items-center justify-between">
           {/* Logo */}
           
-          <Logo className="max-w-[150px]" />
+          <Logo className="max-w-[150px]" width={150} height={150} />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
