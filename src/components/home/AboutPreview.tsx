@@ -12,6 +12,9 @@ const AboutPreview = () => {
             <img
               src="https://images.unsplash.com/photo-1552519507-88aa2dfa9fdb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
               alt="Car Enthusiast Meet"
+              loading="lazy"
+              width={500}
+              height={400}
               className="rounded-lg shadow-lg h-auto max-h-[400px] object-cover w-full"
             />
           </div>

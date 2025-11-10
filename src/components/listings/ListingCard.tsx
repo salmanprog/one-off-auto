@@ -25,7 +25,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("session");
   const authUser = Helper.getStorageData("session");
-  
+
   let favrite = (listing.is_favourite == 0) ? false : true;
   const [isFavorite, setIsFavorite] = useState(favrite);
   const handleClick = () => {
@@ -35,14 +35,14 @@ const ListingCard = ({ listing }: ListingCardProps) => {
   };
   const toggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if(isAuthenticated){
+    if (isAuthenticated) {
       let update_favrite = (isFavorite == false) ? 1 : 0;
       const payload = {
         user_id: authUser.id.toString(),
         vehicle_id: listing.id.toString(),
         is_favourite: update_favrite.toString(),
       };
-      await HttpRequest.makeRequest('POST', baseUrl+'vehicle_favourite', payload).then(
+      await HttpRequest.makeRequest('POST', baseUrl + 'vehicle_favourite', payload).then(
         (response) => {
           if (response.code == 200) {
             setIsFavorite((prev) => !prev);
@@ -51,7 +51,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           }
         }
       );
-      
+
     }
   };
   return (
@@ -62,6 +62,8 @@ const ListingCard = ({ listing }: ListingCardProps) => {
             src={listing.image}
             alt={listing.title}
             className="absolute inset-0 w-full h-full object-cover"
+            width="286" height="185"
+            loading="lazy"
           />
           <div className="absolute top-0 right-0 bg-oneoffautos-red text-white px-3 py-1 m-3 rounded-md font-semibold">
             <span>${listing.price.toLocaleString()}</span>
@@ -92,18 +94,18 @@ const ListingCard = ({ listing }: ListingCardProps) => {
           <div className="mt-3">
             <div className="text-sm font-medium mb-1 text-gray-700">Vehicle is primarily used for?</div>
             <div className="flex flex-wrap gap-1">
-                <span
-                  key='0'
-                  className="text-xs bg-gray-100 text-gray-700 rounded-full px-2 py-1 flex items-center"
-                >
-                  <CheckCircle2 size={12} className="mr-1 text-oneoffautos-blue" />
-                  {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}
-                </span>
+              <span
+                key='0'
+                className="text-xs bg-gray-100 text-gray-700 rounded-full px-2 py-1 flex items-center"
+              >
+                <CheckCircle2 size={12} className="mr-1 text-oneoffautos-blue" />
+                {listing.vehicle_primarily_used ? listing.vehicle_primarily_used.replace(/_/g, " ") : "N/A"}
+              </span>
             </div>
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 
