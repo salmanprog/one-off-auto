@@ -94,6 +94,14 @@ Route
       .middleware({
         index: ['apiAuth'],
   })
+  Route.resource('blog-category', 'Api/Admin/BlogCategoryController')
+      .middleware({
+        index: ['apiAuth'],
+  })
+  Route.resource('blog', 'Api/Admin/BlogController')
+      .middleware({
+        index: ['apiAuth'],
+  })
   Route.get('dashboard','Api/Admin/UsersController.userDashboard').as('dashboard').middleware('apiAuth')
   Route.get('user-hierarchy','Api/Admin/UsersController.getChildUser').as('user-hierarchy').middleware('apiAuth')
   Route.get('assign/job','Api/Admin/JobAssigneeController.getCrewJob').as('crew.job').middleware('apiAuth')
