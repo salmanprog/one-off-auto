@@ -13,6 +13,9 @@ const AboutPreview = () => {
             <img
               src={carimage}
               alt="Car Enthusiast Meet"
+              loading="lazy"
+              width={500}
+              height={400}
               className="rounded-lg shadow-lg h-auto max-h-[400px] object-cover w-full"
             />
           </div>

@@ -78,7 +78,7 @@ const Testimonials = () => {
                       <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg h-full flex flex-col">
                         <div className="flex justify-center mb-4">
                           <Avatar className="h-20 w-20 border-4 border-oneoffautos-blue shadow-md">
-                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} width={150} height={150}  />
+                            <AvatarImage className="w-[72px] h-[72px]" src={testimonial.avatar} alt={testimonial.name} width={70} height={70} loading="lazy"  />
                             <AvatarFallback className="bg-oneoffautos-red text-white text-xl">
                               {testimonial.name.charAt(0)}
                             </AvatarFallback>
