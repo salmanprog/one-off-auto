@@ -171,6 +171,22 @@ const api = {
       url: 'vehicle_favourite',
       method: "GET",
     },
+    blog_categories: {
+      url: 'admin/blog-category',
+      method: "GET",
+    },
+    blog_category_add: {
+      url: 'admin/blog-category',
+      method: "POST",
+    },
+    blog_category_update: {
+      url: 'admin/blog-category',
+      method: "PUT",
+    },
+    blog_category_delete: {
+      url: 'admin/blog-category',
+      method: "DELETE",
+    },
   };
   
   export default api;
