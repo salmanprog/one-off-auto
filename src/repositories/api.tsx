@@ -187,6 +187,22 @@ const api = {
       url: 'admin/blog-category',
       method: "DELETE",
     },
+    blog: {
+      url: 'admin/blog',
+      method: "GET",
+    },
+    blog_add: {
+      url: 'admin/blog',
+      method: "POST",
+    },
+    blog_update: {
+      url: 'admin/blog',
+      method: "PUT",
+    },
+    blog_delete: {
+      url: 'admin/blog',
+      method: "DELETE",
+    },
   };
   
   export default api;
