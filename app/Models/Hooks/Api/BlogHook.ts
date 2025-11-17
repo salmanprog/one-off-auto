@@ -16,7 +16,7 @@ class BlogHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        query.orderBy('id','desc')
+        query.preload('BlogCategory').orderBy('id','desc')
     }
 
     /**

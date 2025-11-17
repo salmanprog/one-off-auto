@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {baseUrl,storageUrl} from 'App/Helpers/Index'
+import BlogCategory from 'App/Controllers/Http/Resource/BlogCategory';
 
 class Blog
 {
@@ -33,6 +34,7 @@ class Blog
           image_url: !_.isEmpty(record.image_url) ?  await storageUrl(record.image_url) : baseUrl('/images/user-placeholder.jpg'),
           meta_title: record.meta_title,
           meta_description: record.meta_description,
+          category: await BlogCategory.initResponse(record.BlogCategory,request),
           created_at: record.created_at
       }
   }

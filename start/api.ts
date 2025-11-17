@@ -60,6 +60,8 @@ Route
     Route.resource('user/vehicle-uses', 'Api/VehicleUsesController').except(['create','update','destroy']);
     // Vehicle Documentation
     Route.resource('user/vehicle-documentation-type', 'Api/VehicleDocumentationController').except(['create','update','destroy']);
+    // Blog
+    Route.resource('user/blogs', 'Api/BlogController').except(['create','update','destroy']);
     // Named as api.users.index, api.users.store
     Route.resource('user', 'Api/UsersController')
       .except(['destroy'])

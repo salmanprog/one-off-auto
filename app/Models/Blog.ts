@@ -3,6 +3,7 @@ import { strSlug, rand, currentDateTime } from 'App/Helpers/Index'
 import _ from 'lodash'
 import { DateTime } from 'luxon'
 import RestModel from './RestModel'
+import BlogCategory from './BlogCategory'
 import moment from 'moment';
 
 export default class Blog extends RestModel
@@ -41,6 +42,12 @@ export default class Blog extends RestModel
 
     @column()
     public deleted_at: DateTime | null
+
+    @belongsTo(() => BlogCategory, {
+        foreignKey: 'cat_id',
+        localKey: 'id'
+    })
+    public BlogCategory: BelongsTo<typeof BlogCategory>
 
     public static fillable()
     {
