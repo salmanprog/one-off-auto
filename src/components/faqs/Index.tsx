@@ -10,7 +10,7 @@ const FAQs = ({
   faqs = [],
   className = ""
 }) => {
-  // Default FAQs if none provided
+  // Default FAQs if none provided ----
   const defaultFaqs = [
     {
       question: "How do I list my modified vehicle for sale?",
