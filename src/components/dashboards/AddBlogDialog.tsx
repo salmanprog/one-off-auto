@@ -14,82 +14,81 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
   const quillRef = useRef(null);
 
   const handleImageUpload = useCallback(() => {
-    // Store quill instance before opening file dialog
     const quill = quillRef.current;
-    
+  
     if (!quill) {
       console.error("Quill editor not ready");
       return;
     }
-
-    // Get current selection before opening dialog
+  
     let range = quill.getSelection();
     if (!range) {
       range = { index: quill.getLength() };
     }
-
-    // Create file input
+  
+    // Create file selector
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.style.display = "none";
     document.body.appendChild(input);
   
-    const handleFileSelect = () => {
+    const handleFileSelect = async () => {
       const file = input.files?.[0];
       if (!file) {
         document.body.removeChild(input);
         return;
       }
   
-      // Re-check quill instance after file selection
       const currentQuill = quillRef.current;
       if (!currentQuill) {
         document.body.removeChild(input);
         return;
       }
   
-      // Use FileReader to convert image to base64
-      const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result;
-        
-        if (!imageUrl || !currentQuill) {
+      // Prepare form data for API upload
+      const formData = new FormData();
+      formData.append("image", file);
+  
+      try {
+        // 🔥 API CALL START
+        const response = await fetch("https://oneoffautos.com/api/media", {
+          method: "POST",
+          body: formData,
+        });
+  
+        const result = await response.json();
+  
+        if (!result.url) {
+          console.error("No image URL returned", result);
           document.body.removeChild(input);
           return;
         }
   
-        // Get current selection again (in case it changed)
+        const imageUrl = result.url;
+  
+        // Insert image into the editor
         let currentRange = currentQuill.getSelection();
         if (!currentRange) {
           currentRange = { index: currentQuill.getLength() };
         }
   
-        // Insert image at the current position using base64 URL
         currentQuill.insertEmbed(currentRange.index, "image", imageUrl);
-  
-        // Move cursor after image
         currentQuill.setSelection(currentRange.index + 1);
   
-        // Cleanup
-        document.body.removeChild(input);
-        input.removeEventListener("change", handleFileSelect);
-      };
-      
-      reader.onerror = () => {
-        console.error("Error reading file");
-        document.body.removeChild(input);
-        input.removeEventListener("change", handleFileSelect);
-      };
-      
-      // Read file as data URL (base64)
-      reader.readAsDataURL(file);
+      } catch (err) {
+        console.error("Image upload failed:", err);
+      }
+  
+      // Cleanup
+      document.body.removeChild(input);
+      input.removeEventListener("change", handleFileSelect);
     };
   
     input.addEventListener("change", handleFileSelect);
     input.click();
   }, []);
+  
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
