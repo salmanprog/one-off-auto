@@ -46,13 +46,11 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
         return;
       }
   
-      // Prepare form data for API upload
       const formData = new FormData();
       formData.append("image", file);
   
       try {
-        // 🔥 API CALL START
-        const response = await fetch("https://oneoffautos.com/api/media", {
+        const response = await fetch("https://oneoffauto.sitestaginglink.com/api/media", {
           method: "POST",
           body: formData,
         });
