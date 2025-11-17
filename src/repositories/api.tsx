@@ -203,6 +203,10 @@ const api = {
       url: 'admin/blog',
       method: "DELETE",
     },
+    blog_list: {
+      url: 'user/blogs',
+      method: "GET",
+    },
   };
   
   export default api;
