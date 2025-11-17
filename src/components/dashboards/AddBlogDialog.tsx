@@ -1,11 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import ImageResize from "quill-image-resize-module-react";
+import axios from "axios";
+
+// Register ImageResize module
+ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
+  const quillRef = useRef(null);
+
+  const handleImageUpload = useCallback(() => {
+    // Store quill instance before opening file dialog
+    const quill = quillRef.current;
+    
+    if (!quill) {
+      console.error("Quill editor not ready");
+      return;
+    }
+
+    // Get current selection before opening dialog
+    let range = quill.getSelection();
+    if (!range) {
+      range = { index: quill.getLength() };
+    }
+
+    // Create file input
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.style.display = "none";
+    document.body.appendChild(input);
+  
+    const handleFileSelect = () => {
+      const file = input.files?.[0];
+      if (!file) {
+        document.body.removeChild(input);
+        return;
+      }
+  
+      // Re-check quill instance after file selection
+      const currentQuill = quillRef.current;
+      if (!currentQuill) {
+        document.body.removeChild(input);
+        return;
+      }
+  
+      // Use FileReader to convert image to base64
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result;
+        
+        if (!imageUrl || !currentQuill) {
+          document.body.removeChild(input);
+          return;
+        }
+  
+        // Get current selection again (in case it changed)
+        let currentRange = currentQuill.getSelection();
+        if (!currentRange) {
+          currentRange = { index: currentQuill.getLength() };
+        }
+  
+        // Insert image at the current position using base64 URL
+        currentQuill.insertEmbed(currentRange.index, "image", imageUrl);
+  
+        // Move cursor after image
+        currentQuill.setSelection(currentRange.index + 1);
+  
+        // Cleanup
+        document.body.removeChild(input);
+        input.removeEventListener("change", handleFileSelect);
+      };
+      
+      reader.onerror = () => {
+        console.error("Error reading file");
+        document.body.removeChild(input);
+        input.removeEventListener("change", handleFileSelect);
+      };
+      
+      // Read file as data URL (base64)
+      reader.readAsDataURL(file);
+    };
+  
+    input.addEventListener("change", handleFileSelect);
+    input.click();
+  }, []);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
@@ -14,6 +98,51 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
   const [metatitle, setMetaTitle] = useState("");
   const [metadescription, setMetaDescription] = useState("");
   const [newImage, setNewImage] = useState<File | null>(null);
+
+  const quillModules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ script: "sub" }, { script: "super" }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ direction: "rtl" }],
+        [{ size: ["small", false, "large", "huge"] }],
+        [{ color: [] }, { background: [] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["link", "image"],
+        ["clean"],
+      ],
+      handlers: {
+        image: handleImageUpload,
+      },
+    },
+    imageResize: {
+      modules: ["Resize", "DisplaySize", "Toolbar"],
+    },
+  }), [handleImageUpload]);
+
+  const quillFormats = useMemo(() => [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "color",
+    "background",
+    "align",
+    "script",
+    "direction",
+    "image",
+  ], []);
 
   const handleSubmit = () => {
     onSave({
@@ -69,37 +198,21 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
           {/* Description */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-700">Description</label>
-            <div className="bg-white">
+            <div className="bg-white" style={{ minHeight: "250px" }}>
               <ReactQuill
                 theme="snow"
                 value={description}
                 onChange={setDescription}
                 placeholder="Please describe the blog post..."
-                modules={{
-                  toolbar: [
-                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'direction': 'rtl' }],
-                    [{ 'size': ['small', false, 'large', 'huge'] }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'font': [] }],
-                    [{ 'align': [] }],
-                    ['link', 'image'],
-                    ['clean']
-                  ],
-                }}
-                formats={[
-                  'header', 'font', 'size',
-                  'bold', 'italic', 'underline', 'strike', 'blockquote',
-                  'list', 'bullet', 'indent',
-                  'color', 'background',
-                  'align', 'script', 'direction'
-                ]}
+                modules={quillModules}
+                formats={quillFormats}
                 className="bg-white rounded-md"
-                style={{ minHeight: '200px' }}
+                style={{ minHeight: "200px" }}
+                ref={(el) => {
+                  if (el) {
+                    quillRef.current = el.getEditor();
+                  }
+                }}
               />
             </div>
           </div>
