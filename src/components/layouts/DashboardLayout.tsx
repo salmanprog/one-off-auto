@@ -8,6 +8,8 @@ import UserAccountSettings from '../dashboards/UserAccountSettings';
 import UserListings from '../dashboards/UserListings';
 import AdminContactListing from '../dashboards/AdminContactListing';
 import AdminSubscriberListing from '../dashboards/AdminSubscriberListing';
+import BlogCategory from '../dashboards/BlogCategory';
+import Blog from '../dashboards/Blog';
 import UserInquiries from '../dashboards/UserInquiries';
 import UserNotifications from '../dashboards/UserNotifications';
 import ApplicationSettings from '../dashboards/ApplicationSettings';
@@ -31,6 +33,8 @@ const DashboardLayout: React.FC = () => {
         { path: '/admin-dashboard/listings', label: 'Listing Management' },
         { path: '/admin-dashboard/contactlistings', label: 'Contact-us Listing' },
         { path: '/admin-dashboard/subscriberslistings', label: 'Subscriber Listing' },
+        { path: '/admin-dashboard/blogcategory', label: 'Blog Category Listing' },
+        { path: '/admin-dashboard/blog', label: 'Blog Listing' },
         { path: '/admin-dashboard/application-setting', label: 'Application Setting' },
         //{ path: '/admin-dashboard/form-management', label: 'Form Management' },
       ]
@@ -59,6 +63,10 @@ const DashboardLayout: React.FC = () => {
           return <AdminContactListing />;
           case '/admin-dashboard/subscriberslistings':
           return <AdminSubscriberListing />;
+          case '/admin-dashboard/blogcategory':
+          return <BlogCategory />;
+          case '/admin-dashboard/blog':
+          return <Blog />;
           case '/admin-dashboard/application-setting':
           return <ApplicationSettings />;
         // case '/admin-dashboard/form-management':

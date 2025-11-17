@@ -17,14 +17,14 @@ const YourNextBuild = () => {
   ];
 
   return (
-    <section className="py-16 bg-transparent your-next-build-sec" style={{ backgroundImage: 'url(/your-next-build-bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section className="py-16 bg-transparent your-next-build-sec" style={{ backgroundImage: 'url(/your-next-build-bg.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
           {buildTypes.slice(0, 2).map((buildType, index) => (
             <div key={index} className="bg-white p-8 rounded-lg shadow-lg border-theme h-full z-[1]">
-              <h3 className="text-xl font-bold mb-4 text-oneoffautos-blue">
+              <h2 className="text-xl font-bold mb-4 text-oneoffautos-blue">
                 {buildType.title}
-              </h3>
+              </h2>
               <p className="text-gray-600 leading-relaxed">
                 {buildType.description}
               </p>
@@ -34,9 +34,9 @@ const YourNextBuild = () => {
         
         <div className="flex justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg border-theme max-w-2xl z-[1]">
-            <h3 className="text-xl font-bold mb-4 text-oneoffautos-blue">
+            <h2 className="text-xl font-bold mb-4 text-oneoffautos-blue">
               {buildTypes[2].title}
-            </h3>
+            </h2>
             <p className="text-gray-600 leading-relaxed">
               {buildTypes[2].description}
             </p>

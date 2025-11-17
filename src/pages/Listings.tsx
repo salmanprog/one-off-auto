@@ -94,7 +94,7 @@ const Listings = () => {
     },
     {
       question: "2. How do I list my car for sale online quickly and safely?",
-      answer: "At One Off Autos, we only accept listings with high-quality photos and a detailed description of the modifications made to the car. To avoid scams, use our platform for secure communication and experience a swift buying and selling process. "
+      answer: "At One Off Autos, we only accept listings with high-quality photos and a detailed description of the modifications made to the car. To avoid scams, use our platform for secure communication and experience a swift buying and selling process."
     },
     {
       question: "3 Are there any fees for listing a car for sale online?",
