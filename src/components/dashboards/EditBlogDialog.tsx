@@ -112,7 +112,7 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
         [{ color: [] }, { background: [] }],
         [{ font: [] }],
         [{ align: [] }],
-        ["link", "image"],
+        ["link"],
         ["clean"],
       ],
       handlers: {

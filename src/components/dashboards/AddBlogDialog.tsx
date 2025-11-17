@@ -109,7 +109,7 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
         [{ color: [] }, { background: [] }],
         [{ font: [] }],
         [{ align: [] }],
-        ["link", "image"],
+        ["link"],
         ["clean"],
       ],
       handlers: {
