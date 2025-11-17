@@ -89,6 +89,9 @@ import Helper from "../../helpers";
             <Link to="/contact" className="font-medium hover:text-oneoffautos-blue transition-colors">
               Contact
             </Link>
+            <Link to="/blogs" className="font-medium hover:text-oneoffautos-blue transition-colors">
+              Blogs
+            </Link>
           </nav>
 
           {/* Social and Mobile Menu Toggle */}

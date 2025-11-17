@@ -25,6 +25,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ScrollToTop from "./components/scrolltotop/ScrollToTop";
 import { OptionsProvider } from './context/OptionsContext';
+import Blogs from "./pages/Blogs";
 
 const queryClient = new QueryClient();
 
@@ -50,12 +51,12 @@ const App = () => (
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/listings/:listingId" element={<ListingDetail />} />
               <Route path="/user/verify/:code" element={<VerifyUser />} />
-              <Route path="/admin-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
+              <Route path="/admin-dashboard/*" element={<DashboardLayout />} />
               <Route path="/user-dashboard/*" element={<AuthRoute><DashboardLayout /></AuthRoute>} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-              {/* <Route path="*" element={<NotFound />} /> */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </HelmetProvider>
         </BrowserRouter>
