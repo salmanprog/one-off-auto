@@ -26,6 +26,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ScrollToTop from "./components/scrolltotop/ScrollToTop";
 import { OptionsProvider } from './context/OptionsContext';
 import Blogs from "./pages/Blogs";
+import BlogDetail from "./pages/BlogDetail";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
               <Route path="/blogs" element={<Blogs />} />
+              <Route path="/view-blog/:slug" element={<BlogDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HelmetProvider>

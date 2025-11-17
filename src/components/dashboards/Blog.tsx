@@ -124,7 +124,6 @@ const BlogPostListings: React.FC = () => {
               <TableRow>
                 <TableHead>Image</TableHead>
                 <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -137,7 +136,6 @@ const BlogPostListings: React.FC = () => {
                   </TableCell>
 
                   <TableCell>{post.title}</TableCell>
-                  <TableCell>{post.status}</TableCell>
 
                   <TableCell className="text-right">
                     <Button
