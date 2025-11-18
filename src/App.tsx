@@ -57,7 +57,7 @@ const App = () => (
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
               <Route path="/blogs" element={<Blogs />} />
-              <Route path="/view-blog/:slug" element={<BlogDetail />} />
+              <Route path="/:slug" element={<BlogDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HelmetProvider>
