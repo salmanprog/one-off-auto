@@ -95,7 +95,7 @@ const Blogs = () => {
                 {/* BLOG LIST */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     {paginatedBlogs.map((blog) => (
-                        <Link key={blog.id} to={`/view-blog/${blog.slug}`} className="block">
+                        <Link key={blog.id} to={`/${blog.slug}`} className="block">
                             <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg h-full transition-shadow">
                                 <div className="relative pb-[65%] overflow-hidden">
                                     <img
