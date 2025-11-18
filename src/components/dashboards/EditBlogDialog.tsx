@@ -141,7 +141,9 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
     "align",
     "script",
     "direction",
+    "size",
     "image",
+    "link",
   ], []);
 
   useEffect(() => {

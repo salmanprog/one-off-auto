@@ -138,7 +138,9 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
     "align",
     "script",
     "direction",
+    "size",
     "image",
+    "link",
   ], []);
 
   const handleSubmit = () => {
