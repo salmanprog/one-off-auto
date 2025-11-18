@@ -83,7 +83,7 @@ const Blogs = () => {
 
                         {/* DESCRIPTION */}
                         <div
-                            className="prose max-w-none mt-4"
+                            className="max-w-none mt-4"
                             dangerouslySetInnerHTML={{ __html: data.description }}
                         />
                     </div>

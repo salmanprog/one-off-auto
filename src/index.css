@@ -160,3 +160,16 @@
 .border-theme {
   border: 3px solid #0a3d91;
 }
+
+
+.quill-content .ql-size-small {
+  font-size: 0.75em !important;
+}
+
+.quill-content .ql-size-large {
+  font-size: 1.5em !important;
+}
+
+.quill-content .ql-size-huge {
+  font-size: 2.5em !important;
+}
