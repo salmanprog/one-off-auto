@@ -162,6 +162,7 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
       title,
       slug,
       description,
+      cat_id: categoryId,
       image_url: image,   // old image
       image_file: newImage, // new uploaded
       metatitle,
