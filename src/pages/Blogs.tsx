@@ -117,7 +117,7 @@ const Blogs = () => {
                                     </h3>
 
                                     <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-                                        {blog.excerpt}
+                                        <div dangerouslySetInnerHTML={{ __html: blog.excerpt }} />
                                     </p>
 
                                     <div className="flex items-center text-gray-600 text-sm">
@@ -153,11 +153,10 @@ const Blogs = () => {
                                     <button
                                         key={pageNum}
                                         onClick={() => goToPage(pageNum)}
-                                        className={`px-4 py-2 border rounded-md ${
-                                            currentPage === pageNum
+                                        className={`px-4 py-2 border rounded-md ${currentPage === pageNum
                                                 ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
                                                 : "border-gray-300 text-oneoffautos-blue bg-white"
-                                        }`}
+                                            }`}
                                     >
                                         {pageNum}
                                     </button>

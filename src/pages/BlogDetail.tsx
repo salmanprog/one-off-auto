@@ -27,7 +27,7 @@ const Blogs = () => {
                 <title>Blogs | One Off Autos</title>
                 <title>{data?.title || "Blog"} | One Off Autos</title>
                 <meta name="description" content={data?.meta_description || ""} />
-                <link rel="canonical" href={`https://www.oneoffautos.com/view-blog/${slug}`} />
+                <link rel="canonical" href={`https://www.oneoffautos.com/${slug}`} />
             </Helmet>
 
             {/* HEADER SECTION */}
