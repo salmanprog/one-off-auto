@@ -48,6 +48,7 @@ const Index = () => {
             name="description"
             content="Buy and sell modified street cars easily. Explore custom rides, tuned vehicles, and performance upgrades from passionate car enthusiasts worldwide."
           />
+        <link rel="canonical" href="https://oneoffautos.com/" />
           <meta name="DC.title" content="Modified Street Cars" />
           <meta name="geo.region" content="US" />
           <meta name="geo.position" content="39.78373;-100.445882" />

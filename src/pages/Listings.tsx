@@ -708,7 +708,7 @@ const Listings = () => {
           name="description"
           content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
         />
-        <link rel="canonical" href="https://www.oneoffautos.com/listings" />
+        <link rel="canonical" href="https://oneoffautos.com/listings" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>
