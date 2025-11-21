@@ -1,5 +1,7 @@
 import RestController from '.././RestController'
 import { schema,rules } from '@ioc:Adonis/Core/Validator'
+import Blog from 'App/Models/Blog';
+import _ from 'lodash'
 
 export default class BlogController extends RestController
 {
@@ -144,7 +146,20 @@ export default class BlogController extends RestController
      */
     protected async beforeUpdateLoadModel()
     {
-        
+        let body_params = this.__request.all();
+        let check_blog_slug = await Blog.query().where('slug',this.__params.id).first();
+        if(check_blog_slug?.slug != body_params.slug){
+            let checking = await Blog.query().where('slug',body_params.slug).first();
+              if(!_.isEmpty(checking)){
+                this.__is_error = true;
+                  return this.sendError(
+                      'Validation Message',
+                      { message: 'Slug already associated with another blog' },
+                      400
+                  );
+              }
+        }
+
     }
 
     /**

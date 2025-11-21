@@ -79,9 +79,23 @@ export default class BlogController extends RestController
               rules.maxLength(150),
               rules.regex(/^[A-Za-z0-9\s]+$/)
             ]),
+            slug: schema.string({},[
+                rules.maxLength(50),
+                rules.unique({
+                  table: 'blogs',
+                  column: 'slug',
+                  where: {
+                    deleted_at: null,
+                  },
+                })
+            ]),
         })
         try{
-          validator = await this.__request.validate({ schema: validationRules })
+          validator = await this.__request.validate({ schema: validationRules,messages: {
+                      required: '{{ field }} is required to sign up', 
+                      'slug.unique': 'slug already exist in our recorde',
+          }
+         })
         } catch(error){
             this.__is_error = true;
             return this.sendError(
@@ -146,7 +160,7 @@ export default class BlogController extends RestController
      */
     protected async beforeUpdateLoadModel()
     {
-        
+        console.log('slug============================',this.__params.id)
     }
 
     /**
