@@ -78,6 +78,7 @@ const BlogPostListings: React.FC = () => {
       const fd = new FormData();
       fd.append("title", updated.title);
       fd.append("cat_id", updated.cat_id);
+      fd.append("slug", updated.slug);
       fd.append("description", updated.description);
 
       if (updated.image_file) {

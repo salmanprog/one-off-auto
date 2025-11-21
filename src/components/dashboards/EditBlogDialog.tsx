@@ -13,6 +13,7 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
   const quillRef = useRef(null);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
+  const [newslug, setNewSlug] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
@@ -150,6 +151,7 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
     if (post) {
       setTitle(post.title || "");
       setSlug(post.slug || "");
+      setNewSlug(post.slug || "");
       setDescription(post.description || "");
       setContent(post.content || "");
       setImage(post.image_url || "");
@@ -160,9 +162,11 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
   }, [post]);
 
   const handleSubmit = () => {
+    console.log("OLD SLUG TO SEND:", post.slug);
+console.log("NEW SLUG IN PAYLOAD:", newslug);
     onSave(post.slug, {
       title,
-      slug,
+      slug: newslug,
       description,
       cat_id: categoryId,
       image_url: image,   // old image
@@ -189,7 +193,21 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
               onChange={(e) => {
                 const value = e.target.value;
                 setTitle(value);
-                setSlug(value.toLowerCase().replace(/ /g, "-"));
+              }}
+            />
+          </div>
+
+          {/* Slug */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Slug</label>
+            <Input
+              placeholder="Blog Slug"
+              value={newslug}
+              onChange={(e) => {
+                let value = e.target.value.toLowerCase();
+                value = value.replace(/[^a-z0-9\s-]/g, "");
+                value = value.trim().replace(/\s+/g, "-");
+                setNewSlug(value);
               }}
             />
           </div>
