@@ -698,8 +698,8 @@ const Listings = () => {
 
   if (loading) return <MainLayout><div className="p-8 text-center">Loading...</div></MainLayout>;
   if (error) return <MainLayout><div className="p-8 text-red-600 text-center">Error: {error.message}</div></MainLayout>;
-  if (!loading && listings.length === 0) return <MainLayout><div className="p-8 text-center">No listings found.</div></MainLayout>;
-
+  if (!loading && listings.length === 0) return <MainLayout><div className="flex justify-center items-center h-screen"><div className="loader"></div></div></MainLayout>;
+  
   return (
     <MainLayout>
       <Helmet>

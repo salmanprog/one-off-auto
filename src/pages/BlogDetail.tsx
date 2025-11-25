@@ -18,6 +18,12 @@ interface Blog {
 }
 
 const Blogs = () => {
+    const [fakeLoading, setFakeLoading] = useState(true);
+
+    useEffect(() => {
+        const t = setTimeout(() => setFakeLoading(false), 10000);
+        return () => clearTimeout(t);
+    }, []);
     // Fetch API
     const { slug } = useParams<{ slug: string }>();
     const { data, loading, error } = useFetch("blog_list", "mount", slug);
@@ -31,33 +37,31 @@ const Blogs = () => {
             </Helmet>
 
             {/* HEADER SECTION */}
-            <div className="bg-oneoffautos-blue text-white py-16">
+            {/* <div className="bg-oneoffautos-blue text-white py-16">
                 <div className="container-custom">
                     <div className="max-w-3xl">
                         <h1 className="text-3xl md:text-4xl font-bold mb-4">{data?.title}</h1>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="container mx-auto px-4 py-10">
-                
+
                 {/* LOADING */}
-                {loading && <p className="text-center text-lg">Loading blog...</p>}
+                {loading && <div className="flex justify-center items-center absolute inset-0 z-1"><div className="loader"></div></div>}
 
                 {/* ERROR */}
                 {error && <p className="text-center text-red-500 text-lg">Blog not found.</p>}
 
                 {/* IF NO BLOG */}
                 {!loading && !data && (
-                    <p className="text-center text-gray-500 text-lg">
-                        Blog not found or removed.
-                    </p>
+                    <div className="flex justify-center items-center h-screen absolute inset-0 z-1"><div className="loader"></div></div>
                 )}
 
                 {/* BLOG CONTENT */}
                 {data && (
                     <div className="max-w-4xl mx-auto">
-                        
+
                         {/* TITLE */}
                         <h1 className="text-3xl md:text-4xl font-bold mb-4">{data.title}</h1>
 
