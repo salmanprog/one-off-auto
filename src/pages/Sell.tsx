@@ -51,7 +51,7 @@ const Sell = () => {
           name="description"
           content="List and sell your modified cars online. Reach passionate buyers, showcase your custom build, and join a growing community of car lovers."
         />
-        <link rel="canonical" href="https://www.oneoffautos.com/sell" />
+        <link rel="canonical" href="https://oneoffautos.com/sell" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>

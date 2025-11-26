@@ -698,8 +698,8 @@ const Listings = () => {
 
   if (loading) return <MainLayout><div className="p-8 text-center">Loading...</div></MainLayout>;
   if (error) return <MainLayout><div className="p-8 text-red-600 text-center">Error: {error.message}</div></MainLayout>;
-  if (!loading && listings.length === 0) return <MainLayout><div className="p-8 text-center">No listings found.</div></MainLayout>;
-
+  if (!loading && listings.length === 0) return <MainLayout><div className="flex justify-center items-center h-screen"><div className="loader"></div></div></MainLayout>;
+  
   return (
     <MainLayout>
       <Helmet>
@@ -708,7 +708,7 @@ const Listings = () => {
           name="description"
           content="List your car for sale online and reach real buyers fast. Showcase your modified or custom ride to enthusiasts looking to buy unique street cars."
         />
-        <link rel="canonical" href="https://www.oneoffautos.com/listings" />
+        <link rel="canonical" href="https://oneoffautos.com/listings" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>

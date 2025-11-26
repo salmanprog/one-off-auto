@@ -89,8 +89,9 @@ const Blogs = () => {
 
                 {/* EMPTY STATE */}
                 {!loading && blogs.length === 0 && (
-                    <p>No blogs available right now.</p>
+                    <div className="flex justify-center items-center h-screen absolute inset-0 z-1"><div className="loader"></div></div>
                 )}
+
 
                 {/* BLOG LIST */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -154,8 +155,8 @@ const Blogs = () => {
                                         key={pageNum}
                                         onClick={() => goToPage(pageNum)}
                                         className={`px-4 py-2 border rounded-md ${currentPage === pageNum
-                                                ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
-                                                : "border-gray-300 text-oneoffautos-blue bg-white"
+                                            ? "border-oneoffautos-blue bg-oneoffautos-blue text-white"
+                                            : "border-gray-300 text-oneoffautos-blue bg-white"
                                             }`}
                                     >
                                         {pageNum}
