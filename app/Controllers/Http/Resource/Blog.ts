@@ -34,6 +34,7 @@ class Blog
           image_url: !_.isEmpty(record.image_url) ?  await storageUrl(record.image_url) : baseUrl('/images/user-placeholder.jpg'),
           meta_title: record.meta_title,
           meta_description: record.meta_description,
+          schedule_date: record.schedule_date,
           category: await BlogCategory.initResponse(record.BlogCategory,request),
           created_at: record.created_at
       }

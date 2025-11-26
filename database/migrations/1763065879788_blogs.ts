@@ -13,6 +13,7 @@ export default class extends BaseSchema {
       table.text('image_url').nullable()
       table.string('meta_title',255).nullable()
       table.text('meta_description').nullable()
+      table.string('schedule_date',255).nullable()
       table.timestamp('created_at', { useTz: true }).nullable()
       table.timestamp('updated_at', { useTz: true }).nullable()
       table.timestamp('deleted_at', { useTz: true }).nullable()

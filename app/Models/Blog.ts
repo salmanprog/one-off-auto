@@ -34,6 +34,9 @@ export default class Blog extends RestModel
     @column()
     public meta_description: string | null
 
+    @column()
+    public schedule_date: string | null
+
     @column.dateTime({ autoCreate: true })
     public created_at: DateTime
 
@@ -52,7 +55,7 @@ export default class Blog extends RestModel
     public static fillable()
     {
         return [
-          'title','slug','cat_id','description','image_url','meta_title','meta_description','created_at','updated_at','deleted_at'
+          'title','slug','cat_id','description','image_url','meta_title','meta_description','schedule_date','created_at','updated_at','deleted_at'
         ]
     }
     
