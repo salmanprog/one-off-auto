@@ -16,19 +16,13 @@ class BlogHook
      */
     public static async indexQueryHook(query: object, request: object, slug:string = '')
     {
-        if(request.user !== undefined && typeof request.user == 'function'){
-            const user = request.user();
-            if(user !== undefined && user.user_group_id == 2){
-                query.preload('BlogCategory').orderBy('id','desc');
-            }else{
-                query.where('schedule_date', '<=', currentDateTime());
-                query.preload('BlogCategory').orderBy('id','desc');
-            }
-        }else{
+        let params = request.all();
+        if(!_.isEmpty(params.user)){
             query.where('schedule_date', '<=', currentDateTime());
             query.preload('BlogCategory').orderBy('id','desc');
+        }else{
+            query.preload('BlogCategory').orderBy('id','desc');
         }
-        
     }
 
     /**
