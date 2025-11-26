@@ -59,9 +59,14 @@ import Helper from "../../helpers";
  } 
  
   const { data:site_setting } = useFetch("get_application_setting");
+  const { loading, postData } = useFetch("logout", "submit", undefined);
   const handleLogout = () => {
-    localStorage.removeItem("session");
-    navigate("/signin");
+    const additionalParams = { device_type: "web", device_token: "1234567890" };
+    const callback = (receivedData) => {
+      localStorage.removeItem("session");
+      navigate("/signin");
+    };
+    postData(additionalParams, callback, undefined);
   };
   
   return (

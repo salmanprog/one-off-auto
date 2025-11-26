@@ -24,7 +24,7 @@ const Blogs = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
 
     // Fetch API
-    const { data, loading } = useFetch("blog_list", "mount", "?limit=5000");
+    const { data, loading } = useFetch("blog_list", "mount", "?user=1&limit=5000");
     // Load API data into blogs[]
     useEffect(() => {
         if (data && Array.isArray(data)) {
