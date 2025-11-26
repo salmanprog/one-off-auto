@@ -94,7 +94,17 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
   const [categoryId, setCategoryId] = useState("");
   const [metatitle, setMetaTitle] = useState("");
   const [metadescription, setMetaDescription] = useState("");
+  const [schedule_date, setScheduleDate] = useState("");
   const [newImage, setNewImage] = useState<File | null>(null);
+
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const quillModules = useMemo(() => ({
     toolbar: {
@@ -151,7 +161,8 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
       cat_id: categoryId,
       image_file: newImage,
       metatitle,
-      metadescription
+      metadescription,
+      schedule_date
     });
   };
 
@@ -264,6 +275,21 @@ const AddBlogDialog = ({ isOpen, onClose, onSave, categories }) => {
                 const value = e.target.value;
                 setMetaDescription(value);
               }}
+            />
+          </div>
+
+          {/* Schedule Date */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Schedule Date</label>
+            <Input
+              type="date"
+              value={schedule_date}
+              min={getTodayDate()}
+              onChange={(e) => {
+                const value = e.target.value;
+                setScheduleDate(value);
+              }}
+              className="w-full"
             />
           </div>
         </div>

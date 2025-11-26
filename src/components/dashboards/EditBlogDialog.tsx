@@ -21,6 +21,16 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
   const [categoryId, setCategoryId] = useState("");
   const [metatitle, setMetaTitle] = useState("");
   const [metadescription, setMetaDescription] = useState("");
+  const [schedule_date, setScheduleDate] = useState("");
+
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const handleImageUpload = useCallback(() => {
     // Store quill instance before opening file dialog
@@ -157,7 +167,8 @@ const EditBlogDialog = ({ isOpen, onClose, post, onSave, categories }) => {
       setImage(post.image_url || "");
       setMetaTitle(post.meta_title || "");
       setMetaDescription(post.meta_description || "");
-      setCategoryId(post.cat_id || ""); 
+      setCategoryId(post.cat_id || "");
+      setScheduleDate(post.schedule_date || "");
     }
   }, [post]);
 
@@ -172,7 +183,8 @@ console.log("NEW SLUG IN PAYLOAD:", newslug);
       image_url: image,   // old image
       image_file: newImage, // new uploaded
       metatitle,
-      metadescription
+      metadescription,
+      schedule_date
     });
   };
 
@@ -308,6 +320,21 @@ console.log("NEW SLUG IN PAYLOAD:", newslug);
                 const value = e.target.value;
                 setMetaDescription(value);
               }}
+            />
+          </div>
+
+          {/* Schedule Date */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700">Schedule Date</label>
+            <Input
+              type="date"
+              value={schedule_date}
+              min={getTodayDate()}
+              onChange={(e) => {
+                const value = e.target.value;
+                setScheduleDate(value);
+              }}
+              className="w-full"
             />
           </div>
         </div>

@@ -24,7 +24,7 @@ const Blogs = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
 
     // Fetch API
-    const { data, loading, error } = useFetch("blog_list", "mount", "?limit=5000");
+    const { data, loading } = useFetch("blog_list", "mount", "?limit=5000");
     // Load API data into blogs[]
     useEffect(() => {
         if (data && Array.isArray(data)) {
@@ -84,18 +84,20 @@ const Blogs = () => {
                 {/* LOADING */}
                 {loading && <p>Loading blogs...</p>}
 
-                {/* ERROR */}
-                {error && <p className="text-red-500">Failed to load blogs.</p>}
-
                 {/* EMPTY STATE */}
                 {!loading && blogs.length === 0 && (
-                    <div className="flex justify-center items-center h-screen absolute inset-0 z-1"><div className="loader"></div></div>
+                    <div className="flex justify-center items-center py-16">
+                        <div className="text-center">
+                            <p className="text-xl text-gray-600 font-semibold">No blog found</p>
+                            <p className="text-gray-500 mt-2">There are no blogs available at the moment.</p>
+                        </div>
+                    </div>
                 )}
 
-
                 {/* BLOG LIST */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {paginatedBlogs.map((blog) => (
+                {!loading && blogs.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {paginatedBlogs.map((blog) => (
                         <Link key={blog.id} to={`/${blog.slug}`} className="block">
                             <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg h-full transition-shadow">
                                 <div className="relative pb-[65%] overflow-hidden">
@@ -133,11 +135,12 @@ const Blogs = () => {
                                 </div>
                             </div>
                         </Link>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* PAGINATION */}
-                {totalPages > 1 && (
+                {!loading && blogs.length > 0 && totalPages > 1 && (
                     <div className="mt-8 flex justify-center">
                         <div className="flex space-x-1">
                             <button

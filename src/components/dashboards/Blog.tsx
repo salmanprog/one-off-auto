@@ -48,6 +48,9 @@ const BlogPostListings: React.FC = () => {
       if (newPost.metadescription) {
         fd.append("meta_description", newPost.metadescription);
       }
+      if (newPost.schedule_date) {
+        fd.append("schedule_date", newPost.schedule_date);
+      }
 
       const response = await HttpRequest.makeRequest(
         "POST",
@@ -83,6 +86,9 @@ const BlogPostListings: React.FC = () => {
 
       if (updated.image_file) {
         fd.append("image_url", updated.image_file);
+      }
+      if (updated.schedule_date) {
+        fd.append("schedule_date", updated.schedule_date);
       }
 
       const callback = () => window.location.reload();
@@ -125,6 +131,7 @@ const BlogPostListings: React.FC = () => {
               <TableRow>
                 <TableHead>Image</TableHead>
                 <TableHead>Title</TableHead>
+                <TableHead>Schedule Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -137,6 +144,7 @@ const BlogPostListings: React.FC = () => {
                   </TableCell>
 
                   <TableCell>{post.title}</TableCell>
+                  <TableCell>{post.schedule_date}</TableCell>
 
                   <TableCell className="text-right">
                     <Button
