@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useFetch } from "../../hooks/request";
 import HttpRequest from "../../repositories";
 import AddBlogDialog from "./AddBlogDialog";
@@ -9,23 +17,33 @@ import Helper from "../../helpers";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
+const ITEMS_PER_PAGE = 10;
+
 const BlogPostListings: React.FC = () => {
 
-  const { data } = useFetch("blog"); 
-  const { data:category } = useFetch("blog_categories");
+  const { data } = useFetch("blog", "mount", '?limit=5000'); 
+  const { data:category } = useFetch("blog_categories", "mount", '?limit=5000');
   const { postData } = useFetch("blog_update", "submit");
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const totalPages = useMemo(() => Math.ceil(posts.length / ITEMS_PER_PAGE) || 1, [posts.length]);
+  const paginatedPosts = useMemo(
+    () => posts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
+    [posts, currentPage]
+  );
+
   useEffect(() => {
     if (data) {
       setPosts(data);
+      setCurrentPage(1);
       setLoading(false);
     }
   }, [data]);
@@ -126,53 +144,99 @@ const BlogPostListings: React.FC = () => {
         {loading ? (
           <p>Loading...</p>
         ) : posts.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Schedule Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {posts.map(post => (
-                <TableRow key={post.id}>
-                  <TableCell>
-                    <img src={post.image_url} className="w-20 h-14 object-cover rounded" />
-                  </TableCell>
-
-                  <TableCell>{post.title}</TableCell>
-                  <TableCell>{post.schedule_date}</TableCell>
-
-                  <TableCell className="text-right">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="mr-2"
-                      onClick={() => {
-                        setSelectedPost(post);
-                        setIsEditDialogOpen(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(post.slug)}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Image</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Schedule Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
+              </TableHeader>
 
-          </Table>
+              <TableBody>
+                {paginatedPosts.map(post => (
+                  <TableRow key={post.id}>
+                    <TableCell>
+                      <img src={post.image_url} className="w-20 h-14 object-cover rounded" />
+                    </TableCell>
+
+                    <TableCell>{post.title}</TableCell>
+                    <TableCell>{post.schedule_date}</TableCell>
+
+                    <TableCell className="text-right">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => {
+                          setSelectedPost(post);
+                          setIsEditDialogOpen(true);
+                        }}
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(post.slug)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+
+                  </TableRow>
+                ))}
+              </TableBody>
+
+            </Table>
+
+            {totalPages > 1 && (
+              <Pagination className="mt-4">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((p) => Math.max(1, p - 1));
+                      }}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      aria-disabled={currentPage === 1}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage(page);
+                        }}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      }}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                      aria-disabled={currentPage === totalPages}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </>
         ) : (
           <p>No posts found.</p>
         )}
