@@ -1,159 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>https://oneoffautos.com/</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>weekly</changefreq>
-<priority>1.0</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/about</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/contact</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/listings</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/buy</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/sell</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/privacy-policy</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.3</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/terms-and-conditions</loc>
-<lastmod>2025-10-27</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.3</priority>
-</url>
-<!-- Added URLs -->
-<url>
-<loc>https://oneoffautos.com/used-modified-sedans-for-sale-online-common-mistakes-to-avoid</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/listings-to-find-rare-used-custom-cars-and-trucks-for-sale</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/from-stock-to-custom-explore-modified-vehicles-for-sale-and-find-your-dream-ride</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/used-cars-for-sale-online-why-modified-cars-sell-faster-with-the-right-listing-</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/buy-and-sell-modified-cars-safely-what-every-enthusiast-should-know</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/how-to-attract-serious-buyers-when-selling-a-modified-car-online</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/the-ultimate-online-marketplace-guide-for-custom-and-highly-modified-vehicles</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/sell-your-car-online-how-to-avoid-scams-and-find-the-best-place-to-list</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/one-off-autos-your-go-to-place-to-buy-used-custom-cars-trucks-and-suvs</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/modified-sports-cars-for-sale-sell-your-car-fast-with-one-off-autos</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/list-your-car-for-sale-see-listings-and-sign-up</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/list-car-for-sale-online-custom-car-listings-and-how-to-get-noticed</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/how-to-sell-a-modified-car-what-you-need-to-know-before-selling</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/get-the-best-deals-on-used-cars-and-trucks</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/from-street-to-off-road-custom-cars-and-trucks-you-can-buy-right-now</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/explore-the-latest-modified-hatchback-and-sedan-cars-for-sale-in-one-place</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/buy-modified-cars-online-classic-or-used</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://oneoffautos.com/add-a-unique-modified-car-to-your-garage-custom-cars-for-sales</loc>
-<lastmod>2025-11-25</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
+
+  
+  <url><loc>https://oneoffautos.com/</loc></url>
+  <url><loc>https://oneoffautos.com/buy</loc></url>
+  <url><loc>https://oneoffautos.com/listings</loc></url>
+  <url><loc>https://oneoffautos.com/signin</loc></url>
+  <url><loc>https://oneoffautos.com/about</loc></url>
+  <url><loc>https://oneoffautos.com/contact</loc></url>
+  <url><loc>https://oneoffautos.com/sell-a-car-online-10-step-guide</loc></url>
+  <url><loc>https://oneoffautos.com/modified-vehicles-for-sale-street-cars-online</loc></url>
+  <url><loc>https://oneoffautos.com/one-off-autos-selling-your-car-easy</loc></url>
+  <url><loc>https://oneoffautos.com/modified-cars-for-sale-custom-car-listings</loc></url>
+  <url><loc>https://oneoffautos.com/sell-your-car-with-one-off-autos</loc></url>
+  <url><loc>https://oneoffautos.com/list-your-car-for-sale-on-one-off-autos</loc></url>
+  <url><loc>https://oneoffautos.com/buying-custom-modified-cars-online</loc></url>
+  <url><loc>https://oneoffautos.com/classic-cars-and-trucks-for-sale</loc></url>
+  <url><loc>https://oneoffautos.com/from-off-road-to-street-custom-vehicles-and-4x4-trucks-for-sale-this-year</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-sell-your-car-online-without-losing-money</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-compare-modified-vehicles-and-used-custom-street-cars-for-sale</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-list-your-car-for-sale-online-step-by-step-guide</loc></url>
+  <url><loc>https://oneoffautos.com/the-ultimate-guide-to-buying-modified-cars-online-from-trusted-marketplaces</loc></url>
+  <url><loc>https://oneoffautos.com/sell-your-car-with-one-off-autos-the-trusted-experts</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-find-the-best-custom-cars-online-using-reliable-car-listings</loc></url>
+  <url><loc>https://oneoffautos.com/modified-cars-what-you-need-to-know-before-selling</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-buy-custom-modified-cars-for-sale-without-overpaying</loc></url>
+  <url><loc>https://oneoffautos.com/used-custom-and-modified-cars-for-sale-pricing-performance-and-buyer-tips</loc></url>
+  <url><loc>https://oneoffautos.com/modified-street-cars-listing-how-to-list-your-car-here-for-maximum-visibility</loc></url>
+  <url><loc>https://oneoffautos.com/buying-modified-cars-online-avoid-scams-and-find-trusted-owner-listings</loc></url>
+  <url><loc>https://oneoffautos.com/used-modified-sedans-for-sale-online-common-mistakes-to-avoid</loc></url>
+  <url><loc>https://oneoffautos.com/listings-to-find-rare-used-custom-cars-and-trucks-for-sale</loc></url>
+  <url><loc>https://oneoffautos.com/from-stock-to-custom-explore-modified-vehicles-for-sale-and-find-your-dream-ride</loc></url>
+  <url><loc>https://oneoffautos.com/used-cars-for-sale-online-why-modified-cars-sell-faster-with-the-right-listing-</loc></url>
+  <url><loc>https://oneoffautos.com/buy-and-sell-modified-cars-safely-what-every-enthusiast-should-know</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-attract-serious-buyers-when-selling-a-modified-car-online</loc></url>
+  <url><loc>https://oneoffautos.com/the-ultimate-online-marketplace-guide-for-custom-and-highly-modified-vehicles</loc></url>
+  <url><loc>https://oneoffautos.com/sell-your-car-online-how-to-avoid-scams-and-find-the-best-place-to-list</loc></url>
+  <url><loc>https://oneoffautos.com/one-off-autos-your-go-to-place-to-buy-used-custom-cars-trucks-and-suvs</loc></url>
+  <url><loc>https://oneoffautos.com/modified-sports-cars-for-sale-sell-your-car-fast-with-one-off-autos</loc></url>
+  <url><loc>https://oneoffautos.com/list-your-car-for-sale-see-listings-and-sign-up</loc></url>
+  <url><loc>https://oneoffautos.com/list-car-for-sale-online-custom-car-listings-and-how-to-get-noticed</loc></url>
+  <url><loc>https://oneoffautos.com/how-to-sell-a-modified-car-what-you-need-to-know-before-selling</loc></url>
+  <url><loc>https://oneoffautos.com/get-the-best-deals-on-used-cars-and-trucks</loc></url>
+  <url><loc>https://oneoffautos.com/from-street-to-off-road-custom-cars-and-trucks-you-can-buy-right-now</loc></url>
+  <url><loc>https://oneoffautos.com/explore-the-latest-modified-hatchback-and-sedan-cars-for-sale-in-one-place</loc></url>
+  <url><loc>https://oneoffautos.com/buy-modified-cars-online-classic-or-used</loc></url>
+  <url><loc>https://oneoffautos.com/add-a-unique-modified-car-to-your-garage-custom-cars-for-sales</loc></url>
+
 </urlset>
